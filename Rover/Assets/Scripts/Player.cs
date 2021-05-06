@@ -15,7 +15,7 @@ public class Player : Entity
     #endregion
 
     #region Builtin Methods
-    public override void Start()
+    protected override void Start()
     {
         base.Start();
         gui = GameObject.Find("ExpBarBackground").GetComponent<Game_GUI>();//Finds direct gameobject not ideal but works

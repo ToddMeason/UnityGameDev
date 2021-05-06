@@ -24,7 +24,7 @@ namespace Rover.Basic
         private Rigidbody rb;
         private Rover_Inputs input;
         private Vector3 finalTurretLookDir;
-        public Rover_Gun gun;
+        private Rover_GunController gunController;
         #endregion
 
 
@@ -33,17 +33,14 @@ namespace Rover.Basic
         {
             rb = GetComponent<Rigidbody>();
             input = GetComponent<Rover_Inputs>();
+            gunController = GetComponent<Rover_GunController>();
         }
 
         private void Update()
         {
-            if(Input.GetButtonDown("Shoot"))
+            if(Input.GetButton("Shoot"))
             {
-                gun.Shoot();
-            }
-            else if (Input.GetButton("Shoot"))
-            {
-                gun.ShootContinous();
+                gunController.Shoot();
             }
         }
 

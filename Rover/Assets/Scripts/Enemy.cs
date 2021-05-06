@@ -16,7 +16,7 @@ public class Enemy : Entity
     #endregion
 
     #region Builtin Methods
-    public override void Start()
+    protected override void Start()
     {
         base.Start();
         
@@ -36,9 +36,8 @@ public class Enemy : Entity
 
 
     #region Custom Methods
-    public override void Die()
+    protected override void Die()
     {
-        Debug.Log(player);
         player.AddExp(expOnDeath);
         base.Die();
     }
@@ -48,12 +47,15 @@ public class Enemy : Entity
     #region Coroutines
     IEnumerator UpdatePath()
     {
-        float refreshRate = 0.25f;
+        float refreshRate = 0.25f;//Runs the pathfinder based on the refreshrate variable instead of each frame (for performance)
 
         while (target != null)
         {
             Vector3 targetPosition = new Vector3(target.position.x, 0, target.position.z);
-            pathfinder.SetDestination(targetPosition);
+            if (!dead)
+            {
+                pathfinder.SetDestination(targetPosition);
+            }
             yield return new WaitForSeconds(refreshRate);
         }
     }

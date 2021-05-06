@@ -2,35 +2,42 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Entity : MonoBehaviour
+public class Entity : MonoBehaviour, IDamageable
 {
     #region Variables
-    public float health;
+    public float startingHealth;
+    protected float health;
+    protected bool dead;
     #endregion
 
-    #region Builtin Methods
-    public virtual void Start()
-    {
+    public event System.Action OnDeath;
 
+    #region Builtin Methods
+    protected virtual void Start()
+    {
+        health = startingHealth;
     }
 
     #endregion
 
     #region Custom Methods
-    public virtual void TakeDamage(float dmg)
+    public virtual void TakeHit(float damage, RaycastHit hit)
     {
-        health -= dmg;
+        health -= damage;
 
-
-        if (health <= 0)
+        if (health <= 0 && !dead)
         {
             Die();
         }
     }
 
-    public virtual void Die()
+    protected virtual void Die()
     {
-
+        dead = true;
+        if(OnDeath != null)
+        {
+            OnDeath();
+        }
         Destroy(gameObject);
     }
     #endregion
