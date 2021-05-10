@@ -6,4 +6,6 @@ public interface IDamageable
 {
     //Exists so collision can just check for this instead of check every script that has a TakeHit method
     void TakeHit(float damage, RaycastHit hit);
+
+    void TakeDamage(float damage);
 }

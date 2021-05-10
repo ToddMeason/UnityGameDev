@@ -23,6 +23,12 @@ public class Entity : MonoBehaviour, IDamageable
     #region Custom Methods
     public virtual void TakeHit(float damage, RaycastHit hit)
     {
+        //Do stuff with raycasthit later
+        TakeDamage(damage);
+    }
+
+    public virtual void TakeDamage(float damage)
+    {
         health -= damage;
 
         if (health <= 0 && !dead)

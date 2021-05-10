@@ -9,9 +9,23 @@ public class Projectile : MonoBehaviour
     float speed = 10;
     float damage = 10;
 
+    float lifeTime = 3;
+    float projectileWidth = 0.1f;
+
     #endregion
 
     #region Builtin Methods
+    private void Start()
+    {
+        Destroy(gameObject, lifeTime);
+
+        Collider[] intialCollisions = Physics.OverlapSphere(transform.position, 0.1f, collisionMask);
+        if(intialCollisions.Length > 0)
+        {
+            OnHitObject(intialCollisions[0]);
+        }
+    }
+
     void Update()
     {
         float moveDistance = speed * Time.deltaTime;
@@ -32,7 +46,7 @@ public class Projectile : MonoBehaviour
         Ray ray = new Ray(transform.position, transform.forward);
         RaycastHit hit;
 
-        if(Physics.Raycast(ray, out hit, moveDistance, collisionMask, QueryTriggerInteraction.Collide))
+        if(Physics.Raycast(ray, out hit, moveDistance + projectileWidth, collisionMask, QueryTriggerInteraction.Collide))
         {
             OnHitObject(hit);
         }
@@ -46,6 +60,17 @@ public class Projectile : MonoBehaviour
             damageableObject.TakeHit(damage, hit);
         }
         //print(hit.collider.gameObject.name);
+        GameObject.Destroy(gameObject);
+    }
+
+    public void OnHitObject(Collider col)
+    {
+        IDamageable damageableObject = col.GetComponent<IDamageable>();
+        if (damageableObject != null)
+        {
+            damageableObject.TakeDamage(damage);
+        }
+        //print(col.gameObject.name);
         GameObject.Destroy(gameObject);
     }
 
