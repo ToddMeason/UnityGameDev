@@ -18,7 +18,8 @@ public class Player : Entity
     protected override void Start()
     {
         base.Start();
-        gui = GameObject.Find("ExpBarBackground").GetComponent<Game_GUI>();//Finds direct gameobject not ideal but works
+        gui = FindObjectOfType<Game_GUI>();
+        //gui = GameObject.Find("ExpBarBackground").GetComponent<Game_GUI>();//Finds direct gameobject not ideal but works
         LevelUp();
     }
     #endregion

@@ -21,7 +21,9 @@ public class MapGenerator : MonoBehaviour
     public float tileSize;
 
     List<Coord> allTileCoords;
-    Queue<Coord> shuffleTileCoords;
+    Queue<Coord> shuffledTileCoords;
+    Queue<Coord> shuffledOpenTileCoords;
+    Transform[,] tileMap;
 
     Map currentMap;
 
@@ -30,7 +32,8 @@ public class MapGenerator : MonoBehaviour
     #region Builtin Methods
     void Start()
     {
-        GenerateMap();
+        FindObjectOfType<Spawner>().OnNewWave += OnNewWave;//Changes the map with each new wave
+        //GenerateMap(); //Will stay on the same map if only you only run generateMap and no OnNewWave method
     }
 
     void Update()
@@ -44,6 +47,7 @@ public class MapGenerator : MonoBehaviour
     public void GenerateMap()
     {       
         currentMap = maps[mapIndex];
+        tileMap = new Transform[currentMap.mapSize.x, currentMap.mapSize.y];
         System.Random prng = new System.Random(currentMap.seed);
         GetComponent<BoxCollider>().size = new Vector3(currentMap.mapSize.x * tileSize, 0.5f, currentMap.mapSize.y * tileSize);
 
@@ -56,7 +60,7 @@ public class MapGenerator : MonoBehaviour
                 allTileCoords.Add(new Coord(x, y));
             }
         }
-        shuffleTileCoords = new Queue<Coord>(Utility.ShuffleArray(allTileCoords.ToArray(), currentMap.seed));
+        shuffledTileCoords = new Queue<Coord>(Utility.ShuffleArray(allTileCoords.ToArray(), currentMap.seed));
 
         //Create mapHolder object
         string holderName = "Generated Map";//Making the tiles spawn in a generated map subfolder
@@ -77,6 +81,7 @@ public class MapGenerator : MonoBehaviour
                 Transform newTile = Instantiate(tilePrefab, tilePosition, Quaternion.Euler(Vector3.right * 90)) as Transform;//Actually spawning tiles
                 newTile.localScale = Vector3.one * (1 - outlinePercent) * tileSize;
                 newTile.parent = mapHolder;
+                tileMap[x, y] = newTile;
             }
         }
 
@@ -85,6 +90,8 @@ public class MapGenerator : MonoBehaviour
 
         int obstacleCount = (int)(currentMap.mapSize.x * currentMap.mapSize.y * currentMap.obstaclePercent);
         int currentObstacleCount = 0;
+        List<Coord> allOpenCoords = new List<Coord>(allTileCoords);
+
         for (int i = 0; i < obstacleCount; i++)
         {
             Coord randomCoord = GetRandomCoord();
@@ -105,6 +112,8 @@ public class MapGenerator : MonoBehaviour
                 float colorPercent = randomCoord.y / (float)currentMap.mapSize.y;
                 obstacleMaterial.color = Color.Lerp(currentMap.foregroundColor, currentMap.backgroundColor, colorPercent);
                 obstacleRenderer.sharedMaterial = obstacleMaterial;
+
+                allOpenCoords.Remove(randomCoord);
             }
             else
             {
@@ -112,6 +121,8 @@ public class MapGenerator : MonoBehaviour
                 currentObstacleCount--;
             }
         }
+
+        shuffledOpenTileCoords = new Queue<Coord>(Utility.ShuffleArray(allOpenCoords.ToArray(), currentMap.seed));
 
         //Creating navmesh mask
         //Create bounds for the grid map generation from the maxMap edge to the current map edge to disable the navmesh agent that is between the bounds of the map and the maxMap edge
@@ -135,7 +146,7 @@ public class MapGenerator : MonoBehaviour
         navmeshFloor.localScale = new Vector3(maxMapSize.x, maxMapSize.y) * tileSize;
     }
 
-    private bool MapIsFullyAccessible(bool[,] obstacleMap, int currentObstacleCount)//Flood fill algorithim to search from inside to the outside and see if the amount of tiles it can reach is the same as the total amount of obstacles
+    private bool MapIsFullyAccessible(bool[,] obstacleMap, int currentObstacleCount)//Flood fill algorithim to search from inside to the outside and see if the amount of tiles it cant reach is the same as the total amount of obstacles
     {
         bool[,] mapFlags = new bool[obstacleMap.GetLength(0), obstacleMap.GetLength(1)];
         Queue<Coord> queue = new Queue<Coord>();
@@ -174,16 +185,40 @@ public class MapGenerator : MonoBehaviour
         return targetAccessibleTileCount == accessibleTileCount;
     }
 
+    private void OnNewWave(int waveNumber)//Changes the map with each new wave
+    {
+        mapIndex = waveNumber - 1;
+        GenerateMap();
+    }
+
     Vector3 CoordToPosition(int x, int y)
     {
         return new Vector3(-currentMap.mapSize.x / 2f + 0.5f + x, 0, -currentMap.mapSize.y / 2f + 0.5f + y) * tileSize;
     }
 
+    public Transform GetTileFromPosition(Vector3 position)
+    {
+        int x = Mathf.RoundToInt(position.x / tileSize + (currentMap.mapSize.x - 1) / 2);
+        int y = Mathf.RoundToInt(position.z / tileSize + (currentMap.mapSize.y - 1) / 2);
+        x = Mathf.Clamp(x, 0, tileMap.GetLength(0) -1);
+        y = Mathf.Clamp(y, 0, tileMap.GetLength(1));
+
+        return tileMap[x, y];
+    }
+
     public Coord GetRandomCoord()
     {
-        Coord randomCoord = shuffleTileCoords.Dequeue();
-        shuffleTileCoords.Enqueue(randomCoord);
+        Coord randomCoord = shuffledTileCoords.Dequeue();
+        shuffledTileCoords.Enqueue(randomCoord);
         return randomCoord;
+    }
+
+    public Transform GetRandomOpenTile()
+    {
+        Coord randomCoord = shuffledOpenTileCoords.Dequeue();
+        shuffledOpenTileCoords.Enqueue(randomCoord);
+
+        return tileMap[randomCoord.x, randomCoord.y];
     }
 
     [System.Serializable]

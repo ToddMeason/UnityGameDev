@@ -37,6 +37,7 @@ public class Entity : MonoBehaviour, IDamageable
         }
     }
 
+    [ContextMenu("Self Destruct")]
     protected virtual void Die()
     {
         dead = true;
