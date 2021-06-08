@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,6 +10,8 @@ public class Enemy : Entity
     #region Variables
     public enum State {Idle, Chasing, Attacking}
     State currentState;
+
+    public Animator animator;
 
     private NavMeshAgent pathfinder;
     private Player player;
@@ -59,6 +62,9 @@ public class Enemy : Entity
 
     private void Update()
     {
+        PlayAnimationState();
+        
+
         if (hasTarget)
         {
             if (Time.time > nextAttackTime)
@@ -70,6 +76,24 @@ public class Enemy : Entity
                     StartCoroutine("Attack");
                 }
             }
+        }
+    }
+
+    private void PlayAnimationState()
+    {
+        switch (currentState)
+        {
+            case State.Idle:
+                animator.Play("Idle_1");
+                break;
+
+            case State.Chasing:
+                animator.Play("Walk_1");
+                break;
+
+            case State.Attacking:
+                animator.Play("Attack_1");
+                break;
         }
     }
 

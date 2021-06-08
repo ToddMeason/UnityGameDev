@@ -17,7 +17,6 @@ public class Entity : MonoBehaviour, IDamageable
     {
         health = startingHealth;
     }
-
     #endregion
 
     #region Custom Methods
@@ -34,6 +33,14 @@ public class Entity : MonoBehaviour, IDamageable
         if (health <= 0 && !dead)
         {
             Die();
+        }
+    }
+
+    public float healthPercent
+    {
+        get
+        {
+            return health / startingHealth;
         }
     }
 

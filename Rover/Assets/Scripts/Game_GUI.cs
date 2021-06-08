@@ -8,9 +8,11 @@ public class Game_GUI : MonoBehaviour
 {
     #region Variables
     public Image expBar;
+    public Image healthBar;
     public Text levelText;
     public Image fadePlane;
     public GameObject gameOverUI;
+    public Player player;
     #endregion
 
     #region Builtin Methods
@@ -27,6 +29,11 @@ public class Game_GUI : MonoBehaviour
     #endregion
 
     #region Custom Methods
+
+    public void ShowHealth(float healthPercent)
+    {
+        healthBar.rectTransform.localScale = new Vector3(player.healthPercent, 1, 1);
+    }
 
     private void OnGameOver()
     {
