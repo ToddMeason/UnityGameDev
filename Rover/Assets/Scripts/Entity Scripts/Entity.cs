@@ -8,6 +8,7 @@ public class Entity : MonoBehaviour, IDamageable
     public float startingHealth;
     protected float health;
     protected bool dead;
+    protected bool hit = false;
     #endregion
 
     public event System.Action OnDeath;
@@ -28,12 +29,14 @@ public class Entity : MonoBehaviour, IDamageable
 
     public virtual void TakeDamage(float damage)
     {
+        hit = true;//Need to get this working for take hit animation on enemies
         health -= damage;
 
         if (health <= 0 && !dead)
         {
             Die();
         }
+        hit = false;
     }
 
     public float healthPercent

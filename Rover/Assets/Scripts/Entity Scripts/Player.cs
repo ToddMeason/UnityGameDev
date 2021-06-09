@@ -22,9 +22,19 @@ public class Player : Entity
         //gui = GameObject.Find("ExpBarBackground").GetComponent<Game_GUI>();//Finds direct gameobject not ideal but works
         LevelUp();
     }
+
+    private void Update()
+    {
+        UpdateHealth();
+    }
     #endregion
 
     #region Custom Methods
+    public void UpdateHealth()
+    {
+        gui.ShowHealth(healthPercent);
+    }
+
     public void AddExp(float exp)
     {
         currentLevelExp += exp;

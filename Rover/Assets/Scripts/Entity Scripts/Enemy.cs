@@ -8,7 +8,7 @@ using UnityEngine.AI;
 public class Enemy : Entity
 {
     #region Variables
-    public enum State {Idle, Chasing, Attacking}
+    public enum State {Idle, Chasing, Attacking, TakeDamage}
     State currentState;
 
     public Animator animator;
@@ -62,8 +62,12 @@ public class Enemy : Entity
 
     private void Update()
     {
-        PlayAnimationState();
-        
+        if (hit)//Dont know if this works properly
+        {
+            currentState = State.TakeDamage;
+        }
+
+        StartCoroutine(PlayAnimationState());
 
         if (hasTarget)
         {
@@ -79,26 +83,7 @@ public class Enemy : Entity
         }
     }
 
-    private void PlayAnimationState()
-    {
-        switch (currentState)
-        {
-            case State.Idle:
-                animator.Play("Idle_1");
-                break;
-
-            case State.Chasing:
-                animator.Play("Walk_1");
-                break;
-
-            case State.Attacking:
-                animator.Play("Attack_1");
-                break;
-        }
-    }
-
     #endregion
-
 
     #region Custom Methods
     protected override void Die()
@@ -116,6 +101,30 @@ public class Enemy : Entity
     #endregion
 
     #region Coroutines
+    IEnumerator PlayAnimationState()
+    {
+        switch (currentState)
+        {
+            case State.Idle:
+                animator.Play("Idle_1");
+                break;
+
+            case State.Chasing:
+                animator.Play("Walk_1");
+                break;
+
+            case State.Attacking:
+                animator.Play("Attack_1");
+                break;
+
+            case State.TakeDamage:
+                Debug.Log("Took damage");
+                animator.Play("Take_Damage_1");
+                break;
+        }
+        yield return null;
+    }
+
     IEnumerator UpdatePath()
     {
 
