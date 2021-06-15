@@ -36,7 +36,6 @@ public class Entity : MonoBehaviour, IDamageable
         {
             Die();
         }
-        hit = false;
     }
 
     public float healthPercent

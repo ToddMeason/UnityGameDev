@@ -8,8 +8,8 @@ using UnityEngine.AI;
 public class Enemy : Entity
 {
     #region Variables
-    public enum State {Idle, Chasing, Attacking, TakeDamage}
-    State currentState;
+    public enum State {Idle, Chasing, Attacking, TakeDamage, Die}
+    [SerializeField] State currentState;
 
     public Animator animator;
 
@@ -64,7 +64,17 @@ public class Enemy : Entity
     {
         if (hit)//Dont know if this works properly
         {
-            currentState = State.TakeDamage;
+            if (health <= 0) {
+                currentState = State.Die;
+            }
+            else 
+            {
+                currentState = State.TakeDamage;
+            }          
+        }
+        else 
+        {
+            currentState = State.Chasing;
         }
 
         StartCoroutine(PlayAnimationState());
@@ -88,8 +98,9 @@ public class Enemy : Entity
     #region Custom Methods
     protected override void Die()
     {
+        currentState = State.Die;
         player.AddExp(expOnDeath);
-        base.Die();
+        StartCoroutine(DieAnimation());    
     }
 
     private void OnTargetDeath()
@@ -118,8 +129,11 @@ public class Enemy : Entity
                 break;
 
             case State.TakeDamage:
-                Debug.Log("Took damage");
-                animator.Play("Take_Damage_1");
+                StartCoroutine(TakeDamageAnimation());
+                break;
+            
+            case State.Die:
+                animator.Play("Die");
                 break;
         }
         yield return null;
@@ -143,6 +157,21 @@ public class Enemy : Entity
             }
             yield return new WaitForSeconds(refreshRate);
         }
+    }
+
+    IEnumerator DieAnimation() {
+        pathfinder.enabled = false;
+        hasTarget = false;
+        yield return new WaitForSeconds(2f);
+        base.Die();
+    }
+
+    IEnumerator TakeDamageAnimation() {
+        pathfinder.enabled = false;
+        animator.Play("Take_Damage_1");
+        yield return new WaitForSeconds(0.5f);
+        hit = false;
+        pathfinder.enabled = true;
     }
 
     IEnumerator Attack()

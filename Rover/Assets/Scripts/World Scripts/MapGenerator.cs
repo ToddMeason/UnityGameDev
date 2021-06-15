@@ -49,7 +49,7 @@ public class MapGenerator : MonoBehaviour
         currentMap = maps[mapIndex];
         tileMap = new Transform[currentMap.mapSize.x, currentMap.mapSize.y];
         System.Random prng = new System.Random(currentMap.seed);
-        GetComponent<BoxCollider>().size = new Vector3(currentMap.mapSize.x * tileSize, 0.5f, currentMap.mapSize.y * tileSize);
+        GetComponent<BoxCollider>().size = new Vector3(currentMap.mapSize.x * tileSize, 0f, currentMap.mapSize.y * tileSize);
 
         //Generating Coords
         allTileCoords = new List<Coord>();//Putting tile coords in a list
@@ -101,10 +101,11 @@ public class MapGenerator : MonoBehaviour
             if (randomCoord != currentMap.mapCentre && MapIsFullyAccessible(obstacleMap, currentObstacleCount))
             {
                 float obstacleHeight = Mathf.Lerp(currentMap.minObstacleHeight, currentMap.maxObstacleHeight, (float)prng.NextDouble());
+                float obstacleWidth = Mathf.Lerp(currentMap.minObstacleWidth, currentMap.maxObstacleWidth, (float)prng.NextDouble());
                 Vector3 obstaclePosition = CoordToPosition(randomCoord.x, randomCoord.y);
-                Transform newObstacle = Instantiate(obstaclePrefab, obstaclePosition + Vector3.up * obstacleHeight/2 , Quaternion.identity) as Transform;
+                Transform newObstacle = Instantiate(obstaclePrefab, obstaclePosition + Vector3.up * obstacleHeight/2 , Random.rotation) as Transform; //Use Quaternion.identity to use the objects default rotation in stead of Random.rotation
                 newObstacle.parent = mapHolder;
-                newObstacle.localScale = new Vector3((1 - outlinePercent) * tileSize, obstacleHeight, (1 - outlinePercent) * tileSize);
+                newObstacle.localScale = new Vector3((1 - outlinePercent) * obstacleWidth, obstacleHeight, (1 - outlinePercent) * obstacleWidth);
 
                 Renderer obstacleRenderer = newObstacle.GetComponent<Renderer>();
                 Material obstacleMaterial = new Material(obstacleRenderer.sharedMaterial);
@@ -253,6 +254,8 @@ public class MapGenerator : MonoBehaviour
         public int seed;
         public float minObstacleHeight;
         public float maxObstacleHeight;
+        public float minObstacleWidth;
+        public float maxObstacleWidth;
         public Color foregroundColor;
         public Color backgroundColor;
 
