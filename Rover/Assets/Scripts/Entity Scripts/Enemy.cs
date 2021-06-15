@@ -99,6 +99,7 @@ public class Enemy : Entity
     protected override void Die()
     {
         currentState = State.Die;
+        dead = true;
         player.AddExp(expOnDeath);
         StartCoroutine(DieAnimation());    
     }
