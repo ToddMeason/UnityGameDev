@@ -4005,6 +4005,7 @@ GameObject:
   - component: {fileID: 8098694925220183217}
   - component: {fileID: 8098694925220183216}
   - component: {fileID: 4015290420583163752}
+  - component: {fileID: 138644572}
   m_Layer: 7
   m_Name: CrabMonster 1
   m_TagString: Untagged
@@ -4075,6 +4076,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startingHealth: 50
+  currentState: 0
   animator: {fileID: 2401885428773023431}
   expOnDeath: 25
   attackDistanceThreshold: 2
@@ -4143,6 +4145,19 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &138644572
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2308005125823568763}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d7eb81b1b9d1824fb8736c482d005d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  image: {fileID: 1055782569905592049, guid: 4de3d516a3c9bf24e8e8a50fe2d2a059, type: 3}
 --- !u!1 &2308010838185810665
 GameObject:
   m_ObjectHideFlags: 0

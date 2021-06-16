@@ -44,3 +44,6 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Radar
+    uniqueID: 42856311
+    locked: 0
