@@ -49,7 +49,7 @@ public class Projectile : MonoBehaviour
 
         if(Physics.Raycast(ray, out hit, moveDistance + projectileWidth, enemyLayer | rockLayer, QueryTriggerInteraction.Collide))
         {
-            print(hit.collider.gameObject.name);
+            //print(hit.collider.gameObject.name);
             OnHitObject(hit);
         }
     }

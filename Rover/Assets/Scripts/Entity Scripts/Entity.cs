@@ -46,6 +46,12 @@ public class Entity : MonoBehaviour, IDamageable
         }
     }
 
+    public float Heal(float healAmount)
+    {
+        health += healAmount;
+        return health = Mathf.Clamp(health, 0f, startingHealth);
+    }
+
     [ContextMenu("Self Destruct")]
     protected virtual void Die()
     {
