@@ -5,7 +5,8 @@ using UnityEngine;
 public class Projectile : MonoBehaviour
 {
     #region Variables
-    public LayerMask collisionMask;
+    public LayerMask enemyLayer;
+    public LayerMask rockLayer;
     float speed = 10;
     float damage = 10;
 
@@ -19,7 +20,7 @@ public class Projectile : MonoBehaviour
     {
         Destroy(gameObject, lifeTime);
 
-        Collider[] intialCollisions = Physics.OverlapSphere(transform.position, 0.1f, collisionMask);
+        Collider[] intialCollisions = Physics.OverlapSphere(transform.position, 0.1f, enemyLayer | rockLayer);//use | for or when checking collision masks
         if(intialCollisions.Length > 0)
         {
             OnHitObject(intialCollisions[0]);
@@ -46,8 +47,9 @@ public class Projectile : MonoBehaviour
         Ray ray = new Ray(transform.position, transform.forward);
         RaycastHit hit;
 
-        if(Physics.Raycast(ray, out hit, moveDistance + projectileWidth, collisionMask, QueryTriggerInteraction.Collide))
+        if(Physics.Raycast(ray, out hit, moveDistance + projectileWidth, enemyLayer | rockLayer, QueryTriggerInteraction.Collide))
         {
+            print(hit.collider.gameObject.name);
             OnHitObject(hit);
         }
     }

@@ -94,6 +94,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 48cb371e4ffc699479d38af9bd4ba39b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  collisionMask:
+  enemyLayer:
     serializedVersion: 2
     m_Bits: 128
+  rockLayer:
+    serializedVersion: 2
+    m_Bits: 512
