@@ -49,7 +49,7 @@ public class Entity : MonoBehaviour, IDamageable
     public float Heal(float healAmount)
     {
         health += healAmount;
-        return health = Mathf.Clamp(health, 0f, startingHealth);
+        return health = Mathf.Clamp(health, 0f, startingHealth);//Clamp sets the min and max values for a given number/float
     }
 
     [ContextMenu("Self Destruct")]

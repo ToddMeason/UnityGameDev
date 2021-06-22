@@ -7,6 +7,7 @@ public class Spawner : MonoBehaviour
     #region Variables
     public Wave[] waves;
     public Enemy enemy;
+    public HealthPickUp healthPickUp;
 
     Entity playerEntity;
     Transform playerT;
@@ -14,8 +15,9 @@ public class Spawner : MonoBehaviour
     private Wave currentWave;
     private int currentWaveNumber;
 
+    private int pickUpsRemainingToSpawn;
     private int enemiesRemainingToSpawn;
-    private int enemiesRemainingAlive;
+    private int enemiesRemainingAlive;//Make this visible on UI later
     private float nextSpawnTime;
 
     MapGenerator map;
@@ -40,6 +42,7 @@ public class Spawner : MonoBehaviour
     public class Wave
     {
         public int enemyCount;
+        public int pickUpCount;
         public float timeBetweenSpawns;
     }
 
@@ -63,11 +66,17 @@ public class Spawner : MonoBehaviour
     {
         if (!isDisabled)
         {
+            if(pickUpsRemainingToSpawn > 0)
+            {
+                pickUpsRemainingToSpawn--;
+                StartCoroutine(SpawnPickUp());
+            }
+
             if (Time.time > nextCampCheckTime)
             {
                 nextCampCheckTime = Time.time + timeBetweenCampingChecks;
 
-                isCamping = (Vector3.Distance(playerT.position, campPositionOld) < campThresholdDistance);//Checking distance between the two points of current pos and the pos the player was however many ssecs ago(timeBetweenCampingChecks)
+                isCamping = (Vector3.Distance(playerT.position, campPositionOld) < campThresholdDistance);//Checking distance between the two points of current pos and the pos the player was however many secs ago(timeBetweenCampingChecks)
                 campPositionOld = playerT.position;
             }
 
@@ -118,6 +127,8 @@ public class Spawner : MonoBehaviour
             enemiesRemainingToSpawn = currentWave.enemyCount;
             enemiesRemainingAlive = enemiesRemainingToSpawn;
 
+            pickUpsRemainingToSpawn = currentWave.pickUpCount;//sets pickups at start of wave before spawning them
+
             if(OnNewWave != null)
             {
                 OnNewWave(currentWaveNumber);
@@ -155,6 +166,14 @@ public class Spawner : MonoBehaviour
 
         Enemy spawnedEnemy = Instantiate(enemy, SpawnTile.position + Vector3.up, Quaternion.identity) as Enemy;
         spawnedEnemy.OnDeath += OnEnemyDeath;//Gets the event call from the enemy/entity script that died
+    }
+
+    IEnumerator SpawnPickUp()//Change to spawn all pick ups not just health later
+    {
+        Transform SpawnTile = map.GetRandomOpenTile();
+
+        HealthPickUp spawnedHealthPickUp = Instantiate(healthPickUp, SpawnTile.position + Vector3.up, Quaternion.identity) as HealthPickUp;
+        yield return null;
     }
 
     #endregion
