@@ -8,6 +8,7 @@ public class Entity : MonoBehaviour, IDamageable
     public float startingHealth;
     protected float health;
     protected bool dead;
+    protected bool hit = false;
     #endregion
 
     public event System.Action OnDeath;
@@ -17,7 +18,6 @@ public class Entity : MonoBehaviour, IDamageable
     {
         health = startingHealth;
     }
-
     #endregion
 
     #region Custom Methods
@@ -29,6 +29,7 @@ public class Entity : MonoBehaviour, IDamageable
 
     public virtual void TakeDamage(float damage)
     {
+        hit = true;//Need to get this working for take hit animation on enemies
         health -= damage;
 
         if (health <= 0 && !dead)
@@ -37,6 +38,21 @@ public class Entity : MonoBehaviour, IDamageable
         }
     }
 
+    public float healthPercent
+    {
+        get
+        {
+            return health / startingHealth;
+        }
+    }
+
+    public float Heal(float healAmount)
+    {
+        health += healAmount;
+        return health = Mathf.Clamp(health, 0f, startingHealth);//Clamp sets the min and max values for a given number/float
+    }
+
+    [ContextMenu("Self Destruct")]
     protected virtual void Die()
     {
         dead = true;

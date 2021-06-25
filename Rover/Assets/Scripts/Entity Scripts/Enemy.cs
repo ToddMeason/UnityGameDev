@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,8 +8,10 @@ using UnityEngine.AI;
 public class Enemy : Entity
 {
     #region Variables
-    public enum State {Idle, Chasing, Attacking}
-    State currentState;
+    public enum State {Idle, Chasing, Attacking, TakeDamage, Die}
+    [SerializeField] State currentState;
+
+    public Animator animator;
 
     private NavMeshAgent pathfinder;
     private Player player;
@@ -59,6 +62,23 @@ public class Enemy : Entity
 
     private void Update()
     {
+        if (hit)//Dont know if this works properly
+        {
+            if (health <= 0) {
+                currentState = State.Die;
+            }
+            else 
+            {
+                currentState = State.TakeDamage;
+            }          
+        }
+        else 
+        {
+            currentState = State.Chasing;
+        }
+
+        StartCoroutine(PlayAnimationState());
+
         if (hasTarget)
         {
             if (Time.time > nextAttackTime)
@@ -75,12 +95,13 @@ public class Enemy : Entity
 
     #endregion
 
-
     #region Custom Methods
     protected override void Die()
     {
+        currentState = State.Die;
+        dead = true;
         player.AddExp(expOnDeath);
-        base.Die();
+        StartCoroutine(DieAnimation());    
     }
 
     private void OnTargetDeath()
@@ -92,6 +113,33 @@ public class Enemy : Entity
     #endregion
 
     #region Coroutines
+    IEnumerator PlayAnimationState()
+    {
+        switch (currentState)
+        {
+            case State.Idle:
+                animator.Play("Idle_1");
+                break;
+
+            case State.Chasing:
+                animator.Play("Walk_1");
+                break;
+
+            case State.Attacking:
+                animator.Play("Attack_1");
+                break;
+
+            case State.TakeDamage:
+                StartCoroutine(TakeDamageAnimation());
+                break;
+            
+            case State.Die:
+                animator.Play("Die");
+                break;
+        }
+        yield return null;
+    }
+
     IEnumerator UpdatePath()
     {
 
@@ -110,6 +158,21 @@ public class Enemy : Entity
             }
             yield return new WaitForSeconds(refreshRate);
         }
+    }
+
+    IEnumerator DieAnimation() {
+        pathfinder.enabled = false;
+        hasTarget = false;
+        yield return new WaitForSeconds(2f);
+        base.Die();
+    }
+
+    IEnumerator TakeDamageAnimation() {
+        pathfinder.enabled = false;
+        animator.Play("Take_Damage_1");
+        yield return new WaitForSeconds(0.5f);
+        hit = false;
+        pathfinder.enabled = true;
     }
 
     IEnumerator Attack()
