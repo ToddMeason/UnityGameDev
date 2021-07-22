@@ -366,5 +366,5 @@ MonoBehaviour:
   shell: {fileID: 2790102550397469287, guid: ad2402707abdc8b49bf3d49435eeaa5b, type: 3}
   shellEjectionSpawn: {fileID: 1610281058757884913}
   dmg: 10
-  muzzleVelocity: 35
+  muzzleVelocity: 75
   msBetweenShots: 100
