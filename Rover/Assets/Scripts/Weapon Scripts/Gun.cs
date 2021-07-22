@@ -15,6 +15,10 @@ public class Gun : MonoBehaviour
     public float dmg = 10;//gun damage per shot
     public float muzzleVelocity = 35;//Speed of bullet
     public float msBetweenShots = 100;//Rate of fire for gun
+    public float maxMagSize = 50;//How many bullets in the guns magzine 
+    public float currentMagSize;
+    public float reloadSpeed = 3;//How long it takes to reload
+    public bool reloading = false;
     private float nextShotTime;
 
     #endregion
@@ -22,6 +26,7 @@ public class Gun : MonoBehaviour
     #region Builtin Methods
     private void Start()
     {
+        currentMagSize = maxMagSize;
         if(GetComponent<LineRenderer>())
         {
             tracer = GetComponent<LineRenderer>();
@@ -32,7 +37,7 @@ public class Gun : MonoBehaviour
     #region Custom Methods
     public void Shoot()
     {
-        if (Time.time > nextShotTime)
+        if (Time.time > nextShotTime && currentMagSize > 0 && !reloading)
         {
             //For bullet projectile
             nextShotTime = Time.time + msBetweenShots / 1000;//Calculating for milliseconds
@@ -60,12 +65,25 @@ public class Gun : MonoBehaviour
 
             Rigidbody newShell = Instantiate(shell, shellEjectionSpawn.position, Quaternion.identity) as Rigidbody;//Spawning a shell casing after a shot 
             newShell.AddForce(shellEjectionSpawn.forward * Random.Range(150, 200) + bulletSpawn.forward * Random.Range(-10, 10));
+            currentMagSize--;
         }
+    }
+
+    public void Reload()
+    {
+        reloading = true;
+        StartCoroutine(ReloadGun());
     }
 
     #endregion
 
     #region Coroutines
+    IEnumerator ReloadGun()//reload gun to maxMagSize and disable shoot while reloading
+    {
+        yield return new WaitForSeconds(reloadSpeed);
+        currentMagSize = maxMagSize;
+        reloading = false;
+    }
 
     IEnumerator RenderTracer(Vector3 hitPoint)
     {

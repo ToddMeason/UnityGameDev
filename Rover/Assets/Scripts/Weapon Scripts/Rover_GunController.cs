@@ -43,6 +43,13 @@ namespace Rover.Basic
             }
         }
 
+        public void Reload()
+        {
+            if (equippedGun != null)
+            {
+                equippedGun.Reload();
+            }
+        }
         #endregion
     }
 }

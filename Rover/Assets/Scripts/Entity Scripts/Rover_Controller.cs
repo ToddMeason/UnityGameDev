@@ -42,6 +42,11 @@ namespace Rover.Basic
             {
                 gunController.Shoot();
             }
+
+            if (Input.GetButton("Reload"))
+            {
+                gunController.Reload();
+            }
         }
 
         void FixedUpdate()
