@@ -71,8 +71,11 @@ public class Gun : MonoBehaviour
 
     public void Reload()
     {
-        reloading = true;
-        StartCoroutine(ReloadGun());
+        if (!reloading && currentMagSize < maxMagSize)//Cant reload when already reloading or mag is full
+        {
+            reloading = true;
+            StartCoroutine(ReloadGun());
+        }
     }
 
     #endregion
