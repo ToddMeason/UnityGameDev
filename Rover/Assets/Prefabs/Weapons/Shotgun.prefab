@@ -75,7 +75,7 @@ GameObject:
   - component: {fileID: 7060285314936383174}
   - component: {fileID: 7060285314936383170}
   m_Layer: 0
-  m_Name: Gun
+  m_Name: Shotgun
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -361,14 +361,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: efad1b7978439174194e7f817405b70c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  weaponType: 1
   projectileSpawn: {fileID: 1610281057850828034}
   projectile: {fileID: 2715062342412648571, guid: 2bac5244ac4a236449234b6304e85906, type: 3}
   shell: {fileID: 2790102550397469287, guid: ad2402707abdc8b49bf3d49435eeaa5b, type: 3}
   shellEjectionSpawn: {fileID: 1610281058757884913}
   dmg: 10
   muzzleVelocity: 75
-  msBetweenShots: 100
-  maxMagSize: 50
+  msBetweenShots: 1000
+  maxMagSize: 10
   currentMagSize: 0
   reloadSpeed: 3
+  projectileCount: 20
+  spread: 25
   reloading: 0

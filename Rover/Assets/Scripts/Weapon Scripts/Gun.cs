@@ -6,11 +6,15 @@ using UnityEngine;
 public class Gun : MonoBehaviour
 {
     #region Variables
+    public enum WeaponType {MachineGun, ShotGun};
+    public WeaponType weaponType;
+
     public Transform projectileSpawn;//Where bullet comes out ie barrel
     public Projectile projectile;
     public Rigidbody shell;
     public Transform shellEjectionSpawn;//Where shell casing is ejected
     private LineRenderer tracer;//Only used if using linerenderer instead of a bullet projectile
+
 
     public float dmg = 10;//gun damage per shot
     public float muzzleVelocity = 35;//Speed of bullet
@@ -18,6 +22,8 @@ public class Gun : MonoBehaviour
     public float maxMagSize = 50;//How many bullets in the guns magazine 
     public float currentMagSize;
     public float reloadSpeed = 3;//How long it takes to reload
+    public float projectileCount = 1;//Amount of projectiles fired per shot
+    public float spread = 5;//Accuracy or spread of bullets
     public bool reloading = false;
     private float nextShotTime;
 
@@ -49,30 +55,18 @@ public class Gun : MonoBehaviour
         if (Time.time > nextShotTime && currentMagSize > 0 && !reloading)
         {
             //For normal bullet projectile
-            //nextShotTime = Time.time + msBetweenShots / 1000;//Calculating for milliseconds
-            //Projectile newProjectile = Instantiate(projectile, projectileSpawn.position, projectileSpawn.rotation) as Projectile;
-            //newProjectile.SetSpeed(muzzleVelocity);//Spawns bullet and sets its velcocity
-            //currentMagSize--;
-
-
-            //For shotgun bullet projectile
             Quaternion newRotation = projectileSpawn.rotation;
-            int bulletCount = 100;
-            float spread = 50;
             
-            for (int i = 0; i < bulletCount; i++)
-            {        
-                newRotation = Quaternion.Euler(projectileSpawn.eulerAngles.x, projectileSpawn.eulerAngles.y + Random.Range(-spread, spread), projectileSpawn.eulerAngles.z);//Spawns bullets at random y angles for a shotgun spread
+            
+            for (int i = 0; i < projectileCount; i++)
+            {
+                newRotation = Quaternion.Euler(projectileSpawn.eulerAngles.x, projectileSpawn.eulerAngles.y + Random.Range(-spread, spread), projectileSpawn.eulerAngles.z);//Spawns bullets at random y angles for a random spread
                 Projectile newProjectile = Instantiate(projectile, projectileSpawn.position, newRotation) as Projectile;
                 newProjectile.SetSpeed(muzzleVelocity);//Spawns bullet and sets its velcocity
             }
 
             nextShotTime = Time.time + msBetweenShots / 1000;//Calculating for milliseconds           
             currentMagSize--;
-
-
-
-
 
             ////For LineRenderer 'projectile'
             //Ray ray = new Ray(transform.position, transform.forward);
