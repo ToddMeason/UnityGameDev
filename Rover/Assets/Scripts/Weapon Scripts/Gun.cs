@@ -21,16 +21,25 @@ public class Gun : MonoBehaviour
     public bool reloading = false;
     private float nextShotTime;
 
+    private Game_GUI gui;
+
     #endregion
 
     #region Builtin Methods
     private void Start()
     {
+        gui = FindObjectOfType<Game_GUI>();
+
         currentMagSize = maxMagSize;
         if(GetComponent<LineRenderer>())
         {
             tracer = GetComponent<LineRenderer>();
         }
+    }
+
+    private void Update()
+    {
+        gui.ShowAmmo(currentMagSize);
     }
     #endregion
 

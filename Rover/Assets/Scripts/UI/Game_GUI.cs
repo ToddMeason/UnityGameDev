@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class Game_GUI : MonoBehaviour
 {
@@ -11,6 +12,7 @@ public class Game_GUI : MonoBehaviour
     public Image healthBar;
     public Text levelText;
     public Image fadePlane;
+    public TextMeshProUGUI ammo;
     public GameObject gameOverUI;
     public Player player;
     #endregion
@@ -33,6 +35,11 @@ public class Game_GUI : MonoBehaviour
     public void ShowHealth(float healthPercent)
     {
         healthBar.rectTransform.localScale = new Vector3(player.healthPercent, 1, 1);
+    }
+
+    public void ShowAmmo(float ammoCount)
+    {
+        ammo.text = ammoCount.ToString();
     }
 
     private void OnGameOver()
