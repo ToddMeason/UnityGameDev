@@ -6,7 +6,7 @@ using UnityEngine;
 public class Gun : MonoBehaviour
 {
     #region Variables
-    public enum WeaponType {MachineGun, ShotGun};
+    public enum WeaponType {MachineGun, ShotGun};//not used currently will be needed for rocket launcher later maybe
     public WeaponType weaponType;
 
     public Transform projectileSpawn;//Where bullet comes out ie barrel
@@ -14,7 +14,6 @@ public class Gun : MonoBehaviour
     public Rigidbody shell;
     public Transform shellEjectionSpawn;//Where shell casing is ejected
     private LineRenderer tracer;//Only used if using linerenderer instead of a bullet projectile
-
 
     public float dmg = 10;//gun damage per shot
     public float muzzleVelocity = 35;//Speed of bullet
@@ -56,8 +55,7 @@ public class Gun : MonoBehaviour
         {
             //For normal bullet projectile
             Quaternion newRotation = projectileSpawn.rotation;
-            
-            
+                    
             for (int i = 0; i < projectileCount; i++)
             {
                 newRotation = Quaternion.Euler(projectileSpawn.eulerAngles.x, projectileSpawn.eulerAngles.y + Random.Range(-spread, spread), projectileSpawn.eulerAngles.z);//Spawns bullets at random y angles for a random spread
@@ -67,6 +65,7 @@ public class Gun : MonoBehaviour
 
             nextShotTime = Time.time + msBetweenShots / 1000;//Calculating for milliseconds           
             currentMagSize--;
+            //Above for normal bullet projectile
 
             ////For LineRenderer 'projectile'
             //Ray ray = new Ray(transform.position, transform.forward);
