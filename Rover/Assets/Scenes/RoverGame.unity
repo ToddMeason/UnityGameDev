@@ -33530,7 +33530,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   waves:
-  - enemyCount: 10
+  - enemyCount: 1
     pickUpCount: 10
     timeBetweenSpawns: 0.1
   - enemyCount: 100

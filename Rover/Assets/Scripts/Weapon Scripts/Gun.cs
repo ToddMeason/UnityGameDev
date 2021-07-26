@@ -6,7 +6,7 @@ using UnityEngine;
 public class Gun : MonoBehaviour
 {
     #region Variables
-    public Transform bulletSpawn;//Where bullet comes out ie barrel
+    public Transform projectileSpawn;//Where bullet comes out ie barrel
     public Projectile projectile;
     public Rigidbody shell;
     public Transform shellEjectionSpawn;//Where shell casing is ejected
@@ -15,7 +15,7 @@ public class Gun : MonoBehaviour
     public float dmg = 10;//gun damage per shot
     public float muzzleVelocity = 35;//Speed of bullet
     public float msBetweenShots = 100;//Rate of fire for gun
-    public float maxMagSize = 50;//How many bullets in the guns magzine 
+    public float maxMagSize = 50;//How many bullets in the guns magazine 
     public float currentMagSize;
     public float reloadSpeed = 3;//How long it takes to reload
     public bool reloading = false;
@@ -39,7 +39,7 @@ public class Gun : MonoBehaviour
 
     private void Update()
     {
-        gui.ShowAmmo(currentMagSize);
+        DisplayAmmo();
     }
     #endregion
 
@@ -48,10 +48,31 @@ public class Gun : MonoBehaviour
     {
         if (Time.time > nextShotTime && currentMagSize > 0 && !reloading)
         {
-            //For bullet projectile
-            nextShotTime = Time.time + msBetweenShots / 1000;//Calculating for milliseconds
-            Projectile newProjectile = Instantiate(projectile, bulletSpawn.position, bulletSpawn.rotation) as Projectile;
-            newProjectile.SetSpeed(muzzleVelocity);//Spawns bullet and sets its velcocity
+            //For normal bullet projectile
+            //nextShotTime = Time.time + msBetweenShots / 1000;//Calculating for milliseconds
+            //Projectile newProjectile = Instantiate(projectile, projectileSpawn.position, projectileSpawn.rotation) as Projectile;
+            //newProjectile.SetSpeed(muzzleVelocity);//Spawns bullet and sets its velcocity
+            //currentMagSize--;
+
+
+            //For shotgun bullet projectile
+            Quaternion newRotation = projectileSpawn.rotation;
+            int bulletCount = 100;
+            float spread = 50;
+            
+            for (int i = 0; i < bulletCount; i++)
+            {        
+                newRotation = Quaternion.Euler(projectileSpawn.eulerAngles.x, projectileSpawn.eulerAngles.y + Random.Range(-spread, spread), projectileSpawn.eulerAngles.z);//Spawns bullets at random y angles for a shotgun spread
+                Projectile newProjectile = Instantiate(projectile, projectileSpawn.position, newRotation) as Projectile;
+                newProjectile.SetSpeed(muzzleVelocity);//Spawns bullet and sets its velcocity
+            }
+
+            nextShotTime = Time.time + msBetweenShots / 1000;//Calculating for milliseconds           
+            currentMagSize--;
+
+
+
+
 
             ////For LineRenderer 'projectile'
             //Ray ray = new Ray(transform.position, transform.forward);
@@ -69,12 +90,13 @@ public class Gun : MonoBehaviour
             //    StartCoroutine(RenderTracer(ray.direction * shotDistance));
             //}
             ////Above for lineRenderer
-            
+
+            //Play Audio
             GetComponent<AudioSource>().Play();
 
-            Rigidbody newShell = Instantiate(shell, shellEjectionSpawn.position, Quaternion.identity) as Rigidbody;//Spawning a shell casing after a shot 
-            newShell.AddForce(shellEjectionSpawn.forward * Random.Range(150, 200) + bulletSpawn.forward * Random.Range(-10, 10));
-            currentMagSize--;
+            //Spawning a shell casing after a shot 
+            Rigidbody newShell = Instantiate(shell, shellEjectionSpawn.position, Quaternion.identity) as Rigidbody;
+            newShell.AddForce(shellEjectionSpawn.forward * Random.Range(150, 200) + projectileSpawn.forward * Random.Range(-10, 10));          
         }
     }
 
@@ -85,6 +107,11 @@ public class Gun : MonoBehaviour
             reloading = true;
             StartCoroutine(ReloadGun());
         }
+    }
+
+    public void DisplayAmmo()
+    {
+        gui.ShowAmmo(currentMagSize);
     }
 
     #endregion
@@ -100,8 +127,8 @@ public class Gun : MonoBehaviour
     IEnumerator RenderTracer(Vector3 hitPoint)
     {
         tracer.enabled = true;
-        tracer.SetPosition(0, bulletSpawn.position);
-        tracer.SetPosition(1, bulletSpawn.position + hitPoint);
+        tracer.SetPosition(0, projectileSpawn.position);
+        tracer.SetPosition(1, projectileSpawn.position + hitPoint);
         yield return null;
         tracer.enabled = false;
     }
