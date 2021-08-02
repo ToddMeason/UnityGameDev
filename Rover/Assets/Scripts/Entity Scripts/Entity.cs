@@ -31,7 +31,8 @@ public class Entity : MonoBehaviour, IDamageable
     public virtual void TakeDamage(float damage)
     {
         hit = true;//Need to get this working for take hit animation on enemies
-        damage = damage * armour;
+        float damageReduction = damage * armour;
+        damage -= damageReduction;
 
         health -= damage;
 
@@ -41,18 +42,18 @@ public class Entity : MonoBehaviour, IDamageable
         }
     }
 
+    public float Heal(float healAmount)
+    {
+        health += healAmount;
+        return health = Mathf.Clamp(health, 0f, maxHealth);//Clamp sets the min and max values for a given number/float
+    }
+
     public float healthPercent
     {
         get
         {
             return health / maxHealth;
         }
-    }
-
-    public float Heal(float healAmount)
-    {
-        health += healAmount;
-        return health = Mathf.Clamp(health, 0f, maxHealth);//Clamp sets the min and max values for a given number/float
     }
 
     [ContextMenu("Self Destruct")]
