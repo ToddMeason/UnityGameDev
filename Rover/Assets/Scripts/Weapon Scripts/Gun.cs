@@ -15,14 +15,14 @@ public class Gun : MonoBehaviour
     public Transform shellEjectionSpawn;//Where shell casing is ejected
     private LineRenderer tracer;//Only used if using linerenderer instead of a bullet projectile
 
-    public float dmg = 10;//gun damage per shot
-    public float muzzleVelocity = 35;//Speed of bullet
-    public float msBetweenShots = 100;//Rate of fire for gun
-    public float maxMagSize = 50;//How many bullets in the guns magazine 
-    public float currentMagSize;
-    public float reloadSpeed = 3;//How long it takes to reload
-    public float projectileCount = 1;//Amount of projectiles fired per shot
-    public float spread = 5;//Accuracy or spread of bullets
+    public float dmg = 10;                 //gun damage per shot
+    public float muzzleVelocity = 35;      //Speed of bullet
+    public float msBetweenShots = 100;     //Rate of fire for gun, smaller is faster
+    public float maxMagSize = 50;          //How many bullets in the guns magazine 
+    public float currentMagSize;                                            
+    public float reloadSpeed = 3;          //How long it takes to reload, smaller is faster
+    public float projectileCount = 1;      //Amount of projectiles fired per shot
+    public float spread = 5;               //Accuracy or spread of bullets, smaller is more accurate
     public bool reloading = false;
     private float nextShotTime;
 

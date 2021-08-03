@@ -12,6 +12,7 @@ public class Player : Entity
 
     private Game_GUI gui;
 
+    public InventoryObject inventory;
     #endregion
 
     #region Builtin Methods
@@ -53,6 +54,21 @@ public class Player : Entity
         expToLevelUp = level * 50 + Mathf.Pow(level * 2, 2);
 
         AddExp(0);
+    }
+
+    private void OnTriggerEnter(Collider other)//Pick up items and add to inventory
+    {
+        var item = other.GetComponent<Item>();
+        if (item)
+        {
+            inventory.AddItem(item.item, 1);
+            Destroy(other.gameObject);
+        }
+    }
+
+    private void OnApplicationQuit()//Clears inventory when app is closed, have to check later if this breaks save file
+    {
+        inventory.Container.Clear();
     }
 
     #endregion

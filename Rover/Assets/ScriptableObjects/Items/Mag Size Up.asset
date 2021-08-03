@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 21742836576f9374aa679b7a84cb2200, type: 3}
+  m_Name: Mag Size Up
+  m_EditorClassIdentifier: 
+  prefab: {fileID: 7185348890485022033, guid: bd5c2aa05e196a443bcea36e85594423, type: 3}
+  type: 1
+  description: 
+  dmgBonus: 0
+  muzzleVelocityBonus: 0
+  msBetweenShotsBonus: 0
+  maxMagSizeBonus: 25
+  reloadSpeedBonus: 0
+  projectileCountBonus: 0
+  spreadBonus: 0
