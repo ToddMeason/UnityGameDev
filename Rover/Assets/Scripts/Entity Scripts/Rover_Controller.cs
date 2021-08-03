@@ -10,6 +10,8 @@ namespace Rover.Basic
     public class Rover_Controller : MonoBehaviour
     {
         #region Variables
+        public InventoryObject inventory;//Temp inventory save button system. Will move to automatic later and in a menu system
+
         [Header("Movement Properties")]
         public float roverSpeed = 5f;
         public float roverRotationSpeed = 20f;
@@ -50,10 +52,22 @@ namespace Rover.Basic
                 gunController.Reload();
             }
 
-            if (Input.GetButton("Sprint"))
+            if(Input.GetButton("Sprint"))
             {
                 Boost();
             }
+
+            //Temp save buttons for testing 
+            if(Input.GetKeyDown(KeyCode.K))
+            {
+                inventory.Save();
+            }
+
+            if (Input.GetKeyDown(KeyCode.L))
+            {
+                inventory.Load();
+            }
+            //Temp save buttons for testing 
         }
 
         void FixedUpdate()

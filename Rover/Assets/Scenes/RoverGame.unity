@@ -43074,6 +43074,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a914dd937fb71b74fa172ef6e89037f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inventory: {fileID: 11400000, guid: 1326d578d53d68747b05ba448eb53a3f, type: 2}
   roverSpeed: 5
   roverRotationSpeed: 100
   boostSpeed: 0
