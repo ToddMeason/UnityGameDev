@@ -12,13 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21742836576f9374aa679b7a84cb2200, type: 3}
   m_Name: Damage Up
   m_EditorClassIdentifier: 
-  prefab: {fileID: 7185348890485022033, guid: 930fe8880e3d7144787e1c7ffbacc88e, type: 3}
+  id: 2
+  uiIcon: {fileID: 3705032854714272127, guid: b0a08012c6b50fc4fa7d71f0f26d430d, type: 3}
   type: 1
   description: 
-  dmgBonus: 10
-  muzzleVelocityBonus: 0
-  msBetweenShotsBonus: 0
-  maxMagSizeBonus: 0
-  reloadSpeedBonus: 0
-  projectileCountBonus: 0
-  spreadBonus: 0
+  buffs:
+  - stats: 0
+    value: 10

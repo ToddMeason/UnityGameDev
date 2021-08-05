@@ -5,27 +5,29 @@ using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "New Inventory", menuName = "Inventory System/Inventory")]
-public class InventoryObject : ScriptableObject, ISerializationCallbackReceiver
+public class InventoryObject : ScriptableObject
 {
     public string savePath;
     public ItemDatabaseObject database;//May need to be private and reworked so it doesnt get overwritten and could be problems when buidling
-    public List<InventorySlot> Container = new List<InventorySlot>();
+    public Inventory Container;
 
-    public void AddItem(ItemObject _item, int _amount)
+    public void AddItem(Item _item, int _amount)
     {
-        for (int i = 0; i < Container.Count; i++)//Check if item is in inventory
+        for (int i = 0; i < Container.Items.Count; i++)//Check if item is in inventory
         {
-            if (Container[i].item == _item)
+            if (Container.Items[i].item.Id == _item.Id)
             {
-                Container[i].AddAmount(_amount);
+                Container.Items[i].AddAmount(_amount);
                 return;
             }
         }
-        Container.Add(new InventorySlot(database.GetId[_item], _item, _amount));
+        Container.Items.Add(new InventorySlot(_item.Id, _item, _amount));
     }
 
-    public void Save()//save path is C:/Users/toddm/AppData/LocalLow/DefaultCompany/Rover
+    [ContextMenu("Save")]
+    public void Save()//save path is C:/Users/'username'/AppData/LocalLow/DefaultCompany/Rover
     {
+        //Could use IFormatter to make file uneditable
         string saveData = JsonUtility.ToJson(this, true);
         BinaryFormatter bf = new BinaryFormatter();
         FileStream file = File.Create(Application.persistentDataPath + savePath);
@@ -34,6 +36,7 @@ public class InventoryObject : ScriptableObject, ISerializationCallbackReceiver
         Debug.Log(Application.persistentDataPath);
     }
 
+    [ContextMenu("Load")]
     public void Load()
     {
         if(File.Exists(Application.persistentDataPath + savePath))
@@ -45,27 +48,26 @@ public class InventoryObject : ScriptableObject, ISerializationCallbackReceiver
         }
     }
 
-    public void OnAfterDeserialize()
+    [ContextMenu("Clear Inventory")]
+    public void Clear()
     {
-        for (int i = 0; i < Container.Count; i++)
-        {
-            Container[i].item = database.GetItem[Container[i].ID];
-        }
+        Container = new Inventory();
     }
+}
 
-    public void OnBeforeSerialize()
-    {
-        
-    }
+[System.Serializable]
+public class Inventory
+{
+    public List<InventorySlot> Items = new List<InventorySlot>();
 }
 
 [System.Serializable]
 public class InventorySlot
 {
     public int ID;
-    public ItemObject item;
+    public Item item;
     public int amount;
-    public InventorySlot(int _ID, ItemObject _item, int _amount)
+    public InventorySlot(int _ID, Item _item, int _amount)
     {
         ID = _ID;
         item = _item;

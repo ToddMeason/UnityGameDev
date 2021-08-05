@@ -58,17 +58,17 @@ public class Player : Entity
 
     private void OnTriggerEnter(Collider other)//Pick up items and add to inventory
     {
-        var item = other.GetComponent<Item>();
+        var item = other.GetComponent<GroundItem>();
         if (item)
         {
-            inventory.AddItem(item.item, 1);
+            inventory.AddItem(new Item(item.item), 1);
             Destroy(other.gameObject);
         }
     }
 
     private void OnApplicationQuit()//Clears inventory when app is closed, have to check later if this breaks save file
     {
-        inventory.Container.Clear();
+        inventory.Container.Items.Clear();
     }
 
     #endregion

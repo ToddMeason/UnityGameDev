@@ -6148,6 +6148,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae06c7c244bb1a34db93d4f06f777430, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inventoryPrefab: {fileID: 5093611017449021093, guid: a4385ff553b806240a729acfaffb565f, type: 3}
   inventory: {fileID: 11400000, guid: 1326d578d53d68747b05ba448eb53a3f, type: 2}
 --- !u!114 &132436198
 MonoBehaviour:
