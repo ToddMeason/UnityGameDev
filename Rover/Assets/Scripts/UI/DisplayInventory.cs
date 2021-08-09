@@ -24,9 +24,9 @@ public class DisplayInventory : MonoBehaviour
 
     public void CreateDisplay()
     {
-        for (int i = 0; i < inventory.Container.Items.Count; i++)
+        for (int i = 0; i < inventory.Container.Slots.Count; i++)
         {
-            InventorySlot slot = inventory.Container.Items[i];
+            InventorySlot slot = inventory.Container.Slots[i];
 
             var obj = Instantiate(inventoryPrefab, Vector3.zero, Quaternion.identity, transform);
             obj.transform.GetChild(0).GetComponentInChildren<Image>().sprite = inventory.database.GetItem[slot.item.Id].uiIcon;
@@ -38,9 +38,9 @@ public class DisplayInventory : MonoBehaviour
 
     public void UpdateDisplay()
     {
-        for (int i = 0; i < inventory.Container.Items.Count; i++)
+        for (int i = 0; i < inventory.Container.Slots.Count; i++)
         {
-            InventorySlot slot = inventory.Container.Items[i];
+            InventorySlot slot = inventory.Container.Slots[i];
 
             if (itemsDisplayed.ContainsKey(slot))
             {

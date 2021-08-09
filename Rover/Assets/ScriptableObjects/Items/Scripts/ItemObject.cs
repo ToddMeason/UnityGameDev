@@ -57,12 +57,17 @@ public class Item
 }
 
 [System.Serializable]
-public class ItemBuff
+public class ItemBuff : IModifiers
 {
     public Stats stats;
     public int value;
     public ItemBuff(int _value)
     {
         value = _value;
+    }
+
+    void IModifiers.AddValue(ref int baseValue)
+    {
+        baseValue += value;
     }
 }

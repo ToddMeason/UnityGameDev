@@ -10,18 +10,19 @@ public class InventoryObject : ScriptableObject
     public string savePath;
     public ItemDatabaseObject database;//May need to be private and reworked so it doesnt get overwritten and could be problems when buidling
     public Inventory Container;
+    public List<InventorySlot> GetSlots { get { return Container.Slots; } }
 
     public void AddItem(Item _item, int _amount)
     {
-        for (int i = 0; i < Container.Items.Count; i++)//Check if item is in inventory
+        for (int i = 0; i < Container.Slots.Count; i++)//Check if item is in inventory
         {
-            if (Container.Items[i].item.Id == _item.Id)
+            if (Container.Slots[i].item.Id == _item.Id)
             {
-                Container.Items[i].AddAmount(_amount);
+                Container.Slots[i].AddAmount(_amount);
                 return;
             }
         }
-        Container.Items.Add(new InventorySlot(_item.Id, _item, _amount));
+        Container.Slots.Add(new InventorySlot(_item.Id, _item, _amount));
     }
 
     [ContextMenu("Save")]
@@ -58,12 +59,15 @@ public class InventoryObject : ScriptableObject
 [System.Serializable]
 public class Inventory
 {
-    public List<InventorySlot> Items = new List<InventorySlot>();
+    public List<InventorySlot> Slots = new List<InventorySlot>();
 }
 
 [System.Serializable]
 public class InventorySlot
 {
+    [System.NonSerialized]
+    public GameObject slot;
+
     public int ID;
     public Item item;
     public int amount;

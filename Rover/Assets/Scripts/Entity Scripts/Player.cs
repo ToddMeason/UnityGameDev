@@ -13,6 +13,8 @@ public class Player : Entity
     private Game_GUI gui;
 
     public InventoryObject inventory;
+    public Stat[] stats;
+
     #endregion
 
     #region Builtin Methods
@@ -22,6 +24,16 @@ public class Player : Entity
         gui = FindObjectOfType<Game_GUI>();
         //gui = GameObject.Find("ExpBarBackground").GetComponent<Game_GUI>();//Finds direct gameobject not ideal but works
         LevelUp();
+
+        for (int i = 0; i < stats.Length; i++)
+        {
+            stats[i].SetParent(this);
+        }
+        for (int i = 0; i < inventory.Container.Slots.Count; i++)
+        {
+            //Need to setup OnBeforeUpdate and OnAfterUpdate in inventory and need to access InventorySlot
+            //inventory.Container.Items[i].
+        }  
     }
 
     private void Update()
@@ -66,10 +78,35 @@ public class Player : Entity
         }
     }
 
+    public void StatModified(Stat stat)
+    {
+        Debug.Log(stat.type + " was updated! Value is now " + stat.value.ModifiedValue);
+    }
+
     private void OnApplicationQuit()//Clears inventory when app is closed, have to check later if this breaks save file
     {
-        inventory.Container.Items.Clear();
+        inventory.Clear();
     }
 
     #endregion
+}
+
+[System.Serializable]
+public class Stat
+{
+    [SerializeField]
+    public Player parent;
+    public Stats type;
+    public ModifiableInt value;
+
+    public void SetParent(Player _parent)
+    {
+        parent = _parent;
+        value = new ModifiableInt(StatModified);
+    }
+
+    public void StatModified()
+    {
+        parent.StatModified(this);
+    }
 }
