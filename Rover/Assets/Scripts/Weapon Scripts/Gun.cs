@@ -15,6 +15,7 @@ public class Gun : MonoBehaviour
     public Transform shellEjectionSpawn;//Where shell casing is ejected
     private LineRenderer tracer;//Only used if using linerenderer instead of a bullet projectile
 
+    //May need to change type or make a list/enum later
     public float dmg = 10;                 //gun damage per shot
     public float muzzleVelocity = 35;      //Speed of bullet
     public float msBetweenShots = 100;     //Rate of fire for gun, smaller is faster

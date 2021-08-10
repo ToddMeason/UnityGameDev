@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+//Not used right now trying different way
 public delegate void ModifiedEvent();
 [System.Serializable]
 public class ModifiableInt

@@ -8,9 +8,12 @@ namespace Rover.Basic
     public class Rover_GunController : MonoBehaviour
     {
         #region Variables
+        public delegate void EquippedGun();
+        public static event EquippedGun GunEquipped;
+
         public Transform gunLocation;// The game object where the weapon will sit and pivot
         public Gun startingGun;
-        private Gun equippedGun;
+        public Gun equippedGun;
 
         #endregion
 
@@ -25,7 +28,7 @@ namespace Rover.Basic
         #endregion
 
         #region Custom Methods
-        public void EquipGun(Gun gunToEquip)
+        public void EquipGun(Gun gunToEquip)//need to add equip gun event later
         {
             if (equippedGun != null)
             {
@@ -33,6 +36,11 @@ namespace Rover.Basic
             }
             equippedGun = Instantiate(gunToEquip, gunLocation.position, gunLocation.rotation) as Gun;
             equippedGun.transform.parent = gunLocation;
+
+            if(GunEquipped != null)
+            {
+                GunEquipped();
+            }
         }
 
         public void Shoot()

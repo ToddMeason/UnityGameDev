@@ -11,6 +11,7 @@ public class Player : Entity
     private float expToLevelUp;
 
     private Game_GUI gui;
+    public Gun gun;
 
     public InventoryObject inventory;
     public Stat[] stats;
@@ -21,28 +22,62 @@ public class Player : Entity
     protected override void Start()
     {
         base.Start();
-        gui = FindObjectOfType<Game_GUI>();
-        //gui = GameObject.Find("ExpBarBackground").GetComponent<Game_GUI>();//Finds direct gameobject not ideal but works
+        gui = FindObjectOfType<Game_GUI>();       
         LevelUp();
-
-        for (int i = 0; i < stats.Length; i++)
-        {
-            stats[i].SetParent(this);
-        }
-        for (int i = 0; i < inventory.Container.Slots.Count; i++)
-        {
-            //Need to setup OnBeforeUpdate and OnAfterUpdate in inventory and need to access InventorySlot
-            //inventory.Container.Items[i].
-        }  
+        //gun = GetComponent<Rover.Basic.Rover_GunController>().equippedGun;
+        //if (gun)
+        //{
+        //    SetBaseStats();
+        //}     
     }
 
     private void Update()
     {
         UpdateHealth();
+        //gun = GetComponent<Rover.Basic.Rover_GunController>().equippedGun;//need to add to equip gun event later not update every frame.
     }
     #endregion
 
     #region Custom Methods
+    public void SetBaseStats()//not clean but should work
+    {
+        gun = GetComponent<Rover.Basic.Rover_GunController>().equippedGun;
+
+        for (int i = 0; i < stats.Length; i++)
+        {
+            stats[i].SetParent(this);
+            switch (stats[i].type)
+            {
+                case Stats.dmgBonus: stats[i].baseValue = gun.dmg;
+                    break;
+
+                case Stats.muzzleVelocityBonus:
+                    stats[i].baseValue = gun.muzzleVelocity;
+                    break;
+
+                case Stats.msBetweenShotsBonus:
+                    stats[i].baseValue = gun.msBetweenShots;
+                    break;
+
+                case Stats.maxMagSizeBonus:
+                    stats[i].baseValue = gun.maxMagSize;
+                    break;
+
+                case Stats.reloadSpeedBonus:
+                    stats[i].baseValue = gun.reloadSpeed;
+                    break;
+
+                case Stats.projectileCountBonus:
+                    stats[i].baseValue = gun.projectileCount;
+                    break;
+
+                case Stats.spreadBonus:
+                    stats[i].baseValue = gun.spread;
+                    break;
+            }           
+        }
+    }
+
     public void UpdateHealth()
     {
         gui.ShowHealth(healthPercent);
@@ -80,7 +115,7 @@ public class Player : Entity
 
     public void StatModified(Stat stat)
     {
-        Debug.Log(stat.type + " was updated! Value is now " + stat.value.ModifiedValue);
+        Debug.Log(stat.type + " was updated! Value is now " + stat.totalValue);
     }
 
     private void OnApplicationQuit()//Clears inventory when app is closed, have to check later if this breaks save file
@@ -88,6 +123,18 @@ public class Player : Entity
         inventory.Clear();
     }
 
+    #endregion
+
+    #region Events
+    private void OnEnable()
+    {
+        Rover.Basic.Rover_GunController.GunEquipped += SetBaseStats;
+    }
+
+    private void OnDisable()
+    {
+        Rover.Basic.Rover_GunController.GunEquipped -= SetBaseStats;
+    }
     #endregion
 }
 
@@ -97,12 +144,16 @@ public class Stat
     [SerializeField]
     public Player parent;
     public Stats type;
-    public ModifiableInt value;
+    public float baseValue;
+    public float bonusValue;
+    public float totalValue;
+    //public ModifiableInt value;
 
     public void SetParent(Player _parent)
     {
         parent = _parent;
-        value = new ModifiableInt(StatModified);
+        totalValue = baseValue + bonusValue;
+        //value = new ModifiableInt(StatModified);
     }
 
     public void StatModified()
@@ -110,3 +161,44 @@ public class Stat
         parent.StatModified(this);
     }
 }
+
+
+
+//SetBaseStats
+//for (int i = 0; i < stats.Length; i++)
+//{
+//    stats[i].SetParent(this);
+
+//    if (stats[i].type == Stats.dmgBonus)
+//    {
+//        stats[i].baseValue = gun.dmg;
+//    }
+//    else if (stats[i].type == Stats.muzzleVelocityBonus)
+//    {
+//        stats[i].baseValue = gun.muzzleVelocity;
+//    }
+//    else if (stats[i].type == Stats.msBetweenShotsBonus)
+//    {
+//        stats[i].baseValue = gun.msBetweenShots;
+//    }
+//    else if (stats[i].type == Stats.maxMagSizeBonus)
+//    {
+//        stats[i].baseValue = gun.maxMagSize;
+//    }
+//    else if (stats[i].type == Stats.reloadSpeedBonus)
+//    {
+//        stats[i].baseValue = gun.reloadSpeed;
+//    }
+//    else if (stats[i].type == Stats.projectileCountBonus)
+//    {
+//        stats[i].baseValue = gun.projectileCount;
+//    }
+//    else if (stats[i].type == Stats.spreadBonus)
+//    {
+//        stats[i].baseValue = gun.spread;
+//    }
+//    else
+//    {
+//        Debug.Log("Not a stat type on player");
+//    }
+//}

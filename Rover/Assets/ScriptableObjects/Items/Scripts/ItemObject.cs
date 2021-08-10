@@ -57,7 +57,7 @@ public class Item
 }
 
 [System.Serializable]
-public class ItemBuff : IModifiers
+public class ItemBuff
 {
     public Stats stats;
     public int value;
@@ -66,8 +66,4 @@ public class ItemBuff : IModifiers
         value = _value;
     }
 
-    void IModifiers.AddValue(ref int baseValue)
-    {
-        baseValue += value;
-    }
 }

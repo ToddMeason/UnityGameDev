@@ -112254,10 +112254,10 @@ GameObject:
   - component: {fileID: 902422009}
   - component: {fileID: 919132148848713896}
   - component: {fileID: 902422007}
+  - component: {fileID: 919132148848713894}
   - component: {fileID: 902422008}
   - component: {fileID: 919132148848713893}
   - component: {fileID: 919132148848713895}
-  - component: {fileID: 919132148848713894}
   m_Layer: 0
   m_Name: Player_Rover
   m_TagString: Player
@@ -112279,7 +112279,44 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 100
   armour: 0
+  gun: {fileID: 7060285314936383170, guid: 5edf1e2e41f419b43b8548cbaef02a7d, type: 3}
   inventory: {fileID: 11400000, guid: 1326d578d53d68747b05ba448eb53a3f, type: 2}
+  stats:
+  - parent: {fileID: 0}
+    type: 0
+    baseValue: 0
+    bonusValue: 0
+    totalValue: 0
+  - parent: {fileID: 0}
+    type: 1
+    baseValue: 0
+    bonusValue: 0
+    totalValue: 0
+  - parent: {fileID: 0}
+    type: 2
+    baseValue: 0
+    bonusValue: 0
+    totalValue: 0
+  - parent: {fileID: 0}
+    type: 3
+    baseValue: 0
+    bonusValue: 0
+    totalValue: 0
+  - parent: {fileID: 0}
+    type: 4
+    baseValue: 0
+    bonusValue: 0
+    totalValue: 0
+  - parent: {fileID: 0}
+    type: 5
+    baseValue: 0
+    bonusValue: 0
+    totalValue: 0
+  - parent: {fileID: 0}
+    type: 6
+    baseValue: 0
+    bonusValue: 0
+    totalValue: 0
 --- !u!114 &919132148848713894
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -112294,6 +112331,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gunLocation: {fileID: 925575201}
   startingGun: {fileID: 7060285314936383170, guid: 5edf1e2e41f419b43b8548cbaef02a7d, type: 3}
+  equippedGun: {fileID: 0}
 --- !u!82 &919132148848713895
 AudioSource:
   m_ObjectHideFlags: 0
