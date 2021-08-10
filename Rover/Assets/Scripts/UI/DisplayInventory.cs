@@ -19,7 +19,7 @@ public class DisplayInventory : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        UpdateDisplay();
+        
     }
 
     public void CreateDisplay()
@@ -54,6 +54,20 @@ public class DisplayInventory : MonoBehaviour
 
                 itemsDisplayed.Add(slot, obj);
             }
+            Debug.Log("noice");
         }
+   
     }
+
+    #region Events
+    private void OnEnable()
+    {
+        InventoryObject.pickedUpItem += UpdateDisplay;
+    }
+
+    private void OnDisable()
+    {
+        InventoryObject.pickedUpItem -= UpdateDisplay;
+    }
+    #endregion
 }

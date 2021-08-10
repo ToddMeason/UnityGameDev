@@ -7,6 +7,9 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New Inventory", menuName = "Inventory System/Inventory")]
 public class InventoryObject : ScriptableObject
 {
+    public delegate void PickedUpItem();
+    public static event PickedUpItem pickedUpItem;
+
     public string savePath;
     public ItemDatabaseObject database;//May need to be private and reworked so it doesnt get overwritten and could be problems when buidling
     public Inventory Container;
@@ -14,15 +17,19 @@ public class InventoryObject : ScriptableObject
 
     public void AddItem(Item _item, int _amount)
     {
+
         for (int i = 0; i < Container.Slots.Count; i++)//Check if item is in inventory
         {
             if (Container.Slots[i].item.Id == _item.Id)
             {
                 Container.Slots[i].AddAmount(_amount);
+                pickedUpItem?.Invoke();
                 return;
             }
         }
         Container.Slots.Add(new InventorySlot(_item.Id, _item, _amount));
+
+       pickedUpItem?.Invoke();
     }
 
     [ContextMenu("Save")]

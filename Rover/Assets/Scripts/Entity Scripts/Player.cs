@@ -39,7 +39,7 @@ public class Player : Entity
     #endregion
 
     #region Custom Methods
-    public void SetBaseStats()//not clean but should work
+    public void GetBaseStats()//not clean but should work
     {
         gun = GetComponent<Rover.Basic.Rover_GunController>().equippedGun;
 
@@ -128,12 +128,12 @@ public class Player : Entity
     #region Events
     private void OnEnable()
     {
-        Rover.Basic.Rover_GunController.GunEquipped += SetBaseStats;
+        Rover.Basic.Rover_GunController.GunEquipped += GetBaseStats;
     }
 
     private void OnDisable()
     {
-        Rover.Basic.Rover_GunController.GunEquipped -= SetBaseStats;
+        Rover.Basic.Rover_GunController.GunEquipped -= GetBaseStats;
     }
     #endregion
 }

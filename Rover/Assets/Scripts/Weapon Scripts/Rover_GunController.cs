@@ -37,10 +37,7 @@ namespace Rover.Basic
             equippedGun = Instantiate(gunToEquip, gunLocation.position, gunLocation.rotation) as Gun;
             equippedGun.transform.parent = gunLocation;
 
-            if(GunEquipped != null)
-            {
-                GunEquipped();
-            }
+            GunEquipped?.Invoke();
         }
 
         public void Shoot()
