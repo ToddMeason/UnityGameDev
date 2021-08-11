@@ -367,11 +367,25 @@ MonoBehaviour:
   shell: {fileID: 2790102550397469287, guid: ad2402707abdc8b49bf3d49435eeaa5b, type: 3}
   shellEjectionSpawn: {fileID: 1610281058757884913}
   dmg: 10
+  dmgBonus: 0
+  dmgTotal: 0
   muzzleVelocity: 75
+  muzzleVelocityBonus: 0
+  muzzleVelocityTotal: 0
   msBetweenShots: 100
+  msBetweenShotsBonus: 0
+  msBetweenShotsTotal: 0
   maxMagSize: 50
+  maxMagSizeBonus: 0
+  maxMagSizeTotal: 0
   currentMagSize: 0
   reloadSpeed: 3
+  reloadSpeedBonus: 0
+  reloadSpeedTotal: 0
   projectileCount: 1
+  projectileCountBonus: 0
+  projectileCountTotal: 0
   spread: 5
+  spreadBonus: 0
+  spreadTotal: 0
   reloading: 0

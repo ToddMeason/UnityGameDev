@@ -36,6 +36,8 @@ public class Entity : MonoBehaviour, IDamageable
 
         health -= damage;
 
+        //Debug.Log(damage);
+
         if (health <= 0 && !dead)
         {
             Die();

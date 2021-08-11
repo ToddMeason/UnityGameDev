@@ -47,7 +47,7 @@ public class Player : Entity
     #endregion
 
     #region Custom Methods
-    public void SetStats()//not clean but should work
+    public void SetStats()//not clean but should work, very scuffed
     {
         gun = GetComponent<Rover.Basic.Rover_GunController>().equippedGun;
 
@@ -56,45 +56,53 @@ public class Player : Entity
             stats[i].SetParent(this);
             switch (stats[i].type)
             {
-                case Stats.dmgBonus: stats[i].baseValue = gun.dmg;
+                case Stats.dmgBonus: 
+                    stats[i].baseValue = gun.dmg;
                     stats[i].bonusValue = dmgBonusTotal;
                     stats[i].totalValue = stats[i].bonusValue + stats[i].baseValue;
+                    gun.dmgBonus = stats[i].bonusValue;
                     break;
 
                 case Stats.muzzleVelocityBonus:
                     stats[i].baseValue = gun.muzzleVelocity;
                     stats[i].bonusValue = muzzleVelocityBonusTotal;
                     stats[i].totalValue = stats[i].bonusValue + stats[i].baseValue;
+                    gun.muzzleVelocityBonus = stats[i].bonusValue;
                     break;
 
                 case Stats.msBetweenShotsBonus:
                     stats[i].baseValue = gun.msBetweenShots;
                     stats[i].bonusValue = msBetweenShotsBonusTotal;
                     stats[i].totalValue = stats[i].bonusValue + stats[i].baseValue;
+                    gun.msBetweenShotsBonus = stats[i].bonusValue;
                     break;
 
                 case Stats.maxMagSizeBonus:
                     stats[i].baseValue = gun.maxMagSize;
                     stats[i].bonusValue = maxMagSizeBonusTotal;
                     stats[i].totalValue = stats[i].bonusValue + stats[i].baseValue;
+                    gun.maxMagSizeBonus = stats[i].bonusValue;
                     break;
 
                 case Stats.reloadSpeedBonus:
                     stats[i].baseValue = gun.reloadSpeed;
                     stats[i].bonusValue = reloadSpeedBonusTotal;
                     stats[i].totalValue = stats[i].bonusValue + stats[i].baseValue;
+                    gun.reloadSpeedBonus = stats[i].bonusValue;
                     break;
 
                 case Stats.projectileCountBonus:
                     stats[i].baseValue = gun.projectileCount;
                     stats[i].bonusValue = projectileCountBonusTotal;
                     stats[i].totalValue = stats[i].bonusValue + stats[i].baseValue;
+                    gun.projectileCountBonus = stats[i].bonusValue;
                     break;
 
                 case Stats.spreadBonus:
                     stats[i].baseValue = gun.spread;
                     stats[i].bonusValue = spreadBonusTotal;
                     stats[i].totalValue = stats[i].bonusValue + stats[i].baseValue;
+                    gun.spreadBonus = stats[i].bonusValue;
                     break;
 
                 default:

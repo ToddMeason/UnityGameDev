@@ -8,7 +8,7 @@ public class Projectile : MonoBehaviour
     public LayerMask enemyLayer;
     public LayerMask rockLayer;
     float speed = 10;
-    float damage = 10;
+    float damage = 1;
 
     float lifeTime = 3;
     float projectileWidth = 0.1f;
@@ -40,6 +40,11 @@ public class Projectile : MonoBehaviour
     public void SetSpeed(float newSpeed)
     {
         speed = newSpeed;
+    }
+
+    public void SetDamage(float newDamage)
+    {
+        damage = newDamage;
     }
 
     public void CheckCollisions(float moveDistance)
