@@ -13,8 +13,17 @@ public class Player : Entity
     private Game_GUI gui;
     public Gun gun;
 
-    public InventoryObject inventory;
+    public InventoryObject inventory;//might need to auto get later with new scenes
     public Stat[] stats;
+
+    //not the best way of doing this but it should work for now, will need to make easier to add new stats later
+    int dmgBonusTotal = 0;
+    int muzzleVelocityBonusTotal = 0;
+    int msBetweenShotsBonusTotal = 0;
+    int maxMagSizeBonusTotal = 0;
+    int reloadSpeedBonusTotal = 0;
+    int projectileCountBonusTotal = 0;
+    int spreadBonusTotal = 0;
 
     #endregion
 
@@ -34,12 +43,11 @@ public class Player : Entity
     private void Update()
     {
         UpdateHealth();
-        //gun = GetComponent<Rover.Basic.Rover_GunController>().equippedGun;//need to add to equip gun event later not update every frame.
     }
     #endregion
 
     #region Custom Methods
-    public void GetBaseStats()//not clean but should work
+    public void SetStats()//not clean but should work
     {
         gun = GetComponent<Rover.Basic.Rover_GunController>().equippedGun;
 
@@ -49,33 +57,89 @@ public class Player : Entity
             switch (stats[i].type)
             {
                 case Stats.dmgBonus: stats[i].baseValue = gun.dmg;
+                    stats[i].bonusValue = dmgBonusTotal;
+                    stats[i].totalValue = stats[i].bonusValue + stats[i].baseValue;
                     break;
 
                 case Stats.muzzleVelocityBonus:
                     stats[i].baseValue = gun.muzzleVelocity;
+                    stats[i].bonusValue = muzzleVelocityBonusTotal;
+                    stats[i].totalValue = stats[i].bonusValue + stats[i].baseValue;
                     break;
 
                 case Stats.msBetweenShotsBonus:
                     stats[i].baseValue = gun.msBetweenShots;
+                    stats[i].bonusValue = msBetweenShotsBonusTotal;
+                    stats[i].totalValue = stats[i].bonusValue + stats[i].baseValue;
                     break;
 
                 case Stats.maxMagSizeBonus:
                     stats[i].baseValue = gun.maxMagSize;
+                    stats[i].bonusValue = maxMagSizeBonusTotal;
+                    stats[i].totalValue = stats[i].bonusValue + stats[i].baseValue;
                     break;
 
                 case Stats.reloadSpeedBonus:
                     stats[i].baseValue = gun.reloadSpeed;
+                    stats[i].bonusValue = reloadSpeedBonusTotal;
+                    stats[i].totalValue = stats[i].bonusValue + stats[i].baseValue;
                     break;
 
                 case Stats.projectileCountBonus:
                     stats[i].baseValue = gun.projectileCount;
+                    stats[i].bonusValue = projectileCountBonusTotal;
+                    stats[i].totalValue = stats[i].bonusValue + stats[i].baseValue;
                     break;
 
                 case Stats.spreadBonus:
                     stats[i].baseValue = gun.spread;
+                    stats[i].bonusValue = spreadBonusTotal;
+                    stats[i].totalValue = stats[i].bonusValue + stats[i].baseValue;
+                    break;
+
+                default:
                     break;
             }           
         }
+    }
+
+    public void GetBonusStats()
+    {
+        for (int i = 0; i < inventory.Container.Slots.Count; i++)
+        {
+            for (int j = 0; j < inventory.Container.Slots[i].item.buffs.Length; j++)
+            {
+                switch (inventory.Container.Slots[i].item.buffs[j].stats)
+                {
+                    case Stats.dmgBonus:
+                        dmgBonusTotal += inventory.Container.Slots[i].item.buffs[j].value;
+                        break;
+                    case Stats.muzzleVelocityBonus:
+                        muzzleVelocityBonusTotal += inventory.Container.Slots[i].item.buffs[j].value;
+                        break;
+                    case Stats.msBetweenShotsBonus:
+                        msBetweenShotsBonusTotal += inventory.Container.Slots[i].item.buffs[j].value;
+                        break;
+                    case Stats.maxMagSizeBonus:
+                        maxMagSizeBonusTotal += inventory.Container.Slots[i].item.buffs[j].value;
+                        break;
+                    case Stats.reloadSpeedBonus:
+                        reloadSpeedBonusTotal += inventory.Container.Slots[i].item.buffs[j].value;
+                        break;
+                    case Stats.projectileCountBonus:
+                        projectileCountBonusTotal += inventory.Container.Slots[i].item.buffs[j].value;
+                        break;
+                    case Stats.spreadBonus:
+                        spreadBonusTotal += inventory.Container.Slots[i].item.buffs[j].value;
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+
+        Debug.Log(dmgBonusTotal);
+        SetStats();
     }
 
     public void UpdateHealth()
@@ -128,12 +192,14 @@ public class Player : Entity
     #region Events
     private void OnEnable()
     {
-        Rover.Basic.Rover_GunController.GunEquipped += GetBaseStats;
+        InventoryObject.pickedUpItem += GetBonusStats;
+        Rover.Basic.Rover_GunController.GunEquipped += SetStats;
     }
 
     private void OnDisable()
     {
-        Rover.Basic.Rover_GunController.GunEquipped -= GetBaseStats;
+        InventoryObject.pickedUpItem -= GetBonusStats;
+        Rover.Basic.Rover_GunController.GunEquipped -= SetStats;
     }
     #endregion
 }
