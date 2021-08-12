@@ -54,7 +54,6 @@ public class DisplayInventory : MonoBehaviour
 
                 itemsDisplayed.Add(slot, obj);
             }
-            Debug.Log("noice");
         }
    
     }

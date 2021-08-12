@@ -113,32 +113,43 @@ public class Player : Entity
 
     public void GetBonusStats()
     {
+        dmgBonusTotal = 0;
+        muzzleVelocityBonusTotal = 0;
+        msBetweenShotsBonusTotal = 0;
+        maxMagSizeBonusTotal = 0;
+        reloadSpeedBonusTotal = 0;
+        projectileCountBonusTotal = 0;
+        spreadBonusTotal = 0;
+
         for (int i = 0; i < inventory.Container.Slots.Count; i++)
         {
             for (int j = 0; j < inventory.Container.Slots[i].item.buffs.Length; j++)
             {
+                int value = inventory.Container.Slots[i].item.buffs[j].value;
+                int amount = inventory.Container.Slots[i].amount;
+
                 switch (inventory.Container.Slots[i].item.buffs[j].stats)
                 {
                     case Stats.dmgBonus:
-                        dmgBonusTotal += inventory.Container.Slots[i].item.buffs[j].value;
+                        dmgBonusTotal += value * amount;
                         break;
                     case Stats.muzzleVelocityBonus:
-                        muzzleVelocityBonusTotal += inventory.Container.Slots[i].item.buffs[j].value;
+                        muzzleVelocityBonusTotal += value * amount;
                         break;
                     case Stats.msBetweenShotsBonus:
-                        msBetweenShotsBonusTotal += inventory.Container.Slots[i].item.buffs[j].value;
+                        msBetweenShotsBonusTotal += value * amount;
                         break;
                     case Stats.maxMagSizeBonus:
-                        maxMagSizeBonusTotal += inventory.Container.Slots[i].item.buffs[j].value;
+                        maxMagSizeBonusTotal += value * amount;
                         break;
                     case Stats.reloadSpeedBonus:
-                        reloadSpeedBonusTotal += inventory.Container.Slots[i].item.buffs[j].value;
+                        reloadSpeedBonusTotal += value * amount;
                         break;
                     case Stats.projectileCountBonus:
-                        projectileCountBonusTotal += inventory.Container.Slots[i].item.buffs[j].value;
+                        projectileCountBonusTotal += value * amount;
                         break;
                     case Stats.spreadBonus:
-                        spreadBonusTotal += inventory.Container.Slots[i].item.buffs[j].value;
+                        spreadBonusTotal += value * amount;
                         break;
                     default:
                         break;
@@ -146,7 +157,7 @@ public class Player : Entity
             }
         }
 
-        Debug.Log(dmgBonusTotal);
+        //Debug.Log(dmgBonusTotal);
         SetStats();
     }
 
