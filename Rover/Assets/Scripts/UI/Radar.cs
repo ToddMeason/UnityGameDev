@@ -26,6 +26,7 @@ public class Radar : MonoBehaviour
     private void Awake() {
         sweepTransform = transform.Find("Sweep");
         rotationSpeed = 180f;
+        playerPos = FindObjectOfType<Player>().GetComponent<Player>().transform;
     }
 
     // Update is called once per frame

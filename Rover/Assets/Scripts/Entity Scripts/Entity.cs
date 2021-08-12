@@ -5,6 +5,8 @@ using UnityEngine;
 public class Entity : MonoBehaviour, IDamageable
 {
     #region Variables
+
+
     public float maxHealth;
     [Range(0, 0.9f)] public float armour;//percent based damage reduction
     protected float health;
@@ -13,6 +15,7 @@ public class Entity : MonoBehaviour, IDamageable
     #endregion
 
     public event System.Action OnDeath;
+    public event System.Action<float> OnHealthChanged;
 
     #region Builtin Methods
     protected virtual void Start()
@@ -36,6 +39,7 @@ public class Entity : MonoBehaviour, IDamageable
 
         health -= damage;
 
+        OnHealthChanged?.Invoke(health);
         //Debug.Log(damage);
 
         if (health <= 0 && !dead)

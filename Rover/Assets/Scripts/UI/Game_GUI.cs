@@ -18,6 +18,11 @@ public class Game_GUI : MonoBehaviour
     #endregion
 
     #region Builtin Methods
+    private void Awake()
+    {
+        player = FindObjectOfType<Player>().GetComponent<Player>();
+    }
+
     void Start()
     {
         FindObjectOfType<Player>().OnDeath += OnGameOver;
@@ -25,7 +30,7 @@ public class Game_GUI : MonoBehaviour
 
     void Update()
     {
-        
+
     }
 
     #endregion
@@ -33,7 +38,7 @@ public class Game_GUI : MonoBehaviour
     #region Custom Methods
 
     public void ShowHealth(float healthPercent)
-    {
+    {         
         healthBar.rectTransform.localScale = new Vector3(player.healthPercent, 1, 1);
     }
 
@@ -65,6 +70,15 @@ public class Game_GUI : MonoBehaviour
     public void StartNewGame()//Added to the button ui object
     {
         SceneManager.LoadScene("RoverGame");
+    }
+
+    #endregion
+
+    #region Events
+    public void OnEnable()
+    {
+        player.OnHealthChanged += ShowHealth;
+        player.gun.OnAmmoChanged += ShowAmmo;
     }
 
     #endregion

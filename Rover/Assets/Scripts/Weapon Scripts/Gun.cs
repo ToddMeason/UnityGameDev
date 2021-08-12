@@ -6,6 +6,8 @@ using UnityEngine;
 public class Gun : MonoBehaviour
 {
     #region Variables
+    public event System.Action<float> OnAmmoChanged;
+
     public enum WeaponType {MachineGun, ShotGun};//not used currently will be needed for rocket launcher later maybe
     public WeaponType weaponType;
 
@@ -46,7 +48,7 @@ public class Gun : MonoBehaviour
 
     private void Update()
     {
-        DisplayAmmo();
+        
     }
     #endregion
 
@@ -89,6 +91,7 @@ public class Gun : MonoBehaviour
 
             //Play Audio
             GetComponent<AudioSource>().Play();
+            OnAmmoChanged?.Invoke(currentMagSize);
 
             //Spawning a shell casing after a shot 
             Rigidbody newShell = Instantiate(shell, shellEjectionSpawn.position, Quaternion.identity) as Rigidbody;
@@ -103,11 +106,6 @@ public class Gun : MonoBehaviour
             reloading = true;
             StartCoroutine(ReloadGun());
         }
-    }
-
-    public void DisplayAmmo()
-    {
-        gui.ShowAmmo(currentMagSize);
     }
 
     public void SetTotals()
@@ -142,6 +140,7 @@ public class Gun : MonoBehaviour
     {
         yield return new WaitForSeconds(reloadSpeedTotal);
         currentMagSize = maxMagSizeTotal;
+        OnAmmoChanged?.Invoke(currentMagSize);
         reloading = false;
     }
 

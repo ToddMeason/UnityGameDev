@@ -10,7 +10,7 @@ public class Player : Entity
     private float currentLevelExp;
     private float expToLevelUp;
 
-    private Game_GUI gui;
+    public Game_GUI gui;
     public Gun gun;
 
     public InventoryObject inventory;//might need to auto get later with new scenes
@@ -42,7 +42,7 @@ public class Player : Entity
 
     private void Update()
     {
-        UpdateHealth();
+
     }
     #endregion
 
@@ -161,12 +161,12 @@ public class Player : Entity
         SetStats();
     }
 
-    public void UpdateHealth()
-    {
-        gui.ShowHealth(healthPercent);
-    }
+    //public void UpdateHealth()//changed to event in entity
+    //{
+    //    //gui.ShowHealth(healthPercent);
+    //}
 
-    public void AddExp(float exp)
+    public void AddExp(float exp)//change to event
     {
         currentLevelExp += exp;
         if (currentLevelExp >= expToLevelUp)
@@ -175,7 +175,7 @@ public class Player : Entity
             LevelUp();
         }
 
-        gui.SetPlayerExp(currentLevelExp / expToLevelUp, level);
+        //gui.SetPlayerExp(currentLevelExp / expToLevelUp, level); currently breaks enemy ai, they wont die
     }
 
     private void LevelUp()
