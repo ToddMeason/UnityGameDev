@@ -6,6 +6,8 @@ using UnityEngine.UI;
 public class Player : Entity
 {
     #region Variables
+    public event System.Action<float, int> OnExpChanged;
+
     private int level;
     private float currentLevelExp;
     private float expToLevelUp;
@@ -175,7 +177,7 @@ public class Player : Entity
             LevelUp();
         }
 
-        //gui.SetPlayerExp(currentLevelExp / expToLevelUp, level); currently breaks enemy ai, they wont die
+        OnExpChanged?.Invoke(currentLevelExp / expToLevelUp, level);
     }
 
     private void LevelUp()

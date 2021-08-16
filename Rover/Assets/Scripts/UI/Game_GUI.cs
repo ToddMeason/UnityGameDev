@@ -79,6 +79,7 @@ public class Game_GUI : MonoBehaviour
     {
         player.OnHealthChanged += ShowHealth;
         player.gun.OnAmmoChanged += ShowAmmo;
+        player.OnExpChanged += SetPlayerExp;
     }
 
     #endregion
