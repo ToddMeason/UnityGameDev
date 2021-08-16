@@ -82,6 +82,13 @@ public class Game_GUI : MonoBehaviour
         player.OnExpChanged += SetPlayerExp;
     }
 
+    public void OnDisable()
+    {
+        player.OnHealthChanged -= ShowHealth;
+        player.gun.OnAmmoChanged -= ShowAmmo;
+        player.OnExpChanged -= SetPlayerExp;
+    }
+
     #endregion
 
     #region Coroutines

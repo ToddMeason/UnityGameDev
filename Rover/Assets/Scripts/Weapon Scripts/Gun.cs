@@ -44,6 +44,7 @@ public class Gun : MonoBehaviour
             tracer = GetComponent<LineRenderer>();
         }
         SetTotals();
+        OnAmmoChanged?.Invoke(currentMagSize);//need to change to load after the UI is loaded
     }
 
     private void Update()

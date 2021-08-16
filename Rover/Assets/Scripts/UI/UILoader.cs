@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 public class UILoader : MonoBehaviour
 {
     // Start is called before the first frame update
-    void Start()
+    void Start()//need to add a UIloaded event to call things after the UI is loaded not before
     {
         if (SceneManager.GetSceneByName("UI").isLoaded == false)
         {
