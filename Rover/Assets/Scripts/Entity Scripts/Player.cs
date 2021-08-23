@@ -17,6 +17,7 @@ public class Player : Entity
 
     public Game_GUI gui;
     public Gun gun;
+    public Interactable interactable;
 
     public InventoryObject inventory;//might need to auto get later with new scenes
     public Stat[] stats;
@@ -198,14 +199,27 @@ public class Player : Entity
         AddExp(0);
     }
 
-    private void OnTriggerEnter(Collider other)//Pick up items and add to inventory
+    private void OnTriggerEnter(Collider collider)//Detect items and interactables
     {
-        var item = other.GetComponent<GroundItem>();
-        if (item)
+        if (collider.GetComponent<GroundItem>())
         {
+            var item = collider.GetComponent<GroundItem>();
             inventory.AddItem(new Item(item.item), 1);
-            Destroy(other.gameObject);
+            Destroy(collider.gameObject);
         }
+
+        if (collider.GetComponent<Interactable>())
+        {
+            Debug.Log("in range of interactable");
+        }
+
+        //var item = collider.GetComponent<GroundItem>();
+        //if (item)
+        //{
+        //    inventory.AddItem(new Item(item.item), 1);
+        //    Destroy(collider.gameObject);
+        //}
+
     }
 
     public void StatModified(Stat stat)
