@@ -3,11 +3,27 @@ using UnityEngine;
 
 public class Interactable : MonoBehaviour
 {
-    public float radius = 5.0f;
+    private Outline outline;
 
-    void OnDrawGizmosSelected()
+    private void Awake()
     {
-        Gizmos.color = Color.white;
-        Gizmos.DrawWireSphere(transform.position, radius);
+        outline = GetComponent<Outline>();
     }
+
+    private void OnTriggerEnter(Collider collider)
+    {
+        if (collider.GetComponent<Player>())
+        {
+            outline.enabled = true;
+        }
+    }
+
+    private void OnTriggerExit(Collider collider)
+    {
+        if (collider.GetComponent<Player>())
+        {
+            outline.enabled = false;
+        }
+    }
+
 }
