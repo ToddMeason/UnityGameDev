@@ -21,6 +21,7 @@ public class Enemy : Entity
     private Material skinMaterial;
     private Color originalColor;
 
+    public float currencyOnDeath;//change to private later
     public float expOnDeath;//change to private later
     public float attackDistanceThreshold = 3f;//change to private later
     public float timeBetweenAttacks = 2f;//change to private later
@@ -101,6 +102,7 @@ public class Enemy : Entity
         currentState = State.Die;
         dead = true;
         player.AddExp(expOnDeath);
+        player.AddCurrency(currencyOnDeath);
         StartCoroutine(DieAnimation());    
     }
 

@@ -13,6 +13,7 @@ public class Game_GUI : MonoBehaviour
     public Text levelText;
     public Image fadePlane;
     public TextMeshProUGUI ammo;
+    public TextMeshProUGUI currency;
     public GameObject gameOverUI;
     public Player player;
     #endregion
@@ -45,6 +46,11 @@ public class Game_GUI : MonoBehaviour
     public void ShowAmmo(float ammoCount)
     {
         ammo.text = ammoCount.ToString();
+    }
+
+    public void ShowCurrency(float currentCurrency)
+    {
+        currency.text = currentCurrency.ToString();
     }
 
     private void OnGameOver()
@@ -80,6 +86,7 @@ public class Game_GUI : MonoBehaviour
         player.OnHealthChanged += ShowHealth;
         player.gun.OnAmmoChanged += ShowAmmo;
         player.OnExpChanged += SetPlayerExp;
+        player.OnCurrencyChanged += ShowCurrency;
     }
 
     public void OnDisable()
@@ -87,6 +94,7 @@ public class Game_GUI : MonoBehaviour
         player.OnHealthChanged -= ShowHealth;
         player.gun.OnAmmoChanged -= ShowAmmo;
         player.OnExpChanged -= SetPlayerExp;
+        player.OnCurrencyChanged -= ShowCurrency;
     }
 
     #endregion

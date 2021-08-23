@@ -7,10 +7,13 @@ public class Player : Entity
 {
     #region Variables
     public event System.Action<float, int> OnExpChanged;
+    public event System.Action<float> OnCurrencyChanged;
 
     private int level;
     private float currentLevelExp;
     private float expToLevelUp;
+
+    private float currentCurrency;
 
     public Game_GUI gui;
     public Gun gun;
@@ -168,6 +171,13 @@ public class Player : Entity
     //    //gui.ShowHealth(healthPercent);
     //}
 
+    public void AddCurrency(float currency)
+    {
+        currentCurrency += currency;
+
+        OnCurrencyChanged?.Invoke(currentCurrency);
+    }
+
     public void AddExp(float exp)//change to event
     {
         currentLevelExp += exp;
@@ -248,44 +258,3 @@ public class Stat
         parent.StatModified(this);
     }
 }
-
-
-
-//SetBaseStats
-//for (int i = 0; i < stats.Length; i++)
-//{
-//    stats[i].SetParent(this);
-
-//    if (stats[i].type == Stats.dmgBonus)
-//    {
-//        stats[i].baseValue = gun.dmg;
-//    }
-//    else if (stats[i].type == Stats.muzzleVelocityBonus)
-//    {
-//        stats[i].baseValue = gun.muzzleVelocity;
-//    }
-//    else if (stats[i].type == Stats.msBetweenShotsBonus)
-//    {
-//        stats[i].baseValue = gun.msBetweenShots;
-//    }
-//    else if (stats[i].type == Stats.maxMagSizeBonus)
-//    {
-//        stats[i].baseValue = gun.maxMagSize;
-//    }
-//    else if (stats[i].type == Stats.reloadSpeedBonus)
-//    {
-//        stats[i].baseValue = gun.reloadSpeed;
-//    }
-//    else if (stats[i].type == Stats.projectileCountBonus)
-//    {
-//        stats[i].baseValue = gun.projectileCount;
-//    }
-//    else if (stats[i].type == Stats.spreadBonus)
-//    {
-//        stats[i].baseValue = gun.spread;
-//    }
-//    else
-//    {
-//        Debug.Log("Not a stat type on player");
-//    }
-//}

@@ -4076,8 +4076,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 50
+  armour: 0
   currentState: 0
   animator: {fileID: 2401885428773023431}
+  currencyOnDeath: 5
   expOnDeath: 25
   attackDistanceThreshold: 2
   timeBetweenAttacks: 3
