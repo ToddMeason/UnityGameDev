@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 21742836576f9374aa679b7a84cb2200, type: 3}
+  m_Name: Mag Size Up
+  m_EditorClassIdentifier: 
+  id: 3
+  uiIcon: {fileID: -8620398074457317949, guid: b0a08012c6b50fc4fa7d71f0f26d430d, type: 3}
+  type: 1
+  description: 
+  buffs:
+  - stats: 3
+    value: 50

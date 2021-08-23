@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class Game_GUI : MonoBehaviour
 {
@@ -11,11 +12,18 @@ public class Game_GUI : MonoBehaviour
     public Image healthBar;
     public Text levelText;
     public Image fadePlane;
+    public TextMeshProUGUI ammo;
+    public TextMeshProUGUI currency;
     public GameObject gameOverUI;
     public Player player;
     #endregion
 
     #region Builtin Methods
+    private void Awake()
+    {
+        player = FindObjectOfType<Player>().GetComponent<Player>();
+    }
+
     void Start()
     {
         FindObjectOfType<Player>().OnDeath += OnGameOver;
@@ -23,7 +31,7 @@ public class Game_GUI : MonoBehaviour
 
     void Update()
     {
-        
+
     }
 
     #endregion
@@ -31,8 +39,18 @@ public class Game_GUI : MonoBehaviour
     #region Custom Methods
 
     public void ShowHealth(float healthPercent)
-    {
+    {         
         healthBar.rectTransform.localScale = new Vector3(player.healthPercent, 1, 1);
+    }
+
+    public void ShowAmmo(float ammoCount)
+    {
+        ammo.text = ammoCount.ToString();
+    }
+
+    public void ShowCurrency(float currentCurrency)
+    {
+        currency.text = currentCurrency.ToString();
     }
 
     private void OnGameOver()
@@ -58,6 +76,25 @@ public class Game_GUI : MonoBehaviour
     public void StartNewGame()//Added to the button ui object
     {
         SceneManager.LoadScene("RoverGame");
+    }
+
+    #endregion
+
+    #region Events
+    public void OnEnable()
+    {
+        player.OnHealthChanged += ShowHealth;
+        player.gun.OnAmmoChanged += ShowAmmo;
+        player.OnExpChanged += SetPlayerExp;
+        player.OnCurrencyChanged += ShowCurrency;
+    }
+
+    public void OnDisable()
+    {
+        player.OnHealthChanged -= ShowHealth;
+        player.gun.OnAmmoChanged -= ShowAmmo;
+        player.OnExpChanged -= SetPlayerExp;
+        player.OnCurrencyChanged -= ShowCurrency;
     }
 
     #endregion

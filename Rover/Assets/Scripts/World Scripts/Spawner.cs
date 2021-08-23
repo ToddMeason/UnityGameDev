@@ -7,7 +7,7 @@ public class Spawner : MonoBehaviour
     #region Variables
     public Wave[] waves;
     public Enemy enemy;
-    public HealthPickUp healthPickUp;
+    public List<GameObject> pickUps = new List<GameObject>();
 
     Entity playerEntity;
     Transform playerT;
@@ -66,7 +66,7 @@ public class Spawner : MonoBehaviour
     {
         if (!isDisabled)
         {
-            if(pickUpsRemainingToSpawn > 0)
+            if(pickUpsRemainingToSpawn > 0)//currently loops through whole list 
             {
                 pickUpsRemainingToSpawn--;
                 StartCoroutine(SpawnPickUp());
@@ -168,11 +168,14 @@ public class Spawner : MonoBehaviour
         spawnedEnemy.OnDeath += OnEnemyDeath;//Gets the event call from the enemy/entity script that died
     }
 
-    IEnumerator SpawnPickUp()//Change to spawn all pick ups not just health later
+    IEnumerator SpawnPickUp()//Change to spawn the selected amount of items but randomlly select which ones spawn 
     {
-        Transform SpawnTile = map.GetRandomOpenTile();
+        for (int i = 0; i < pickUps.Count; i++)
+        {
+            Transform SpawnTile = map.GetRandomOpenTile();
 
-        HealthPickUp spawnedHealthPickUp = Instantiate(healthPickUp, SpawnTile.position + Vector3.up, Quaternion.identity) as HealthPickUp;
+            Instantiate(pickUps[i], SpawnTile.position + Vector3.up, Quaternion.identity);
+        }
         yield return null;
     }
 
