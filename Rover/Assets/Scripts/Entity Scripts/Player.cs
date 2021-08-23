@@ -211,6 +211,7 @@ public class Player : Entity
         if (collider.GetComponent<Interactable>())
         {
             Debug.Log("in range of interactable");
+            interactable = collider.GetComponent<Interactable>();
         }
 
         //var item = collider.GetComponent<GroundItem>();
@@ -220,6 +221,15 @@ public class Player : Entity
         //    Destroy(collider.gameObject);
         //}
 
+    }
+
+    private void OnTriggerExit(Collider colliderExit)
+    {
+        if (colliderExit.GetComponent<Interactable>())//Detects if you left the intereactable area then sets it back to null
+        {
+            Debug.Log("left range of interactable");
+            interactable = null;
+        }      
     }
 
     public void StatModified(Stat stat)

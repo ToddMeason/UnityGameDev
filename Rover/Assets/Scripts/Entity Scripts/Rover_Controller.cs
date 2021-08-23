@@ -28,6 +28,7 @@ namespace Rover.Basic
         private Rover_Inputs input;
         private Vector3 finalTurretLookDir;
         private Rover_GunController gunController;
+        protected Player player;
         #endregion
 
 
@@ -37,6 +38,7 @@ namespace Rover.Basic
             rb = GetComponent<Rigidbody>();
             input = GetComponent<Rover_Inputs>();
             gunController = GetComponent<Rover_GunController>();
+            player = GetComponent<Player>();
             boostSpeed = roverSpeed * 5;
         }
 
@@ -50,6 +52,19 @@ namespace Rover.Basic
             if(Input.GetButton("Reload"))
             {
                 gunController.Reload();
+            }
+
+            if (Input.GetButtonDown("Interact"))
+            {
+                if (player.interactable)
+                {
+                    player.interactable.Interact();
+                }
+                else
+                {
+                    Debug.Log("No interactable in range");
+                }
+                
             }
 
             if(Input.GetButton("Sprint"))
