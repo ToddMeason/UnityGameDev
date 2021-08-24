@@ -7,7 +7,7 @@ public class Spawner : MonoBehaviour
     #region Variables
     public Wave[] waves;
     public Enemy enemy;
-    public List<GameObject> pickUps = new List<GameObject>();
+    public List<GameObject> chests = new List<GameObject>();
 
     Entity playerEntity;
     Transform playerT;
@@ -66,7 +66,7 @@ public class Spawner : MonoBehaviour
     {
         if (!isDisabled)
         {
-            if(chestsRemainingToSpawn > 0)//currently loops through whole list 
+            if (chestsRemainingToSpawn > 0)//currently loops through whole list 
             {
                 chestsRemainingToSpawn--;
                 StartCoroutine(SpawnChest());
@@ -165,16 +165,18 @@ public class Spawner : MonoBehaviour
         }
 
         Enemy spawnedEnemy = Instantiate(enemy, SpawnTile.position + Vector3.up, Quaternion.identity) as Enemy;
+        spawnedEnemy.transform.parent = this.transform;
         spawnedEnemy.OnDeath += OnEnemyDeath;//Gets the event call from the enemy/entity script that died
     }
 
-    IEnumerator SpawnChest()//Change to spawn the selected amount of items but randomlly select which ones spawn 
+    IEnumerator SpawnChest()//Change to spawn chests properly later not from a list
     {
-        for (int i = 0; i < pickUps.Count; i++)
+        for (int i = 0; i < chests.Count; i++)
         {
             Transform SpawnTile = map.GetRandomOpenTile();
 
-            Instantiate(pickUps[i], SpawnTile.position + Vector3.up, Quaternion.identity);
+            var chest = Instantiate(chests[i], SpawnTile.position + Vector3.up, Quaternion.identity);
+            chest.transform.parent = this.transform;
         }
         yield return null;
     }

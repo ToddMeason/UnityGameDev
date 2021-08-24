@@ -228,6 +228,7 @@ GameObject:
   - component: {fileID: 7524535409318879807}
   - component: {fileID: 7524535409318879806}
   - component: {fileID: 7524535409318879801}
+  - component: {fileID: 3976229595912036119}
   m_Layer: 0
   m_Name: Chest
   m_TagString: HasCost
@@ -358,10 +359,23 @@ MonoBehaviour:
   outline: {fileID: 0}
   textPopup: {fileID: 0}
   activated: 0
+  cost: 0
   items:
   - {fileID: 7052385741067589597, guid: fea9e7fa50ffcee489dfb5b1e2d77710, type: 3}
   - {fileID: 7172466799089907167, guid: 3ac276adc620ebd40964e9457e32fe86, type: 3}
   - {fileID: 3713707129099903484, guid: 9fc023bc0a65fd14eb8f2110f24fdac5, type: 3}
   - {fileID: 1912280067656612997, guid: a9d2df45e623f9a47b8a5c3861bcda8c, type: 3}
   renderer: {fileID: 0}
-  cost: 0
+--- !u!114 &3976229595912036119
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7524535409318879800}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d7eb81b1b9d1824fb8736c482d005d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  image: {fileID: 8955511299753132442, guid: 0a4809c9d4a262c489c722c52a1384f2, type: 3}
