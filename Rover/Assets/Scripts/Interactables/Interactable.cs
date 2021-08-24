@@ -1,17 +1,21 @@
 using System.Collections;
 using UnityEngine;
+using TMPro;
 
 [RequireComponent(typeof(Outline))]
 [RequireComponent(typeof(SphereCollider))]
 public abstract class Interactable : MonoBehaviour
 {
     public Outline outline;
+    public TextMeshPro textPopup;
     public bool activated = false;
 
     protected virtual void Awake()
     {
         outline = GetComponent<Outline>();
+        textPopup = GetComponentInChildren<TextMeshPro>();
         outline.enabled = false;
+        textPopup.enabled = false;
     }
 
     private void Reset()
@@ -21,7 +25,14 @@ public abstract class Interactable : MonoBehaviour
 
     //make sure it has ontrigger spherecollider
 
-    public abstract void Interact();
+    public virtual void Interact()
+    {
+        if (activated)
+        {
+            outline.enabled = false;
+            textPopup.enabled = false;
+        }
+    }
 
     private void OnTriggerEnter(Collider collider)
     {
@@ -29,6 +40,7 @@ public abstract class Interactable : MonoBehaviour
         {
             outline.enabled = true;
             //Display interact key(E) above object
+            textPopup.enabled = true;
         }
     }
 
@@ -37,6 +49,7 @@ public abstract class Interactable : MonoBehaviour
         if (collider.GetComponent<Player>())
         {
             outline.enabled = false;
+            textPopup.enabled = false;
         }
     }
 

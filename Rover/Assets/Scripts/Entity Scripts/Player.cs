@@ -39,11 +39,6 @@ public class Player : Entity
         base.Start();
         gui = FindObjectOfType<Game_GUI>();       
         LevelUp();
-        //gun = GetComponent<Rover.Basic.Rover_GunController>().equippedGun;
-        //if (gun)
-        //{
-        //    SetBaseStats();
-        //}     
     }
 
     private void Update()
@@ -179,7 +174,7 @@ public class Player : Entity
         OnCurrencyChanged?.Invoke(currentCurrency);
     }
 
-    public void AddExp(float exp)//change to event
+    public void AddExp(float exp)
     {
         currentLevelExp += exp;
         if (currentLevelExp >= expToLevelUp)
