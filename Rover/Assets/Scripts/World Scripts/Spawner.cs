@@ -15,7 +15,7 @@ public class Spawner : MonoBehaviour
     private Wave currentWave;
     private int currentWaveNumber;
 
-    private int pickUpsRemainingToSpawn;
+    private int chestsRemainingToSpawn;
     private int enemiesRemainingToSpawn;
     private int enemiesRemainingAlive;//Make this visible on UI later
     private float nextSpawnTime;
@@ -42,7 +42,7 @@ public class Spawner : MonoBehaviour
     public class Wave
     {
         public int enemyCount;
-        public int pickUpCount;
+        public int chestCount;
         public float timeBetweenSpawns;
     }
 
@@ -66,10 +66,10 @@ public class Spawner : MonoBehaviour
     {
         if (!isDisabled)
         {
-            if(pickUpsRemainingToSpawn > 0)//currently loops through whole list 
+            if(chestsRemainingToSpawn > 0)//currently loops through whole list 
             {
-                pickUpsRemainingToSpawn--;
-                StartCoroutine(SpawnPickUp());
+                chestsRemainingToSpawn--;
+                StartCoroutine(SpawnChest());
             }
 
             if (Time.time > nextCampCheckTime)
@@ -127,7 +127,7 @@ public class Spawner : MonoBehaviour
             enemiesRemainingToSpawn = currentWave.enemyCount;
             enemiesRemainingAlive = enemiesRemainingToSpawn;
 
-            pickUpsRemainingToSpawn = currentWave.pickUpCount;//sets pickups at start of wave before spawning them
+            chestsRemainingToSpawn = currentWave.chestCount;//sets pickups at start of wave before spawning them
 
             if(OnNewWave != null)
             {
@@ -168,7 +168,7 @@ public class Spawner : MonoBehaviour
         spawnedEnemy.OnDeath += OnEnemyDeath;//Gets the event call from the enemy/entity script that died
     }
 
-    IEnumerator SpawnPickUp()//Change to spawn the selected amount of items but randomlly select which ones spawn 
+    IEnumerator SpawnChest()//Change to spawn the selected amount of items but randomlly select which ones spawn 
     {
         for (int i = 0; i < pickUps.Count; i++)
         {

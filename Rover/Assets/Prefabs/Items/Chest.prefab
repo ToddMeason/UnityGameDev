@@ -230,7 +230,7 @@ GameObject:
   - component: {fileID: 7524535409318879801}
   m_Layer: 0
   m_Name: Chest
-  m_TagString: Untagged
+  m_TagString: HasCost
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -363,4 +363,5 @@ MonoBehaviour:
   - {fileID: 7172466799089907167, guid: 3ac276adc620ebd40964e9457e32fe86, type: 3}
   - {fileID: 3713707129099903484, guid: 9fc023bc0a65fd14eb8f2110f24fdac5, type: 3}
   - {fileID: 1912280067656612997, guid: a9d2df45e623f9a47b8a5c3861bcda8c, type: 3}
+  renderer: {fileID: 0}
   cost: 0

@@ -56,15 +56,7 @@ namespace Rover.Basic
 
             if (Input.GetButtonDown("Interact"))
             {
-                if (player.interactable)
-                {
-                    player.interactable.Interact();
-                }
-                else
-                {
-                    Debug.Log("No interactable in range");
-                }
-                
+                player.TryInteract();
             }
 
             if(Input.GetButton("Sprint"))

@@ -13,7 +13,7 @@ public class Player : Entity
     private float currentLevelExp;
     private float expToLevelUp;
 
-    private float currentCurrency;
+    public float currentCurrency;
 
     public Game_GUI gui;
     public Gun gun;
@@ -167,11 +167,57 @@ public class Player : Entity
     //    //gui.ShowHealth(healthPercent);
     //}
 
+    public void TryInteract()
+    {
+        if (interactable)
+        {
+            if (interactable.tag == "HasCost")
+            {
+                if(TrySpendCostAmount(interactable.cost))
+                {
+                    interactable.Interact();
+                }
+                else
+                {
+                    Debug.Log("Not enough money");
+                }
+            }
+            else if (interactable.tag == "NoCost")
+            {
+                interactable.Interact();
+            }         
+        }
+        else
+        {
+            Debug.Log("No interactable in range");
+        }
+    }
+
     public void AddCurrency(float currency)
     {
         currentCurrency += currency;
 
         OnCurrencyChanged?.Invoke(currentCurrency);
+    }
+
+    public void GetCostAmount(float cost)
+    {
+
+    }
+
+    public bool TrySpendCostAmount(float cost)
+    {
+        if (currentCurrency >= cost)
+        {
+            currentCurrency -= cost;
+            OnCurrencyChanged?.Invoke(currentCurrency);
+            //trigger chest event to open
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     public void AddExp(float exp)

@@ -9,6 +9,7 @@ public abstract class Interactable : MonoBehaviour
     public Outline outline;
     public TextMeshPro textPopup;
     public bool activated = false;
+    public float cost;
 
     protected virtual void Awake()
     {
