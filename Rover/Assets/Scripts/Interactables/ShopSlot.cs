@@ -13,6 +13,14 @@ public class ShopSlot : Interactable
     void Start()//Need to set item in here later once rarity is setup
     {
         renderer = GetComponent<Renderer>();
+        GenerateItem();
+        DisplayItem();
+        textPopup.autoSizeTextContainer = true;
+        textPopup.text = "E\n" + cost;
+    }
+
+    public void GenerateItem()
+    {
         float rand = Random.Range(0, 100);
 
         if (rand < 60)//common
@@ -30,10 +38,6 @@ public class ShopSlot : Interactable
             cost = 100;
             renderer.material.color = Color.black;
         }
-
-        DisplayItem();
-        textPopup.autoSizeTextContainer = true;
-        textPopup.text = "E\n" + cost;
     }
 
     public void DisplayItem()
@@ -41,6 +45,7 @@ public class ShopSlot : Interactable
         newItem = Instantiate(items[Random.Range(0, items.Length)], new Vector3(transform.position.x, transform.position.y + 1, transform.position.z), Quaternion.identity);//Displays item above the shopSlot
         newItem.GetComponent<Rigidbody>().isKinematic = true;
         newItem.GetComponent<GroundItem>().enabled = false;//Turns off components so it doesnt move and cant be picked up
+        newItem.transform.parent = this.transform;
     }
 
     public override void Interact()

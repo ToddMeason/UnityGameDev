@@ -251,31 +251,16 @@ public class Player : Entity
 
         if (collider.GetComponent<Interactable>())
         {
-            Debug.Log("in range of interactable");
             interactable = collider.GetComponent<Interactable>();
         }
-
-        //var item = collider.GetComponent<GroundItem>();
-        //if (item)
-        //{
-        //    inventory.AddItem(new Item(item.item), 1);
-        //    Destroy(collider.gameObject);
-        //}
-
     }
 
     private void OnTriggerExit(Collider colliderExit)
     {
         if (colliderExit.GetComponent<Interactable>())//Detects if you left the intereactable area then sets it back to null
         {
-            Debug.Log("left range of interactable");
             interactable = null;
         }      
-    }
-
-    public void StatModified(Stat stat)
-    {
-        Debug.Log(stat.type + " was updated! Value is now " + stat.totalValue);
     }
 
     private void OnApplicationQuit()//Clears inventory when app is closed, have to check later if this breaks save file
@@ -316,10 +301,5 @@ public class Stat
         parent = _parent;
         totalValue = baseValue + bonusValue;
         //value = new ModifiableInt(StatModified);
-    }
-
-    public void StatModified()
-    {
-        parent.StatModified(this);
     }
 }
