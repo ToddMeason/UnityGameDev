@@ -200,11 +200,6 @@ public class Player : Entity
         OnCurrencyChanged?.Invoke(currentCurrency);
     }
 
-    public void GetCostAmount(float cost)
-    {
-
-    }
-
     public bool TrySpendCostAmount(float cost)
     {
         if (currentCurrency >= cost)
@@ -268,6 +263,52 @@ public class Player : Entity
         inventory.Clear();
     }
 
+    #region Saving/Loading 
+    //Should probably move to seperate class later
+    [ContextMenu("Save")]
+    private void Save()
+    {
+        PlayerPrefs.SetInt("level", level);
+        PlayerPrefs.SetFloat("currentExp", currentLevelExp);//may need exp to level
+        PlayerPrefs.SetFloat("currentCurrency", currentCurrency);
+
+        //PlayerPrefs.SetString("gun", gun.name);//Change to an array of guns then read the array position/id to save and load the gun
+
+        //Saveplayer stats somehow later once they are setup properly
+    }
+
+    [ContextMenu("Load")]
+    private void Load()
+    {
+        level = PlayerPrefs.GetInt("level");
+        currentLevelExp = PlayerPrefs.GetFloat("currentExp");
+        currentCurrency = PlayerPrefs.GetFloat("currentCurrency");
+
+        //switch (PlayerPrefs.GetString("gun"))//change to int later
+        //{
+        //    case "MachineGun":
+        //        gun = 
+
+
+        //    default:
+        //        break;
+        //}
+
+        OnExpChanged?.Invoke(currentLevelExp / expToLevelUp, level);
+        GetBonusStats();
+        OnCurrencyChanged?.Invoke(currentCurrency);
+    }
+
+    [ContextMenu("Clear")]
+    private void Clear()
+    {
+        PlayerPrefs.SetInt("level", 0);
+        PlayerPrefs.SetFloat("currentExp", 0);
+        PlayerPrefs.SetFloat("currentCurrency", 0);
+    }
+
+    #endregion
+
     #endregion
 
     #region Events
@@ -286,7 +327,7 @@ public class Player : Entity
 }
 
 [System.Serializable]
-public class Stat
+public class Stat//Not used now
 {
     [SerializeField]
     public Player parent;
