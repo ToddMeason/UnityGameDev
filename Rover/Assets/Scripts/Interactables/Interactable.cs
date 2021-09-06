@@ -3,7 +3,7 @@ using UnityEngine;
 using TMPro;
 
 [RequireComponent(typeof(Outline))]
-[RequireComponent(typeof(SphereCollider))]
+[RequireComponent(typeof(Collider))]
 public abstract class Interactable : MonoBehaviour
 {
     public Outline outline;
@@ -21,7 +21,7 @@ public abstract class Interactable : MonoBehaviour
 
     private void Reset()
     {
-        GetComponent<SphereCollider>().isTrigger = true;
+        GetComponent<Collider>().isTrigger = true;
     }
 
     //make sure it has ontrigger spherecollider
