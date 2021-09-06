@@ -46,6 +46,7 @@ public class Game_GUI : MonoBehaviour
     public void ShowAmmo(float ammoCount)
     {
         ammo.text = ammoCount.ToString();
+        Debug.Log(ammoCount);
     }
 
     public void ShowCurrency(float currentCurrency)

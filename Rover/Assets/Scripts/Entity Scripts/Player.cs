@@ -9,13 +9,12 @@ public class Player : Entity
     public event System.Action<float, int> OnExpChanged;
     public event System.Action<float> OnCurrencyChanged;
 
-    private int level;
-    private float currentLevelExp;
+    public int level;
+    public float currentLevelExp;
     private float expToLevelUp;
 
     public float currentCurrency;
 
-    public Game_GUI gui;
     public Gun gun;
     public Interactable interactable;
 
@@ -36,8 +35,7 @@ public class Player : Entity
     #region Builtin Methods
     protected override void Start()
     {
-        base.Start();
-        gui = FindObjectOfType<Game_GUI>();       
+        base.Start();      
         LevelUp();
     }
 
@@ -263,51 +261,12 @@ public class Player : Entity
         inventory.Clear();
     }
 
-    #region Saving/Loading 
-    //Should probably move to seperate class later
-    [ContextMenu("Save")]
-    private void Save()
+    public void OnLoad()
     {
-        PlayerPrefs.SetInt("level", level);
-        PlayerPrefs.SetFloat("currentExp", currentLevelExp);//may need exp to level
-        PlayerPrefs.SetFloat("currentCurrency", currentCurrency);
-
-        //PlayerPrefs.SetString("gun", gun.name);//Change to an array of guns then read the array position/id to save and load the gun
-
-        //Saveplayer stats somehow later once they are setup properly
-    }
-
-    [ContextMenu("Load")]
-    private void Load()
-    {
-        level = PlayerPrefs.GetInt("level");
-        currentLevelExp = PlayerPrefs.GetFloat("currentExp");
-        currentCurrency = PlayerPrefs.GetFloat("currentCurrency");
-
-        //switch (PlayerPrefs.GetString("gun"))//change to int later
-        //{
-        //    case "MachineGun":
-        //        gun = 
-
-
-        //    default:
-        //        break;
-        //}
-
         OnExpChanged?.Invoke(currentLevelExp / expToLevelUp, level);
         GetBonusStats();
         OnCurrencyChanged?.Invoke(currentCurrency);
     }
-
-    [ContextMenu("Clear")]
-    private void Clear()
-    {
-        PlayerPrefs.SetInt("level", 0);
-        PlayerPrefs.SetFloat("currentExp", 0);
-        PlayerPrefs.SetFloat("currentCurrency", 0);
-    }
-
-    #endregion
 
     #endregion
 
