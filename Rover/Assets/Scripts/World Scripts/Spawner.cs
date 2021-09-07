@@ -2,12 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Spawner : MonoBehaviour
+public class Spawner : MonoBehaviour //rework to not spawn when objective is spawning and to not reset on new wave
 {
     #region Variables
     public Wave[] waves;
     public Enemy enemy;
-    public List<GameObject> pickUps = new List<GameObject>();
+    public List<GameObject> chests = new List<GameObject>();
+    public MainObjective mainObjective;
 
     Entity playerEntity;
     Transform playerT;
@@ -15,7 +16,7 @@ public class Spawner : MonoBehaviour
     private Wave currentWave;
     private int currentWaveNumber;
 
-    private int pickUpsRemainingToSpawn;
+    private int chestsRemainingToSpawn;
     private int enemiesRemainingToSpawn;
     private int enemiesRemainingAlive;//Make this visible on UI later
     private float nextSpawnTime;
@@ -42,7 +43,7 @@ public class Spawner : MonoBehaviour
     public class Wave
     {
         public int enemyCount;
-        public int pickUpCount;
+        public int chestCount;
         public float timeBetweenSpawns;
     }
 
@@ -60,16 +61,18 @@ public class Spawner : MonoBehaviour
 
         map = FindObjectOfType<MapGenerator>();
         NextWave();
+
+        StartCoroutine(SpawnMainObjective());
     }
 
     private void Update()
     {
         if (!isDisabled)
         {
-            if(pickUpsRemainingToSpawn > 0)//currently loops through whole list 
+            if (chestsRemainingToSpawn > 0)//currently loops through whole list 
             {
-                pickUpsRemainingToSpawn--;
-                StartCoroutine(SpawnPickUp());
+                chestsRemainingToSpawn--;
+                StartCoroutine(SpawnChest());
             }
 
             if (Time.time > nextCampCheckTime)
@@ -85,7 +88,7 @@ public class Spawner : MonoBehaviour
                 enemiesRemainingToSpawn--;
                 nextSpawnTime = Time.time + currentWave.timeBetweenSpawns;
 
-                StartCoroutine("SpawnEnemy");
+                StartCoroutine(SpawnEnemy());
             }
         }
     }
@@ -127,7 +130,7 @@ public class Spawner : MonoBehaviour
             enemiesRemainingToSpawn = currentWave.enemyCount;
             enemiesRemainingAlive = enemiesRemainingToSpawn;
 
-            pickUpsRemainingToSpawn = currentWave.pickUpCount;//sets pickups at start of wave before spawning them
+            chestsRemainingToSpawn = currentWave.chestCount;//sets pickups at start of wave before spawning them
 
             if(OnNewWave != null)
             {
@@ -165,17 +168,29 @@ public class Spawner : MonoBehaviour
         }
 
         Enemy spawnedEnemy = Instantiate(enemy, SpawnTile.position + Vector3.up, Quaternion.identity) as Enemy;
+        spawnedEnemy.transform.parent = this.transform;
         spawnedEnemy.OnDeath += OnEnemyDeath;//Gets the event call from the enemy/entity script that died
     }
 
-    IEnumerator SpawnPickUp()//Change to spawn the selected amount of items but randomlly select which ones spawn 
+    IEnumerator SpawnChest()//Change to spawn chests properly later not from a list
     {
-        for (int i = 0; i < pickUps.Count; i++)
+        for (int i = 0; i < chests.Count; i++)
         {
             Transform SpawnTile = map.GetRandomOpenTile();
 
-            Instantiate(pickUps[i], SpawnTile.position + Vector3.up, Quaternion.identity);
+            var chest = Instantiate(chests[i], SpawnTile.position + Vector3.up, Quaternion.identity);
+            chest.transform.parent = this.transform;
         }
+        yield return null;
+    }
+
+    IEnumerator SpawnMainObjective()
+    {
+        Transform SpawnTile = map.GetRandomOpenTile();
+
+        var mainObj = Instantiate(mainObjective, SpawnTile.position + Vector3.up + new Vector3(0, 2, 0), Quaternion.identity);//set height later once prefab model added
+        mainObj.transform.parent = this.transform;
+
         yield return null;
     }
 

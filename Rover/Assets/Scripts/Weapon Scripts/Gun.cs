@@ -6,6 +6,8 @@ using UnityEngine;
 public class Gun : MonoBehaviour
 {
     #region Variables
+    public int ID;
+
     public event System.Action<float> OnAmmoChanged;
 
     public enum WeaponType {MachineGun, ShotGun};//not used currently will be needed for rocket launcher later maybe
@@ -29,15 +31,11 @@ public class Gun : MonoBehaviour
     public bool reloading = false;
     private float nextShotTime;
 
-    private Game_GUI gui;
-
     #endregion
 
     #region Builtin Methods
     private void Start()
     {
-        gui = FindObjectOfType<Game_GUI>();
-
         currentMagSize = maxMagSize;
         if(GetComponent<LineRenderer>())
         {
@@ -45,11 +43,6 @@ public class Gun : MonoBehaviour
         }
         SetTotals();
         OnAmmoChanged?.Invoke(currentMagSize);//need to change to load after the UI is loaded
-    }
-
-    private void Update()
-    {
-        
     }
     #endregion
 

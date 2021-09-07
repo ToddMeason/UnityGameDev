@@ -32,6 +32,7 @@ public class InventoryObject : ScriptableObject
        pickedUpItem?.Invoke();
     }
 
+    #region Save/Load
     [ContextMenu("Save")]
     public void Save()//save path is C:/Users/'username'/AppData/LocalLow/DefaultCompany/Rover
     {
@@ -54,6 +55,7 @@ public class InventoryObject : ScriptableObject
             JsonUtility.FromJsonOverwrite(bf.Deserialize(file).ToString(), this);
             file.Close();
         }
+        pickedUpItem?.Invoke();//just to call update inventoryDisplay
     }
 
     [ContextMenu("Clear Inventory")]
@@ -61,6 +63,7 @@ public class InventoryObject : ScriptableObject
     {
         Container = new Inventory();
     }
+    #endregion
 }
 
 [System.Serializable]

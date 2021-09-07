@@ -9,14 +9,14 @@ public class Player : Entity
     public event System.Action<float, int> OnExpChanged;
     public event System.Action<float> OnCurrencyChanged;
 
-    private int level;
-    private float currentLevelExp;
+    public int level;
+    public float currentLevelExp;
     private float expToLevelUp;
 
-    private float currentCurrency;
+    public float currentCurrency;
 
-    public Game_GUI gui;
     public Gun gun;
+    public Interactable interactable;
 
     public InventoryObject inventory;//might need to auto get later with new scenes
     public Stat[] stats;
@@ -35,14 +35,8 @@ public class Player : Entity
     #region Builtin Methods
     protected override void Start()
     {
-        base.Start();
-        gui = FindObjectOfType<Game_GUI>();       
+        base.Start();      
         LevelUp();
-        //gun = GetComponent<Rover.Basic.Rover_GunController>().equippedGun;
-        //if (gun)
-        //{
-        //    SetBaseStats();
-        //}     
     }
 
     private void Update()
@@ -171,6 +165,32 @@ public class Player : Entity
     //    //gui.ShowHealth(healthPercent);
     //}
 
+    public void TryInteract()
+    {
+        if (interactable)
+        {
+            if (interactable.tag == "HasCost")
+            {
+                if(TrySpendCostAmount(interactable.cost))
+                {
+                    interactable.Interact();
+                }
+                else
+                {
+                    Debug.Log("Not enough money");
+                }
+            }
+            else if (interactable.tag == "NoCost")
+            {
+                interactable.Interact();
+            }         
+        }
+        else
+        {
+            Debug.Log("No interactable in range");
+        }
+    }
+
     public void AddCurrency(float currency)
     {
         currentCurrency += currency;
@@ -178,7 +198,22 @@ public class Player : Entity
         OnCurrencyChanged?.Invoke(currentCurrency);
     }
 
-    public void AddExp(float exp)//change to event
+    public bool TrySpendCostAmount(float cost)
+    {
+        if (currentCurrency >= cost)
+        {
+            currentCurrency -= cost;
+            OnCurrencyChanged?.Invoke(currentCurrency);
+            //trigger chest event to open
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public void AddExp(float exp)
     {
         currentLevelExp += exp;
         if (currentLevelExp >= expToLevelUp)
@@ -198,24 +233,39 @@ public class Player : Entity
         AddExp(0);
     }
 
-    private void OnTriggerEnter(Collider other)//Pick up items and add to inventory
+    private void OnTriggerEnter(Collider collider)//Detect items and interactables
     {
-        var item = other.GetComponent<GroundItem>();
-        if (item)
+        if (collider.GetComponent<GroundItem>())
         {
+            var item = collider.GetComponent<GroundItem>();
             inventory.AddItem(new Item(item.item), 1);
-            Destroy(other.gameObject);
+            Destroy(collider.gameObject);
+        }
+
+        if (collider.GetComponent<Interactable>())
+        {
+            interactable = collider.GetComponent<Interactable>();
         }
     }
 
-    public void StatModified(Stat stat)
+    private void OnTriggerExit(Collider colliderExit)
     {
-        Debug.Log(stat.type + " was updated! Value is now " + stat.totalValue);
+        if (colliderExit.GetComponent<Interactable>())//Detects if you left the intereactable area then sets it back to null
+        {
+            interactable = null;
+        }      
     }
 
     private void OnApplicationQuit()//Clears inventory when app is closed, have to check later if this breaks save file
     {
         inventory.Clear();
+    }
+
+    public void OnLoad()
+    {
+        OnExpChanged?.Invoke(currentLevelExp / expToLevelUp, level);
+        GetBonusStats();
+        OnCurrencyChanged?.Invoke(currentCurrency);
     }
 
     #endregion
@@ -236,7 +286,7 @@ public class Player : Entity
 }
 
 [System.Serializable]
-public class Stat
+public class Stat//Not used now
 {
     [SerializeField]
     public Player parent;
@@ -251,10 +301,5 @@ public class Stat
         parent = _parent;
         totalValue = baseValue + bonusValue;
         //value = new ModifiableInt(StatModified);
-    }
-
-    public void StatModified()
-    {
-        parent.StatModified(this);
     }
 }

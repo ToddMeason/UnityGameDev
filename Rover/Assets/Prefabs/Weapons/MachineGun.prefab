@@ -361,6 +361,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: efad1b7978439174194e7f817405b70c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ID: 1
   weaponType: 1
   projectileSpawn: {fileID: 1610281057850828034}
   projectile: {fileID: 2715062342412648571, guid: 2bac5244ac4a236449234b6304e85906, type: 3}

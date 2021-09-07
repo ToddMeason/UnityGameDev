@@ -9,8 +9,8 @@ namespace Rover.Cameras
         #region Variables
         public Transform target;
 
-        public float height = 10f;
-        public float distance = 20f;
+        public float height = 20f;
+        public float distance = 15f;
         public float angle = 45f;
         public float smoothSpeed = 0.5f;
 
