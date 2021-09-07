@@ -2,12 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Spawner : MonoBehaviour
+public class Spawner : MonoBehaviour //rework to not spawn when objective is spawning and to not reset on new wave
 {
     #region Variables
     public Wave[] waves;
     public Enemy enemy;
     public List<GameObject> chests = new List<GameObject>();
+    public MainObjective mainObjective;
 
     Entity playerEntity;
     Transform playerT;
@@ -60,6 +61,8 @@ public class Spawner : MonoBehaviour
 
         map = FindObjectOfType<MapGenerator>();
         NextWave();
+
+        StartCoroutine(SpawnMainObjective());
     }
 
     private void Update()
@@ -85,7 +88,7 @@ public class Spawner : MonoBehaviour
                 enemiesRemainingToSpawn--;
                 nextSpawnTime = Time.time + currentWave.timeBetweenSpawns;
 
-                StartCoroutine("SpawnEnemy");
+                StartCoroutine(SpawnEnemy());
             }
         }
     }
@@ -178,6 +181,16 @@ public class Spawner : MonoBehaviour
             var chest = Instantiate(chests[i], SpawnTile.position + Vector3.up, Quaternion.identity);
             chest.transform.parent = this.transform;
         }
+        yield return null;
+    }
+
+    IEnumerator SpawnMainObjective()
+    {
+        Transform SpawnTile = map.GetRandomOpenTile();
+
+        var mainObj = Instantiate(mainObjective, SpawnTile.position + Vector3.up + new Vector3(0, 2, 0), Quaternion.identity);//set height later once prefab model added
+        mainObj.transform.parent = this.transform;
+
         yield return null;
     }
 

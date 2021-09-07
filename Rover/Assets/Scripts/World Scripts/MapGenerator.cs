@@ -37,10 +37,10 @@ public class MapGenerator : MonoBehaviour
 
 
         //Random map settings
-        maps[mapIndex].mapSize.x = Random.Range(20, 40);
-        maps[mapIndex].mapSize.y = Random.Range(20, 40);
-        maps[mapIndex].obstaclePercent = Random.Range(0.2f, 0.4f);
-        maps[mapIndex].seed = Random.Range(0, 1000);
+        //maps[mapIndex].mapSize.x = Random.Range(20, 40);
+        //maps[mapIndex].mapSize.y = Random.Range(20, 40);
+        //maps[mapIndex].obstaclePercent = Random.Range(0.2f, 0.4f);
+        //maps[mapIndex].seed = Random.Range(0, 1000);
     }   
 
     void Update()
