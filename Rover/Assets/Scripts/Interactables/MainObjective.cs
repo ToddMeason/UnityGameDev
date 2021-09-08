@@ -10,6 +10,7 @@ public class MainObjective : Interactable //Make spawning its own class later
     [SerializeField] private float maxSpawnPos = 20;
 
     public float time;
+    public float spawnDelay = 2f;
     public bool playerInRange;
 
     private float nextSpawnTime;
@@ -37,7 +38,7 @@ public class MainObjective : Interactable //Make spawning its own class later
         //Get random coord in area on flat axis, spherecast down from the sky onto that coord, if no colliders besides ground if there than spawn the enemy if not get a new coord
         while (!isDisabled)
         {
-            Vector3 pos = new Vector3(Random.Range(-maxSpawnPos, maxSpawnPos), 0.5f, Random.Range(-maxSpawnPos, maxSpawnPos));//might need to change to z not y
+            Vector3 pos = new Vector3(transform.position.x + Random.Range(-maxSpawnPos, maxSpawnPos), 0.5f, transform.position.z + Random.Range(-maxSpawnPos, maxSpawnPos));//might need to change to z not y
             Debug.DrawLine(transform.position, pos, Color.red, 5);
             if (Physics.Raycast(pos, Vector3.up, 10))
             {
@@ -65,14 +66,13 @@ public class MainObjective : Interactable //Make spawning its own class later
 
     private void OnEnable()
     {
-       GetComponent<Player>().OnDeath += OnPlayerDeath;
+        FindObjectOfType<Player>().GetComponent<Player>().OnDeath += OnPlayerDeath;      
     }
 
     #region Coroutines
     public IEnumerator Timer()
     {
-        float curTime = 0;
-        float spawnDelay = 1.5f;
+        float curTime = 0;       
         float spawnTime = 0;
 
         while (playerInRange)

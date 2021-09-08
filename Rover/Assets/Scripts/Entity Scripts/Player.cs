@@ -35,7 +35,7 @@ public class Player : Entity
     #region Builtin Methods
     protected override void Start()
     {
-        base.Start();      
+        base.Start();
         LevelUp();
     }
 
@@ -275,12 +275,14 @@ public class Player : Entity
     {
         InventoryObject.pickedUpItem += GetBonusStats;
         Rover.Basic.Rover_GunController.GunEquipped += SetStats;
+        interactable.GetComponent<DoorWay>().OnSceneChange += OnLoad;//Change to overall game manager load later
     }
 
     private void OnDisable()
     {
         InventoryObject.pickedUpItem -= GetBonusStats;
         Rover.Basic.Rover_GunController.GunEquipped -= SetStats;
+        interactable.GetComponent<DoorWay>().OnSceneChange -= OnLoad;
     }
     #endregion
 }

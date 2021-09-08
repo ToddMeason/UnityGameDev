@@ -136,7 +136,7 @@ public class Spawner : MonoBehaviour //rework to not spawn when objective is spa
             {
                 OnNewWave(currentWaveNumber);
             }
-            ResetPlayerPosition();//turn off if not changing map with each wave
+            //ResetPlayerPosition();//turn off if not changing map with each wave
         }
     }
 

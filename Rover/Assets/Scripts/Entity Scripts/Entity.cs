@@ -66,10 +66,7 @@ public class Entity : MonoBehaviour, IDamageable
     protected virtual void Die()
     {
         dead = true;
-        if(OnDeath != null)
-        {
-            OnDeath();
-        }
+        OnDeath?.Invoke();
         Destroy(gameObject);
     }
     #endregion

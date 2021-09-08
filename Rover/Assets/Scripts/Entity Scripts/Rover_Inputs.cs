@@ -8,6 +8,7 @@ namespace Rover.Basic
     {
         #region Variables
         public new Camera camera;
+        public LayerMask groundLayer;
         #endregion
 
         #region Properties
@@ -59,7 +60,7 @@ namespace Rover.Basic
             Ray screenRay = camera.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
 
-            if (Physics.Raycast(screenRay, out hit))
+            if (Physics.Raycast(screenRay, out hit, Mathf.Infinity, groundLayer))
             {
                 reticlePosition = hit.point;
                 reticleNormal = hit.normal;
