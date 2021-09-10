@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class DoorWay : Interactable
 {
-    public event System.Action OnSceneChange;// change tot gamemanager load later
+    public event System.Action OnSceneChange;// change tot gamemanager load later //change to delegates 
 
     void Start()
     {

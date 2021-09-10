@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class Player : Entity
 {
     #region Variables
-    public event System.Action<float, int> OnExpChanged;
+    public event System.Action<float, int> OnExpChanged;//change to delegates 
     public event System.Action<float> OnCurrencyChanged;
 
     public int level;
