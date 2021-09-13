@@ -47553,6 +47553,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Main Objective
       objectReference: {fileID: 0}
+    - target: {fileID: 7739547081906055639, guid: 33ef62d58fb10434291208fc5fe21f52, type: 3}
+      propertyPath: spawnDelay
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 7739547081906055640, guid: 33ef62d58fb10434291208fc5fe21f52, type: 3}
       propertyPath: m_RootOrder
       value: 1

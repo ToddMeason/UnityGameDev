@@ -8,10 +8,14 @@ public class GroundItem : MonoBehaviour
     public LayerMask terrainLayer;
     public LayerMask groundLayer;
 
-    void OnTriggerEnter(Collider c)//Detecting ground collision
+    private void OnTriggerEnter(Collider c)
     {
-        //Debug.Log($"Hit {LayerMask.LayerToName(c.gameObject.layer)}");//This detects it is hitting tht correct layer and reading it 
-        if (c.gameObject.layer == groundLayer || c.gameObject.layer == terrainLayer)//Dont know why it doesnt pick up layer like this will change later
+        //if (c.gameObject.layer == groundLayer || c.gameObject.layer == terrainLayer)//this somehow doesnt work, it has to be like the one below. Thanks Unity very cool
+        //{
+        //    GetComponent<Rigidbody>().Sleep();
+        //}
+
+        if ((groundLayer.value & 1<< c.gameObject.layer) != 0  || (terrainLayer.value & 1 << c.gameObject.layer) != 0)//this works 
         {
             GetComponent<Rigidbody>().Sleep();
         }

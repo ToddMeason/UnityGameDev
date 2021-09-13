@@ -2940,7 +2940,7 @@ GameObject:
   - component: {fileID: 1330402219}
   - component: {fileID: 1330402218}
   - component: {fileID: 1330402217}
-  m_Layer: 9
+  m_Layer: 10
   m_Name: Ground
   m_TagString: Ground
   m_Icon: {fileID: 0}
@@ -3461,6 +3461,10 @@ PrefabInstance:
       propertyPath: camera
       value: 
       objectReference: {fileID: 1345443889}
+    - target: {fileID: 136347799116648479, guid: b39355888b5dd7a4eb25e030bdf16808, type: 3}
+      propertyPath: groundLayer.m_Bits
+      value: 1024
+      objectReference: {fileID: 0}
     - target: {fileID: 463552885368322041, guid: b39355888b5dd7a4eb25e030bdf16808, type: 3}
       propertyPath: m_RootOrder
       value: 1
