@@ -5,7 +5,15 @@ using UnityEngine;
 public class Entity : MonoBehaviour, IDamageable
 {
     #region Variables
+    //public delegate void OnEntityDeath();
+    //public static event OnEntityDeath OnDeath;
 
+    public event System.Action OnDeath;
+
+    //public delegate void OnHealthChange(float health);
+    //public static event OnHealthChange OnHealthChanged;
+
+    public event System.Action<float> OnHealthChanged;//Dont know how to make a callable event through subclasses eg player.OnHealthChanged
 
     public float maxHealth;
     [Range(0, 0.9f)] public float armour;//percent based damage reduction
@@ -14,8 +22,7 @@ public class Entity : MonoBehaviour, IDamageable
     protected bool hit = false;
     #endregion
 
-    public event System.Action OnDeath;
-    public event System.Action<float> OnHealthChanged;
+
 
     #region Builtin Methods
     protected virtual void Start()

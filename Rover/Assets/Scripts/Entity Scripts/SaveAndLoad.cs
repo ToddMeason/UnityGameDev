@@ -9,7 +9,7 @@ public class SaveAndLoad : MonoBehaviour
 
     void Start()
     {
-        player = GetComponent<Player>();
+        player = FindObjectOfType<Player>().GetComponent<Player>();
     }
 
     #region Saving/Loading 
@@ -26,6 +26,9 @@ public class SaveAndLoad : MonoBehaviour
 
 
         //Saveplayer stats somehow later once they are setup properly
+
+        player.inventory.Save();
+        Debug.Log(player.inventory);
     }
 
     [ContextMenu("Load")]
@@ -39,11 +42,12 @@ public class SaveAndLoad : MonoBehaviour
         {
             if (guns[i].ID == PlayerPrefs.GetInt("gunId"))
             {
-                GetComponent<Rover.Basic.Rover_GunController>().EquipGun(guns[i]);
+                player.GetComponent<Rover.Basic.Rover_GunController>().EquipGun(guns[i]);
                 return;
             }
         }
 
+        player.inventory.Load();
         player.OnLoad();
     }
 
@@ -53,6 +57,8 @@ public class SaveAndLoad : MonoBehaviour
         PlayerPrefs.SetInt("level", 0);
         PlayerPrefs.SetFloat("currentExp", 0);
         PlayerPrefs.SetFloat("currentCurrency", 0);
+
+        player.inventory.Clear();
     }
 
     #endregion

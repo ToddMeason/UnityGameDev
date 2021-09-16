@@ -22,7 +22,14 @@ namespace Rover.Basic
         {
             if (startingGun != null)
             {
-                EquipGun(startingGun);
+                if (equippedGun == null)
+                {
+                    EquipGun(startingGun);
+                }
+                else
+                {
+                    EquipGun(equippedGun);
+                }
             }
         }
         #endregion
@@ -30,10 +37,10 @@ namespace Rover.Basic
         #region Custom Methods
         public void EquipGun(Gun gunToEquip)//need to add equip gun event later
         {
-            if (equippedGun != null)
-            {
-                Destroy(equippedGun.gameObject);
-            }
+            //if (equippedGun != null)
+            //{
+            //    Destroy(equippedGun.gameObject);
+            //}
             equippedGun = Instantiate(gunToEquip, gunLocation.position, gunLocation.rotation) as Gun;
             equippedGun.transform.parent = gunLocation;
 

@@ -2010,6 +2010,7 @@ GameObject:
   m_Component:
   - component: {fileID: 730024961}
   - component: {fileID: 730024960}
+  - component: {fileID: 730024962}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -2043,6 +2044,22 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &730024962
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 730024959}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a79c1fd63e07a94fbff9fa5aebe3d70, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 0}
+  guns:
+  - {fileID: 7060285314936383170, guid: 5edf1e2e41f419b43b8548cbaef02a7d, type: 3}
+  - {fileID: 7060285314936383170, guid: 66f931cdaca543f4d8b1f722bdf2f749, type: 3}
 --- !u!1 &736781100
 GameObject:
   m_ObjectHideFlags: 0
@@ -3461,10 +3478,6 @@ PrefabInstance:
       propertyPath: camera
       value: 
       objectReference: {fileID: 1345443889}
-    - target: {fileID: 136347799116648479, guid: b39355888b5dd7a4eb25e030bdf16808, type: 3}
-      propertyPath: groundLayer.m_Bits
-      value: 1024
-      objectReference: {fileID: 0}
     - target: {fileID: 463552885368322041, guid: b39355888b5dd7a4eb25e030bdf16808, type: 3}
       propertyPath: m_RootOrder
       value: 1

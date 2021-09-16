@@ -48,8 +48,10 @@ public class InventoryObject : ScriptableObject
     [ContextMenu("Load")]
     public void Load()
     {
-        if(File.Exists(Application.persistentDataPath + savePath))
+        Debug.Log("not Load Inv");
+        if (File.Exists(Application.persistentDataPath + savePath))
         {
+            Debug.Log("Load Inv");
             BinaryFormatter bf = new BinaryFormatter();
             FileStream file = File.Open(Application.persistentDataPath + savePath, FileMode.Open);
             JsonUtility.FromJsonOverwrite(bf.Deserialize(file).ToString(), this);

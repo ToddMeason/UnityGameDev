@@ -5,7 +5,8 @@ using UnityEngine;
 
 public class DoorWay : Interactable
 {
-    public event System.Action OnSceneChange;// change tot gamemanager load later //change to delegates 
+    public delegate void OnSceneChange();
+    public static event OnSceneChange OnSceneChanged;// change to gamemanager load later //change to delegates 
 
     void Start()
     {
@@ -15,6 +16,6 @@ public class DoorWay : Interactable
     public override void Interact()
     {
         SceneManager.LoadScene("RoverGame");
-        OnSceneChange?.Invoke();
+        OnSceneChanged?.Invoke();
     }
 }

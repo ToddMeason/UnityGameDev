@@ -52,7 +52,7 @@ public class Enemy : Entity
             target = GameObject.FindGameObjectWithTag("Player").transform;
             player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
             targetEntity = target.GetComponent<Entity>();//Get OnDeath for target to see if it is dead and to stop chasing/attacking it
-            targetEntity.OnDeath += OnTargetDeath;
+            targetEntity.OnDeath += OnTargetDeath;//Need to change to target later if enemies have different targets
 
             myCollisionRadius = GetComponent<CapsuleCollider>().radius;
             targetCollisionRadius = target.GetComponent<CapsuleCollider>().radius;//Need to figure out a way to get box collider edge or just add a capsule collider for a radius float

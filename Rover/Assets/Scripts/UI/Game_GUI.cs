@@ -26,7 +26,7 @@ public class Game_GUI : MonoBehaviour
 
     void Start()
     {
-        FindObjectOfType<Player>().OnDeath += OnGameOver;
+        player.OnDeath += OnGameOver;
     }
 
     void Update()
@@ -84,17 +84,17 @@ public class Game_GUI : MonoBehaviour
     public void OnEnable()
     {
         player.OnHealthChanged += ShowHealth;
-        player.gun.OnAmmoChanged += ShowAmmo;
-        player.OnExpChanged += SetPlayerExp;
-        player.OnCurrencyChanged += ShowCurrency;
+        Gun.OnAmmoChanged += ShowAmmo;
+        Player.OnExpChanged += SetPlayerExp;
+        Player.OnCurrencyChanged += ShowCurrency;
     }
 
     public void OnDisable()
     {
         player.OnHealthChanged -= ShowHealth;
-        player.gun.OnAmmoChanged -= ShowAmmo;
-        player.OnExpChanged -= SetPlayerExp;
-        player.OnCurrencyChanged -= ShowCurrency;
+        Gun.OnAmmoChanged -= ShowAmmo;
+        Player.OnExpChanged -= SetPlayerExp;
+        Player.OnCurrencyChanged -= ShowCurrency;
     }
 
     #endregion

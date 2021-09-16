@@ -6,8 +6,11 @@ using UnityEngine.UI;
 public class Player : Entity
 {
     #region Variables
-    public event System.Action<float, int> OnExpChanged;//change to delegates 
-    public event System.Action<float> OnCurrencyChanged;
+    public delegate void OnExpChange(float exp, int level);
+    public static event OnExpChange OnExpChanged;
+
+    public delegate void OnCurrencyChange(float currency);
+    public static event OnCurrencyChange OnCurrencyChanged;
 
     public int level;
     public float currentLevelExp;
@@ -275,14 +278,14 @@ public class Player : Entity
     {
         InventoryObject.pickedUpItem += GetBonusStats;
         Rover.Basic.Rover_GunController.GunEquipped += SetStats;
-        interactable.GetComponent<DoorWay>().OnSceneChange += OnLoad;//Change to overall game manager load later
+        DoorWay.OnSceneChanged += OnLoad;//Change to overall game manager load later
     }
 
     private void OnDisable()
     {
         InventoryObject.pickedUpItem -= GetBonusStats;
         Rover.Basic.Rover_GunController.GunEquipped -= SetStats;
-        interactable.GetComponent<DoorWay>().OnSceneChange -= OnLoad;
+        DoorWay.OnSceneChanged -= OnLoad;
     }
     #endregion
 }

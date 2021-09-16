@@ -169,7 +169,7 @@ public class Spawner : MonoBehaviour //rework to not spawn when objective is spa
 
         Enemy spawnedEnemy = Instantiate(enemy, SpawnTile.position + Vector3.up, Quaternion.identity) as Enemy;
         spawnedEnemy.transform.parent = this.transform;
-        spawnedEnemy.OnDeath += OnEnemyDeath;//Gets the event call from the enemy/entity script that died
+        //spawnedEnemy.OnDeath += OnEnemyDeath;//Gets the event call from the enemy/entity script that died
     }
 
     IEnumerator SpawnChest()//Change to spawn chests properly later not from a list

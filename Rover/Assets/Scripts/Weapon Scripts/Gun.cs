@@ -8,7 +8,8 @@ public class Gun : MonoBehaviour
     #region Variables
     public int ID;
 
-    public event System.Action<float> OnAmmoChanged;
+    public delegate void OnAmmoChange(float ammo);
+    public static event OnAmmoChange OnAmmoChanged;
 
     public enum WeaponType {MachineGun, ShotGun};//not used currently will be needed for rocket launcher later maybe
     public WeaponType weaponType;
