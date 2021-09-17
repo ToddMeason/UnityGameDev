@@ -43,7 +43,7 @@ public class SaveAndLoad : MonoBehaviour
             if (guns[i].ID == PlayerPrefs.GetInt("gunId"))
             {
                 player.GetComponent<Rover.Basic.Rover_GunController>().EquipGun(guns[i]);
-                return;
+                break;
             }
         }
 
