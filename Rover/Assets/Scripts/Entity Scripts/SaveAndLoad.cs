@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class SaveAndLoad : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class SaveAndLoad : MonoBehaviour
     void Start()
     {
         player = FindObjectOfType<Player>().GetComponent<Player>();
+        Load();
     }
 
     #region Saving/Loading 
@@ -58,8 +60,25 @@ public class SaveAndLoad : MonoBehaviour
         PlayerPrefs.SetFloat("currentExp", 0);
         PlayerPrefs.SetFloat("currentCurrency", 0);
 
+        PlayerPrefs.SetInt("gunId", 0);
+
         player.inventory.Clear();
     }
 
+    #endregion
+
+    #region Events
+    private void OnEnable()
+    {
+        DoorWay.BeforeSceneChanged += Save;
+        DoorWay.OnSceneChanged += Load;
+        //SceneManager.sceneLoaded += Load;
+    }
+
+    private void OnDisable()
+    {
+        DoorWay.BeforeSceneChanged -= Save;
+        DoorWay.OnSceneChanged -= Load;
+    }
     #endregion
 }

@@ -278,14 +278,12 @@ public class Player : Entity
     {
         InventoryObject.pickedUpItem += GetBonusStats;
         Rover.Basic.Rover_GunController.GunEquipped += SetStats;
-        DoorWay.OnSceneChanged += OnLoad;//Change to overall game manager load later
     }
 
     private void OnDisable()
     {
         InventoryObject.pickedUpItem -= GetBonusStats;
         Rover.Basic.Rover_GunController.GunEquipped -= SetStats;
-        DoorWay.OnSceneChanged -= OnLoad;
     }
     #endregion
 }

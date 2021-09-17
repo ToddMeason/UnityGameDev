@@ -35,7 +35,7 @@ public abstract class Interactable : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter(Collider collider)
+    protected virtual void OnTriggerEnter(Collider collider)
     {
         if (collider.GetComponent<Player>() && !activated)//Checks if player is within range and if the interactable is still active
         {
