@@ -16,6 +16,8 @@ public class MainObjective : Interactable //Make spawning its own class later
     private float nextSpawnTime;
     private bool isDisabled = false;
 
+    [SerializeField]private GameObject dropShip;
+
     private void Update()
     {
         
@@ -64,6 +66,11 @@ public class MainObjective : Interactable //Make spawning its own class later
         isDisabled = true;
     }
 
+    private void OnObjectiveComplete()
+    {
+        StopAllCoroutines();
+    }
+
     private void OnEnable()
     {
         FindObjectOfType<Player>().GetComponent<Player>().OnDeath += OnPlayerDeath;      
@@ -75,10 +82,10 @@ public class MainObjective : Interactable //Make spawning its own class later
         float curTime = 0;       
         float spawnTime = 0;
 
-        while (playerInRange)
+        while (playerInRange || isDisabled)
         {
             curTime += Time.deltaTime;
-            //Debug.Log(curTime);
+            Debug.Log(curTime);//Add to UI later
             isDisabled = false;
 
             spawnTime += Time.deltaTime;
@@ -91,6 +98,8 @@ public class MainObjective : Interactable //Make spawning its own class later
             if (curTime >= time)
             {
                 isDisabled = true;
+                Instantiate(dropShip, transform.position + new Vector3(0, 15, 0), Quaternion.identity);
+                OnObjectiveComplete();
                 yield return null;
             }
             yield return null;

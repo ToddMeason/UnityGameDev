@@ -213,7 +213,9 @@ MonoBehaviour:
     m_Bits: 0
   maxSpawnPos: 20
   time: 60
+  spawnDelay: 2
   playerInRange: 0
+  dropShip: {fileID: 5649862038540878072, guid: 6c9dc58915df0b3438bf2468e607a4cc, type: 3}
 --- !u!1 &7739547082034838345
 GameObject:
   m_ObjectHideFlags: 0

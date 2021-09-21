@@ -3,14 +3,8 @@ using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using UnityEngine;
 
-public class DoorWay : Interactable
+public class DoorWay : ChangeLevelInteractable
 {
-    public delegate void OnSceneChange();
-    public static event OnSceneChange OnSceneChanged;// change to gamemanager load later
-
-    public delegate void BeforeSceneChange();
-    public static event BeforeSceneChange BeforeSceneChanged;// change to gamemanager load later
-
     void Start()
     {
         
@@ -18,8 +12,8 @@ public class DoorWay : Interactable
 
     public override void Interact()
     {
-        BeforeSceneChanged?.Invoke();
+        InvokeBeforeSceneChange();
         SceneManager.LoadScene("RoverGame");
-        OnSceneChanged?.Invoke();
+        InvokeOnSceneChange();
     }
 }
