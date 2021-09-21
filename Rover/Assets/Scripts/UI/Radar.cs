@@ -12,10 +12,13 @@ public class RadarObject
 public class Radar : MonoBehaviour
 {
     #region Variables
+    public float arrowOffset;//need to set base on arrow icon used and + 45 for the camera offset for the player
     public Transform playerPos;
     Transform sweepTransform;
     float rotationSpeed;
     float mapScale = 2f;
+    [SerializeField] Transform target;
+    [SerializeField] GameObject arrow;
 
     public static List<RadarObject> radObjects = new List<RadarObject>();
 
@@ -26,7 +29,8 @@ public class Radar : MonoBehaviour
     private void Awake() {
         sweepTransform = transform.Find("Sweep");
         rotationSpeed = 180f;
-        playerPos = FindObjectOfType<Player>().GetComponent<Player>().transform;
+        playerPos = FindObjectOfType<Player>().transform;
+        target = FindObjectOfType<MainObjective>().transform;
     }
 
     // Update is called once per frame
@@ -34,11 +38,19 @@ public class Radar : MonoBehaviour
     {
         sweepTransform.eulerAngles -= new Vector3(0, 0, rotationSpeed * Time.deltaTime);
         DrawRadarDots();
+        LookAtObj();
     }
 
     #endregion
 
     #region Custom Methods
+
+    void LookAtObj()
+    {
+        Vector3 dir = target.transform.InverseTransformDirection(target.position - playerPos.transform.position);
+        float angle = Mathf.Atan2(-dir.x, dir.z) * Mathf.Rad2Deg + arrowOffset;
+        arrow.transform.eulerAngles = new Vector3(0, 0, angle);
+    }
 
     void DrawRadarDots() 
     {
