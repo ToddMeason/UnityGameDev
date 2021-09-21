@@ -13794,6 +13794,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Main Objective
       objectReference: {fileID: 0}
+    - target: {fileID: 7739547081906055636, guid: 33ef62d58fb10434291208fc5fe21f52, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7739547081906055639, guid: 33ef62d58fb10434291208fc5fe21f52, type: 3}
       propertyPath: time
       value: 2

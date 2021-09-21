@@ -85,7 +85,7 @@ public class MainObjective : Interactable //Make spawning its own class later
         while (playerInRange || isDisabled)
         {
             curTime += Time.deltaTime;
-            Debug.Log(curTime);//Add to UI later
+            //Debug.Log(curTime);//Add to UI later
             isDisabled = false;
 
             spawnTime += Time.deltaTime;

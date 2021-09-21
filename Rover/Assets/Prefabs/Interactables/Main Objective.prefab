@@ -73,6 +73,7 @@ GameObject:
   - component: {fileID: 7739547081906055642}
   - component: {fileID: 7739547081906055643}
   - component: {fileID: 7739547081906055639}
+  - component: {fileID: -1591149823999310780}
   m_Layer: 0
   m_Name: Main Objective
   m_TagString: NoCost
@@ -216,6 +217,19 @@ MonoBehaviour:
   spawnDelay: 2
   playerInRange: 0
   dropShip: {fileID: 5649862038540878072, guid: 6c9dc58915df0b3438bf2468e607a4cc, type: 3}
+--- !u!114 &-1591149823999310780
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7739547081906055636}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d7eb81b1b9d1824fb8736c482d005d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  image: {fileID: 8955511299753132442, guid: d5c652178543f4b4386e399910c86a00, type: 3}
 --- !u!1 &7739547082034838345
 GameObject:
   m_ObjectHideFlags: 0
