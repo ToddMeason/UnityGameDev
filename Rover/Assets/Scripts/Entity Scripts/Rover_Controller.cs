@@ -63,18 +63,6 @@ namespace Rover.Basic
             {
                 Boost();
             }
-
-            //Temp save buttons for testing 
-            if(Input.GetKeyDown(KeyCode.K))
-            {
-                inventory.Save();
-            }
-
-            if (Input.GetKeyDown(KeyCode.L))
-            {
-                inventory.Load();
-            }
-            //Temp save buttons for testing 
         }
 
         void FixedUpdate()
