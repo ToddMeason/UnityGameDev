@@ -23,18 +23,6 @@ namespace Rover.Basic
         {
             get { return reticleNormal; }
         }
-
-        private float forwardInput;
-        public float ForwardInput
-        {
-            get { return forwardInput; }
-        }
-
-        private float rotationInput;
-        public float RotationInput
-        {
-            get { return rotationInput; }
-        }
         #endregion
 
 
@@ -65,9 +53,6 @@ namespace Rover.Basic
                 reticlePosition = hit.point;
                 reticleNormal = hit.normal;
             }
-
-            forwardInput = Input.GetAxis("Vertical");
-            rotationInput = Input.GetAxis("Horizontal");
         }
         #endregion
     }

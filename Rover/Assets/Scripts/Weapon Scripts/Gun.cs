@@ -37,6 +37,7 @@ public class Gun : MonoBehaviour
     #region Builtin Methods
     private void Start()
     {
+        GetComponent<AudioSource>().enabled = true;
         currentMagSize = maxMagSize;
         if(GetComponent<LineRenderer>())
         {

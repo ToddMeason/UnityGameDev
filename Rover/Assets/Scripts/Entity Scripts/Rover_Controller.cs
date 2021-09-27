@@ -10,12 +10,20 @@ namespace Rover.Basic
     public class Rover_Controller : MonoBehaviour
     {
         #region Variables
-        public InventoryObject inventory;//Temp inventory save button system. Will move to automatic later and in a menu system
-
         [Header("Movement Properties")]
-        public float roverSpeed = 5f;
-        public float roverRotationSpeed = 20f;
-        public float boostSpeed;
+        private Rigidbody body;
+        private float deadZone = 0f;
+        public float groundedDrag = 3f;
+        public float maxVelocity = 50;
+
+        public float forwardAcceleration = 8000f;
+        public float reverseAcceleration = 4000f;
+        [SerializeField] private float thrust = 0f;
+
+        public float turnStrength = 1000f;
+        float turnValue = 0f;
+
+        public ParticleSystem[] dustTrails = new ParticleSystem[2];
 
         [Header("Reticle Properties")]
         public Transform reticleTransform;
@@ -24,7 +32,6 @@ namespace Rover.Basic
         public Transform turretTransform;
         public float turretLagSpeed = 0.5f;
 
-        private Rigidbody rb;
         private Rover_Inputs input;
         private Vector3 finalTurretLookDir;
         private Rover_GunController gunController;
@@ -35,39 +42,51 @@ namespace Rover.Basic
         #region Builtin Methods
         void Start()
         {
-            rb = GetComponent<Rigidbody>();
+            body = GetComponent<Rigidbody>();
             input = GetComponent<Rover_Inputs>();
             gunController = GetComponent<Rover_GunController>();
             player = GetComponent<Player>();
-            boostSpeed = roverSpeed * 5;
+            body.centerOfMass = Vector3.down;
+            //boostSpeed = roverSpeed * 5;
         }
 
         private void Update()
         {
             if(Input.GetButton("Shoot"))
-            {
                 gunController.Shoot();
-            }
 
             if(Input.GetButton("Reload"))
-            {
                 gunController.Reload();
-            }
 
             if (Input.GetButtonDown("Interact"))
-            {
                 player.TryInteract();
-            }
 
             if(Input.GetButton("Sprint"))
-            {
                 Boost();
-            }
+
+
+            // Get thrust input
+            thrust = 0.0f;
+            float acceleration = Input.GetAxis("Vertical");
+            if (acceleration > deadZone)
+                thrust = acceleration * forwardAcceleration;
+            else if (acceleration < -deadZone)
+                thrust = acceleration * reverseAcceleration;
+
+            // Get turning input
+            turnValue = 0.0f;
+            float turnAxis = Input.GetAxis("Horizontal");
+            if (Mathf.Abs(turnAxis) > deadZone)
+                turnValue = turnAxis;
+
+            //Debug.Log(turnAxis);
+            //Debug.Log(acceleration);
+
         }
 
         void FixedUpdate()
         {
-            if(rb && input)
+            if(body && input)
             {
                 HandleMovement();
                 HandleTurret();
@@ -80,13 +99,36 @@ namespace Rover.Basic
         #region Custom Methods
         protected virtual void HandleMovement()
         {
-            //Move Rover forward
-            Vector3 wantedPosition = transform.position + (transform.forward * input.ForwardInput * roverSpeed * Time.deltaTime);
-            rb.MovePosition(wantedPosition);
+            //add something to make emmission stop if not moving
+            var emissionRate = 10;
+            body.drag = groundedDrag;
 
-            //Rotate Rover
-            Quaternion wantedRotaion = transform.rotation * Quaternion.Euler(Vector3.up * roverRotationSpeed * input.RotationInput * Time.deltaTime);
-            rb.MoveRotation(wantedRotaion);
+            for (int i = 0; i < dustTrails.Length; i++)
+            {
+                var emission = dustTrails[i].emission;
+                emission.rateOverTime = new ParticleSystem.MinMaxCurve(emissionRate);
+            }
+
+            // Handle Forward and Reverse forces
+            if (Mathf.Abs(thrust) > 0)
+                body.AddForce(transform.forward * thrust);
+
+            // Handle Turn forces
+            if (turnValue > 0)
+            {
+                body.AddRelativeTorque(Vector3.up * turnValue * turnStrength);
+            }
+            else if (turnValue < 0)
+            {
+                body.AddRelativeTorque(Vector3.up * turnValue * turnStrength);
+            }
+
+
+            // Limit max velocity
+            if (body.velocity.sqrMagnitude > (body.velocity.normalized * maxVelocity).sqrMagnitude)
+            {
+                body.velocity = body.velocity.normalized * maxVelocity;
+            }
         }
 
         protected virtual void HandleReticle()
