@@ -57976,6 +57976,7 @@ MonoBehaviour:
   reticleTransform: {fileID: 2871278593093881784}
   turretTransform: {fileID: 925575201}
   turretLagSpeed: 4
+  useController: 1
 --- !u!114 &902422008
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -137913,7 +137914,7 @@ MonoBehaviour:
   currentLevelExp: 0
   currentCurrency: 0
   gun: {fileID: 7060285314936383170, guid: 66f931cdaca543f4d8b1f722bdf2f749, type: 3}
-  controller: {fileID: 0}
+  roverController: {fileID: 0}
   interactable: {fileID: 0}
   inventory: {fileID: 11400000, guid: 1326d578d53d68747b05ba448eb53a3f, type: 2}
   stats:

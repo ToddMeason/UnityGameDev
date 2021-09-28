@@ -19,7 +19,7 @@ public class Player : Entity
     public float currentCurrency;
 
     public Gun gun;
-    public Rover.Basic.Rover_Controller controller;
+    public Rover.Basic.Rover_Controller roverController;
     public Interactable interactable;
 
     public InventoryObject inventory;//might need to auto get later with new scenes
@@ -57,7 +57,7 @@ public class Player : Entity
     public void SetStats()//not clean but should work, very scuffed
     {
         gun = GetComponent<Rover.Basic.Rover_GunController>().equippedGun;
-        controller = GetComponent<Rover.Basic.Rover_Controller>();
+        roverController = GetComponent<Rover.Basic.Rover_Controller>();
 
         for (int i = 0; i < stats.Length; i++)
         {
@@ -114,29 +114,29 @@ public class Player : Entity
                     break;
 
                 case Stats.maxVelocityBonus:
-                    stats[i].baseValue = controller.maxVelocity;
+                    stats[i].baseValue = roverController.maxVelocity;
                     stats[i].bonusValue = maxVelocityBonusTotal;
                     stats[i].totalValue = stats[i].bonusValue + stats[i].baseValue;
-                    controller.maxVelocityBonus = stats[i].bonusValue;
+                    roverController.maxVelocityBonus = stats[i].bonusValue;
                     break;
 
                 case Stats.accelerationBonus:
-                    stats[i].baseValue = controller.forwardAcceleration;
+                    stats[i].baseValue = roverController.forwardAcceleration;
                     stats[i].bonusValue = accelerationBonusTotal;
                     stats[i].totalValue = stats[i].bonusValue + stats[i].baseValue;
-                    controller.forwardAccelerationBonus = stats[i].bonusValue;
+                    roverController.forwardAccelerationBonus = stats[i].bonusValue;
 
-                    stats[i].baseValue = controller.reverseAcceleration;
+                    stats[i].baseValue = roverController.reverseAcceleration;
                     stats[i].bonusValue = accelerationBonusTotal;
                     stats[i].totalValue = stats[i].bonusValue + stats[i].baseValue;
-                    controller.reverseAccelerationBonus = stats[i].bonusValue;
+                    roverController.reverseAccelerationBonus = stats[i].bonusValue;
                     break;
 
                 case Stats.turnStrengthBonus:
-                    stats[i].baseValue = controller.turnStrength;
+                    stats[i].baseValue = roverController.turnStrength;
                     stats[i].bonusValue = turnStrengthBonusTotal;
                     stats[i].totalValue = stats[i].bonusValue + stats[i].baseValue;
-                    controller.turnStrengthBonus = stats[i].bonusValue;
+                    roverController.turnStrengthBonus = stats[i].bonusValue;
                     break;
 
                 default:
@@ -310,7 +310,7 @@ public class Player : Entity
         OnExpChanged?.Invoke(currentLevelExp / expToLevelUp, level);
         GetBonusStats();
         OnCurrencyChanged?.Invoke(currentCurrency);
-        controller.SetTotals();
+        roverController.SetTotals();
     }
 
     #endregion

@@ -36,6 +36,8 @@ namespace Rover.Basic
         private Vector3 finalTurretLookDir;
         private Rover_GunController gunController;
         protected Player player;
+
+        public bool useController;
         #endregion
 
 
@@ -48,13 +50,17 @@ namespace Rover.Basic
             player = GetComponent<Player>();
             body.centerOfMass = Vector3.down;
             //boostSpeed = roverSpeed * 5;
+            if (useController)
+            {
+                reticleTransform.gameObject.SetActive(false);
+            }
 
             SetTotals();
         }
 
         private void Update()
         {
-            if(Input.GetButton("Shoot"))
+            if(Input.GetButton("Shoot") || Input.GetAxis("Shoot") > 0.2f)
                 gunController.Shoot();
 
             if(Input.GetButton("Reload"))
@@ -84,15 +90,27 @@ namespace Rover.Basic
             //Debug.Log(turnAxis);
             //Debug.Log(acceleration);
 
+
+            //Controller input
+
         }
 
         void FixedUpdate()
         {
-            if(body && input)
+            if(body && input && !useController)//Keyboard Inputs
             {
                 HandleMovement();
-                HandleTurret();
+                HandleTurretKeyboard();
                 HandleReticle();
+            }
+            else if (body && input && useController)
+            {
+                HandleMovement();
+                HandleTurretController();
+            }
+            else
+            {
+                Debug.Log("No control inputs detected. Check useContoller bool");
             }
         }
         #endregion
@@ -141,7 +159,7 @@ namespace Rover.Basic
             }
         }
 
-        protected virtual void HandleTurret()
+        protected virtual void HandleTurretKeyboard()
         {
             if(turretTransform)
             {
@@ -150,6 +168,18 @@ namespace Rover.Basic
 
                 finalTurretLookDir = Vector3.Slerp(finalTurretLookDir, turretLookDir, Time.deltaTime * turretLagSpeed);
                 turretTransform.rotation = Quaternion.LookRotation(finalTurretLookDir);
+            }
+        }
+
+        protected virtual void HandleTurretController()
+        {
+            if (turretTransform)
+            {
+                Vector3 turretLookDir = Vector3.right * Input.GetAxisRaw("RHorizontal") + Vector3.forward * -Input.GetAxisRaw("RVertical");
+                if (turretLookDir.sqrMagnitude > 0.0f)
+                {
+                    turretTransform.rotation = Quaternion.LookRotation(turretLookDir, Vector3.up);
+                }
             }
         }
 
