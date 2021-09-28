@@ -15,8 +15,7 @@ public class CheckPlayerNearObjective : MonoBehaviour
     {
         if (collider.GetComponent<Player>())//Checks if player is within range
         {
-            mainObjective.playerInRange = true;
-            
+            mainObjective.playerInRange = true;           
         }
     }
 

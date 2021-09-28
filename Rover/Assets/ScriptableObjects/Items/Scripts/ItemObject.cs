@@ -16,7 +16,11 @@ public enum Stats//Add player stats and weapon stats in here
     maxMagSizeBonus,       //How many bullets in the guns magazine 
     reloadSpeedBonus,      //How long it takes to reload, smaller is faster
     projectileCountBonus,  //Amount of projectiles fired per shot
-    spreadBonus           //Accuracy or spread of bullets, smaller is more accurate
+    spreadBonus,           //Accuracy or spread of bullets, smaller is more accurate
+
+    maxVelocityBonus,
+    accelerationBonus,
+    turnStrengthBonus
 }
 
 public abstract class ItemObject : ScriptableObject//Base item script for stat changes above for more complex items later will need to create special item types with there own methods

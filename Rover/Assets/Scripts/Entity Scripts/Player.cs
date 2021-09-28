@@ -19,6 +19,7 @@ public class Player : Entity
     public float currentCurrency;
 
     public Gun gun;
+    public Rover.Basic.Rover_Controller controller;
     public Interactable interactable;
 
     public InventoryObject inventory;//might need to auto get later with new scenes
@@ -32,6 +33,10 @@ public class Player : Entity
     int reloadSpeedBonusTotal = 0;
     int projectileCountBonusTotal = 0;
     int spreadBonusTotal = 0;
+
+    int maxVelocityBonusTotal = 0;
+    int accelerationBonusTotal = 0;
+    int turnStrengthBonusTotal = 0;
 
     #endregion
 
@@ -52,6 +57,7 @@ public class Player : Entity
     public void SetStats()//not clean but should work, very scuffed
     {
         gun = GetComponent<Rover.Basic.Rover_GunController>().equippedGun;
+        controller = GetComponent<Rover.Basic.Rover_Controller>();
 
         for (int i = 0; i < stats.Length; i++)
         {
@@ -107,6 +113,32 @@ public class Player : Entity
                     gun.spreadBonus = stats[i].bonusValue;
                     break;
 
+                case Stats.maxVelocityBonus:
+                    stats[i].baseValue = controller.maxVelocity;
+                    stats[i].bonusValue = maxVelocityBonusTotal;
+                    stats[i].totalValue = stats[i].bonusValue + stats[i].baseValue;
+                    controller.maxVelocityBonus = stats[i].bonusValue;
+                    break;
+
+                case Stats.accelerationBonus:
+                    stats[i].baseValue = controller.forwardAcceleration;
+                    stats[i].bonusValue = accelerationBonusTotal;
+                    stats[i].totalValue = stats[i].bonusValue + stats[i].baseValue;
+                    controller.forwardAccelerationBonus = stats[i].bonusValue;
+
+                    stats[i].baseValue = controller.reverseAcceleration;
+                    stats[i].bonusValue = accelerationBonusTotal;
+                    stats[i].totalValue = stats[i].bonusValue + stats[i].baseValue;
+                    controller.reverseAccelerationBonus = stats[i].bonusValue;
+                    break;
+
+                case Stats.turnStrengthBonus:
+                    stats[i].baseValue = controller.turnStrength;
+                    stats[i].bonusValue = turnStrengthBonusTotal;
+                    stats[i].totalValue = stats[i].bonusValue + stats[i].baseValue;
+                    controller.turnStrengthBonus = stats[i].bonusValue;
+                    break;
+
                 default:
                     break;
             }           
@@ -122,6 +154,11 @@ public class Player : Entity
         reloadSpeedBonusTotal = 0;
         projectileCountBonusTotal = 0;
         spreadBonusTotal = 0;
+
+        maxVelocityBonusTotal = 0;
+        accelerationBonusTotal = 0;
+        turnStrengthBonusTotal = 0;
+
 
         for (int i = 0; i < inventory.Container.Slots.Count; i++)
         {
@@ -153,6 +190,15 @@ public class Player : Entity
                     case Stats.spreadBonus:
                         spreadBonusTotal += value * amount;
                         break;
+                    case Stats.maxVelocityBonus:
+                        maxVelocityBonusTotal += value * amount;
+                        break;
+                    case Stats.accelerationBonus:
+                        accelerationBonusTotal += value * amount;
+                        break;
+                    case Stats.turnStrengthBonus:
+                        turnStrengthBonusTotal += value * amount;
+                        break;
                     default:
                         break;
                 }
@@ -162,11 +208,6 @@ public class Player : Entity
         //Debug.Log(dmgBonusTotal);
         SetStats();
     }
-
-    //public void UpdateHealth()//changed to event in entity
-    //{
-    //    //gui.ShowHealth(healthPercent);
-    //}
 
     public void TryInteract()
     {
@@ -269,6 +310,7 @@ public class Player : Entity
         OnExpChanged?.Invoke(currentLevelExp / expToLevelUp, level);
         GetBonusStats();
         OnCurrencyChanged?.Invoke(currentCurrency);
+        controller.SetTotals();
     }
 
     #endregion
@@ -289,7 +331,7 @@ public class Player : Entity
 }
 
 [System.Serializable]
-public class Stat//Not used now
+public class Stat
 {
     [SerializeField]
     public Player parent;
@@ -297,12 +339,10 @@ public class Stat//Not used now
     public float baseValue;
     public float bonusValue;
     public float totalValue;
-    //public ModifiableInt value;
 
     public void SetParent(Player _parent)
     {
         parent = _parent;
         totalValue = baseValue + bonusValue;
-        //value = new ModifiableInt(StatModified);
     }
 }

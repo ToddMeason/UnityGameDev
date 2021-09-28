@@ -14,13 +14,13 @@ namespace Rover.Basic
         private Rigidbody body;
         private float deadZone = 0f;
         public float groundedDrag = 3f;
-        public float maxVelocity = 50;
+        public float maxVelocity = 10;                public float maxVelocityBonus = 0;             public float maxVelocityTotal;
 
-        public float forwardAcceleration = 8000f;
-        public float reverseAcceleration = 4000f;
+        public float forwardAcceleration = 4000;      public float forwardAccelerationBonus = 0;     public float forwardAccelerationTotal;
+        public float reverseAcceleration = 2000;      public float reverseAccelerationBonus = 0;     public float reverseAccelerationTotal;
         [SerializeField] private float thrust = 0f;
 
-        public float turnStrength = 1000f;
+        public float turnStrength = 250;              public float turnStrengthBonus = 0;            public float turnStrengthTotal;
         float turnValue = 0f;
 
         public ParticleSystem[] dustTrails = new ParticleSystem[2];
@@ -48,6 +48,8 @@ namespace Rover.Basic
             player = GetComponent<Player>();
             body.centerOfMass = Vector3.down;
             //boostSpeed = roverSpeed * 5;
+
+            SetTotals();
         }
 
         private void Update()
@@ -69,9 +71,9 @@ namespace Rover.Basic
             thrust = 0.0f;
             float acceleration = Input.GetAxis("Vertical");
             if (acceleration > deadZone)
-                thrust = acceleration * forwardAcceleration;
+                thrust = acceleration * forwardAccelerationTotal;
             else if (acceleration < -deadZone)
-                thrust = acceleration * reverseAcceleration;
+                thrust = acceleration * reverseAccelerationTotal;
 
             // Get turning input
             turnValue = 0.0f;
@@ -116,18 +118,18 @@ namespace Rover.Basic
             // Handle Turn forces
             if (turnValue > 0)
             {
-                body.AddRelativeTorque(Vector3.up * turnValue * turnStrength);
+                body.AddRelativeTorque(Vector3.up * turnValue * turnStrengthTotal);
             }
             else if (turnValue < 0)
             {
-                body.AddRelativeTorque(Vector3.up * turnValue * turnStrength);
+                body.AddRelativeTorque(Vector3.up * turnValue * turnStrengthTotal);
             }
 
 
             // Limit max velocity
-            if (body.velocity.sqrMagnitude > (body.velocity.normalized * maxVelocity).sqrMagnitude)
+            if (body.velocity.sqrMagnitude > (body.velocity.normalized * maxVelocityTotal).sqrMagnitude)
             {
-                body.velocity = body.velocity.normalized * maxVelocity;
+                body.velocity = body.velocity.normalized * maxVelocityTotal;
             }
         }
 
@@ -156,6 +158,26 @@ namespace Rover.Basic
             //Setup a boost system that moves the player forward faster based on movespeed and make the player invincible and able to damage enemies 
         }
 
+        public void SetTotals()
+        {
+            maxVelocityTotal = maxVelocity + maxVelocityBonus;
+            forwardAccelerationTotal = forwardAcceleration + forwardAccelerationBonus;
+            reverseAccelerationTotal = reverseAcceleration + reverseAccelerationBonus;
+            turnStrengthTotal = turnStrength + turnStrengthBonus;
+        }
+
+        #endregion
+
+        #region Events
+        private void OnEnable()
+        {
+            InventoryObject.pickedUpItem += SetTotals;
+        }
+
+        private void OnDisable()
+        {
+            InventoryObject.pickedUpItem -= SetTotals;
+        }
         #endregion
     }
 }
