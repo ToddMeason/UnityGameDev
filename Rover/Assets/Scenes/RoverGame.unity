@@ -57976,7 +57976,8 @@ MonoBehaviour:
   reticleTransform: {fileID: 2871278593093881784}
   turretTransform: {fileID: 925575201}
   turretLagSpeed: 4
-  useController: 1
+  cameraOffset: 45
+  useController: 0
 --- !u!114 &902422008
 MonoBehaviour:
   m_ObjectHideFlags: 0

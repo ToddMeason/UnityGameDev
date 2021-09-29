@@ -37,6 +37,7 @@ namespace Rover.Basic
         private Rover_GunController gunController;
         protected Player player;
 
+        [SerializeField] private float cameraOffset = 45;
         public bool useController;
         #endregion
 
@@ -72,7 +73,35 @@ namespace Rover.Basic
             if(Input.GetButton("Sprint"))
                 Boost();
 
+            KeyBoardMovementInput();
+            //ControllerMovementInput();
+        }
 
+
+        void FixedUpdate()
+        {
+            if(body && input && !useController)//Keyboard Inputs
+            {
+                HandleMovementKeyboard();
+                HandleTurretKeyboard();
+                HandleReticle();
+            }
+            else if (body && input && useController)
+            {
+                HandleMovementKeyboard();
+                HandleTurretController();
+            }
+            else
+            {
+                Debug.Log("No control inputs detected. Check useContoller bool");
+            }
+        }
+        #endregion
+
+
+        #region Custom Methods
+        private void KeyBoardMovementInput()
+        {
             // Get thrust input
             thrust = 0.0f;
             float acceleration = Input.GetAxis("Vertical");
@@ -89,35 +118,18 @@ namespace Rover.Basic
 
             //Debug.Log(turnAxis);
             //Debug.Log(acceleration);
-
-
-            //Controller input
-
         }
 
-        void FixedUpdate()
-        {
-            if(body && input && !useController)//Keyboard Inputs
+        private void ControllerMovementInput()
+        {           
+            Vector3 playerLookDir = Vector3.right * Input.GetAxisRaw("Horizontal") + Vector3.forward * Input.GetAxisRaw("Vertical");
+            if (playerLookDir.sqrMagnitude > 0.0f)
             {
-                HandleMovement();
-                HandleTurretKeyboard();
-                HandleReticle();
-            }
-            else if (body && input && useController)
-            {
-                HandleMovement();
-                HandleTurretController();
-            }
-            else
-            {
-                Debug.Log("No control inputs detected. Check useContoller bool");
+                transform.rotation = Quaternion.LookRotation(playerLookDir, Vector3.up) * Quaternion.Euler(0, cameraOffset,0);
             }
         }
-        #endregion
 
-
-        #region Custom Methods
-        protected virtual void HandleMovement()
+        protected virtual void HandleMovementKeyboard()
         {
             //add something to make emmission stop if not moving
             var emissionRate = 10;
@@ -178,7 +190,7 @@ namespace Rover.Basic
                 Vector3 turretLookDir = Vector3.right * Input.GetAxisRaw("RHorizontal") + Vector3.forward * -Input.GetAxisRaw("RVertical");
                 if (turretLookDir.sqrMagnitude > 0.0f)
                 {
-                    turretTransform.rotation = Quaternion.LookRotation(turretLookDir, Vector3.up);
+                    turretTransform.rotation = Quaternion.LookRotation(turretLookDir, Vector3.up) * Quaternion.Euler(0, cameraOffset, 0);
                 }
             }
         }
