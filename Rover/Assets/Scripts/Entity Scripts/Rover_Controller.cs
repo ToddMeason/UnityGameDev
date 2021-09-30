@@ -12,7 +12,7 @@ namespace Rover.Basic
         #region Variables
         [Header("Movement Properties")]
         private Rigidbody body;
-        private float deadZone = 0f;
+        private float deadZone = 0.2f;
         public float groundedDrag = 3f;
         public float maxVelocity = 10;                public float maxVelocityBonus = 0;             public float maxVelocityTotal;
 
@@ -23,21 +23,23 @@ namespace Rover.Basic
         public float turnStrength = 250;              public float turnStrengthBonus = 0;            public float turnStrengthTotal;
         float turnValue = 0f;
 
-        public ParticleSystem[] dustTrails = new ParticleSystem[2];
+        [SerializeField] private float playerLagSpeed;
 
         [Header("Reticle Properties")]
         public Transform reticleTransform;
 
         [Header("Turret Properties")]
         public Transform turretTransform;
-        public float turretLagSpeed = 0.5f;
+        [SerializeField] private float turretLagSpeed = 0.5f;
 
         private Rover_Inputs input;
         private Vector3 finalTurretLookDir;
+        private Vector3 finalPlayerLookDir;
         private Rover_GunController gunController;
         protected Player player;
 
         [SerializeField] private float cameraOffset = 45;
+        public ParticleSystem[] dustTrails = new ParticleSystem[2];
         public bool useController;
         #endregion
 
@@ -73,8 +75,14 @@ namespace Rover.Basic
             if(Input.GetButton("Sprint"))
                 Boost();
 
-            KeyBoardMovementInput();
-            //ControllerMovementInput();
+            if (useController)
+            {
+                ControllerMovementInput();
+            }
+            else
+            {
+                 KeyBoardMovementInput();
+            }          
         }
 
 
@@ -88,7 +96,7 @@ namespace Rover.Basic
             }
             else if (body && input && useController)
             {
-                HandleMovementKeyboard();
+                HandleMovementController();
                 HandleTurretController();
             }
             else
@@ -122,10 +130,42 @@ namespace Rover.Basic
 
         private void ControllerMovementInput()
         {           
-            Vector3 playerLookDir = Vector3.right * Input.GetAxisRaw("Horizontal") + Vector3.forward * Input.GetAxisRaw("Vertical");
-            if (playerLookDir.sqrMagnitude > 0.0f)
+            Vector3 wantedPlayerLookDir = Vector3.right * Input.GetAxisRaw("Horizontal") + Vector3.forward * Input.GetAxisRaw("Vertical");
+            if (wantedPlayerLookDir.sqrMagnitude > 0.0f)
             {
-                transform.rotation = Quaternion.LookRotation(playerLookDir, Vector3.up) * Quaternion.Euler(0, cameraOffset,0);
+                finalPlayerLookDir = Vector3.Slerp(finalPlayerLookDir, wantedPlayerLookDir, Time.deltaTime * playerLagSpeed);
+                transform.rotation = Quaternion.LookRotation(finalPlayerLookDir, Vector3.up) * Quaternion.Euler(0, cameraOffset,0);
+
+                thrust = 0.0f;
+                float acceleration;
+                bool active = false;
+                StartCoroutine(IsActive());
+                
+                if (Mathf.Abs(Input.GetAxisRaw("Horizontal") - 0) > deadZone || Mathf.Abs(Input.GetAxisRaw("Vertical") - 0) > deadZone)
+                {
+                    active = true;
+                    if (Mathf.Abs(Input.GetAxisRaw("Horizontal") - 0) > Mathf.Abs(Input.GetAxisRaw("Vertical") - 0))
+                    {
+                        acceleration = Mathf.Abs(Input.GetAxisRaw("Horizontal"));
+                    }
+                    else if (Mathf.Abs(Input.GetAxisRaw("Vertical") - 0) > Mathf.Abs(Input.GetAxisRaw("Horizontal") - 0))
+                    {
+                        acceleration = Mathf.Abs(Input.GetAxisRaw("Vertical"));
+                    }
+                    else
+                    {
+                        acceleration = 0;
+                    }
+                }
+                else
+                {
+                    acceleration = 0;
+                }
+
+                Debug.Log(Input.GetAxisRaw("Horizontal"));
+                Debug.Log(Input.GetAxisRaw("Vertical"));
+
+                thrust = acceleration * forwardAccelerationTotal;
             }
         }
 
@@ -163,6 +203,29 @@ namespace Rover.Basic
             }
         }
 
+        private void HandleMovementController()
+        {
+            //add something to make emmission stop if not moving
+            var emissionRate = 10;
+            body.drag = groundedDrag;
+
+            for (int i = 0; i < dustTrails.Length; i++)
+            {
+                var emission = dustTrails[i].emission;
+                emission.rateOverTime = new ParticleSystem.MinMaxCurve(emissionRate);
+            }
+
+            // Handle Forward and Reverse forces
+            if (Mathf.Abs(thrust) > 0)
+                body.AddForce(transform.forward * thrust);
+
+            // Limit max velocity
+            if (body.velocity.sqrMagnitude > (body.velocity.normalized * maxVelocityTotal).sqrMagnitude)
+            {
+                body.velocity = body.velocity.normalized * maxVelocityTotal;
+            }
+        }
+        
         protected virtual void HandleReticle()
         {
             if(reticleTransform)
@@ -206,6 +269,15 @@ namespace Rover.Basic
             forwardAccelerationTotal = forwardAcceleration + forwardAccelerationBonus;
             reverseAccelerationTotal = reverseAcceleration + reverseAccelerationBonus;
             turnStrengthTotal = turnStrength + turnStrengthBonus;
+        }
+
+        #endregion
+
+        #region Coroutines
+        IEnumerator IsActive()//check if the input has changed and if not then put acceleration 
+        {
+            yield return new WaitForSeconds(1);
+            
         }
 
         #endregion

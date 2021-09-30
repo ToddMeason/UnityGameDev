@@ -57970,14 +57970,15 @@ MonoBehaviour:
   turnStrength: 250
   turnStrengthBonus: 0
   turnStrengthTotal: 0
-  dustTrails:
-  - {fileID: 1978460314}
-  - {fileID: 1458750401}
+  playerLagSpeed: 2
   reticleTransform: {fileID: 2871278593093881784}
   turretTransform: {fileID: 925575201}
   turretLagSpeed: 4
   cameraOffset: 45
-  useController: 0
+  dustTrails:
+  - {fileID: 1978460314}
+  - {fileID: 1458750401}
+  useController: 1
 --- !u!114 &902422008
 MonoBehaviour:
   m_ObjectHideFlags: 0
