@@ -129,7 +129,7 @@ namespace Rover.Basic
         }
 
         private void ControllerMovementInput()
-        {           
+        {
             Vector3 wantedPlayerLookDir = Vector3.right * Input.GetAxisRaw("Horizontal") + Vector3.forward * Input.GetAxisRaw("Vertical");
             if (wantedPlayerLookDir.sqrMagnitude > 0.0f)
             {
@@ -138,12 +138,9 @@ namespace Rover.Basic
 
                 thrust = 0.0f;
                 float acceleration;
-                bool active = false;
-                StartCoroutine(IsActive());
                 
                 if (Mathf.Abs(Input.GetAxisRaw("Horizontal") - 0) > deadZone || Mathf.Abs(Input.GetAxisRaw("Vertical") - 0) > deadZone)
                 {
-                    active = true;
                     if (Mathf.Abs(Input.GetAxisRaw("Horizontal") - 0) > Mathf.Abs(Input.GetAxisRaw("Vertical") - 0))
                     {
                         acceleration = Mathf.Abs(Input.GetAxisRaw("Horizontal"));
@@ -164,6 +161,7 @@ namespace Rover.Basic
 
                 Debug.Log(Input.GetAxisRaw("Horizontal"));
                 Debug.Log(Input.GetAxisRaw("Vertical"));
+
 
                 thrust = acceleration * forwardAccelerationTotal;
             }
@@ -274,11 +272,6 @@ namespace Rover.Basic
         #endregion
 
         #region Coroutines
-        IEnumerator IsActive()//check if the input has changed and if not then put acceleration 
-        {
-            yield return new WaitForSeconds(1);
-            
-        }
 
         #endregion
 
