@@ -57978,7 +57978,7 @@ MonoBehaviour:
   dustTrails:
   - {fileID: 1978460314}
   - {fileID: 1458750401}
-  useController: 1
+  useController: 0
 --- !u!114 &902422008
 MonoBehaviour:
   m_ObjectHideFlags: 0

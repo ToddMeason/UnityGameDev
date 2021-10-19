@@ -23,6 +23,10 @@ namespace Rover.Basic
         public float turnStrength = 250;              public float turnStrengthBonus = 0;            public float turnStrengthTotal;
         float turnValue = 0f;
 
+        public float boostSpeed;
+        public float boostTime = 3;
+        public bool boosting;
+
         [SerializeField] private float playerLagSpeed;
 
         [Header("Reticle Properties")]
@@ -52,7 +56,8 @@ namespace Rover.Basic
             gunController = GetComponent<Rover_GunController>();
             player = GetComponent<Player>();
             body.centerOfMass = Vector3.down;
-            //boostSpeed = roverSpeed * 5;
+            boostSpeed = forwardAccelerationTotal * 4;
+            boosting = false;
             if (useController)
             {
                 reticleTransform.gameObject.SetActive(false);
@@ -72,8 +77,8 @@ namespace Rover.Basic
             if (Input.GetButtonDown("Interact"))
                 player.TryInteract();
 
-            if(Input.GetButton("Sprint"))
-                Boost();
+            if(Input.GetButtonDown("Sprint") && !boosting)
+                StartCoroutine(Boost());
 
             if (useController)
             {
@@ -256,22 +261,34 @@ namespace Rover.Basic
             }
         }
 
-        public void Boost()
-        {
-            //Setup a boost system that moves the player forward faster based on movespeed and make the player invincible and able to damage enemies 
-        }
-
         public void SetTotals()
         {
             maxVelocityTotal = maxVelocity + maxVelocityBonus;
             forwardAccelerationTotal = forwardAcceleration + forwardAccelerationBonus;
             reverseAccelerationTotal = reverseAcceleration + reverseAccelerationBonus;
             turnStrengthTotal = turnStrength + turnStrengthBonus;
+            boostSpeed = forwardAccelerationTotal * 4;
         }
 
         #endregion
 
         #region Coroutines
+        IEnumerator Boost()
+        {
+            //Setup a boost system that moves the player forward faster based on movespeed and make the player invincible and able to damage enemies 
+            boosting = true;
+            player.invulnerable = true;
+
+            float originalAcc = forwardAccelerationTotal;
+            forwardAccelerationTotal = boostSpeed;
+
+            yield return new WaitForSeconds(boostTime);
+
+            forwardAccelerationTotal = originalAcc;
+
+            boosting = false;
+            player.invulnerable = false;
+        }
 
         #endregion
 

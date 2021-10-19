@@ -17,12 +17,12 @@ public class Entity : MonoBehaviour, IDamageable
 
     public float maxHealth;
     [Range(0, 0.9f)] public float armour;//percent based damage reduction
+    public bool invulnerable = false;
     protected float health;
     protected bool dead;
     protected bool hit = false;
+    
     #endregion
-
-
 
     #region Builtin Methods
     protected virtual void Start()
@@ -40,18 +40,21 @@ public class Entity : MonoBehaviour, IDamageable
 
     public virtual void TakeDamage(float damage)
     {
-        hit = true;//Need to get this working for take hit animation on enemies
-        float damageReduction = damage * armour;
-        damage -= damageReduction;
-
-        health -= damage;
-
-        OnHealthChanged?.Invoke(health);
-        //Debug.Log(damage);
-
-        if (health <= 0 && !dead)
+        if (!invulnerable)
         {
-            Die();
+            hit = true;//Need to get this working for take hit animation on enemies
+            float damageReduction = damage * armour;
+            damage -= damageReduction;
+
+            health -= damage;
+
+            OnHealthChanged?.Invoke(health);
+            //Debug.Log(damage);
+
+            if (health <= 0 && !dead)
+            {
+                Die();
+            }
         }
     }
 

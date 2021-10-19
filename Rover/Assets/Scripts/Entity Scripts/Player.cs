@@ -34,6 +34,9 @@ public class Player : Entity
     int projectileCountBonusTotal = 0;
     int spreadBonusTotal = 0;
 
+    int ramDamage = 50;
+    int ramDamageTotal = 0;
+
     int maxVelocityBonusTotal = 0;
     int accelerationBonusTotal = 0;
     int turnStrengthBonusTotal = 0;
@@ -58,6 +61,7 @@ public class Player : Entity
     {
         gun = GetComponent<Rover.Basic.Rover_GunController>().equippedGun;
         roverController = GetComponent<Rover.Basic.Rover_Controller>();
+        ramDamageTotal = ramDamage + dmgBonusTotal;
 
         for (int i = 0; i < stats.Length; i++)
         {
@@ -290,6 +294,12 @@ public class Player : Entity
         {
             interactable = collider.GetComponent<Interactable>();
         }
+
+        if (collider.GetComponent<Enemy>() && roverController.boosting == true)//works but should add physics to hits later ie activate ragdolls
+        {
+            collider.GetComponent<Enemy>().TakeDamage(ramDamageTotal);
+            Debug.Log("Rammed " + collider.GetComponent<Enemy>().name);
+        }
     }
 
     private void OnTriggerExit(Collider colliderExit)
@@ -298,6 +308,11 @@ public class Player : Entity
         {
             interactable = null;
         }      
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        
     }
 
     private void OnApplicationQuit()//Clears inventory when app is closed, have to check later if this breaks save file
