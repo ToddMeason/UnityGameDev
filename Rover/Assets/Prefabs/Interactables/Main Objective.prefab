@@ -211,7 +211,7 @@ MonoBehaviour:
   - {fileID: 8098694925220183217, guid: 2aa3884c09e49084aab2c15b0262b342, type: 3}
   terrainLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 512
   maxSpawnPos: 20
   time: 60
   spawnDelay: 2

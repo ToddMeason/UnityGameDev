@@ -19,6 +19,15 @@ public class CheckPlayerNearObjective : MonoBehaviour
         }
     }
 
+    private void OnTriggerEnter(Collider collider)
+    {
+        if (collider.GetComponent<Player>())//Checks if player re-enters range and starts the timer again
+        {
+            mainObjective.playerInRange = true;
+            mainObjective.StartCoroutine(mainObjective.Timer());
+        }
+    }
+
     private void OnTriggerExit(Collider collider)
     {
         if (collider.GetComponent<Player>())

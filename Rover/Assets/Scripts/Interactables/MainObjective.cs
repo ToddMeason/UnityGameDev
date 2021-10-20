@@ -4,12 +4,16 @@ using UnityEngine;
 
 public class MainObjective : Interactable //Make spawning its own class later
 {
+    public delegate void OnObjTimerChange(float time);
+    public static event OnObjTimerChange OnTimerChange;
+
     public Enemy[] enemies;
     public LayerMask terrainLayer;//May add this to sphereCast later if i change the ground layer
 
     [SerializeField] private float maxSpawnPos = 20;
 
-    public float time;
+    [SerializeField]private float time;
+    public float curTime;
     public float spawnDelay = 2f;
     public bool playerInRange;
 
@@ -17,6 +21,11 @@ public class MainObjective : Interactable //Make spawning its own class later
     private bool isDisabled = false;
 
     [SerializeField]private GameObject dropShip;
+
+    private void Start()
+    {
+        curTime = time;
+    }
 
     private void Update()
     {
@@ -78,14 +87,13 @@ public class MainObjective : Interactable //Make spawning its own class later
 
     #region Coroutines
     public IEnumerator Timer()
-    {
-        float curTime = 0;       
+    {              
         float spawnTime = 0;
 
         while (playerInRange || isDisabled)
         {
-            curTime += Time.deltaTime;
-            //Debug.Log(curTime);//Add to UI later
+            curTime -= Time.deltaTime;
+            OnTimerChange?.Invoke(curTime);
             isDisabled = false;
 
             spawnTime += Time.deltaTime;
@@ -95,7 +103,7 @@ public class MainObjective : Interactable //Make spawning its own class later
                 spawnTime = 0;
             }
 
-            if (curTime >= time)
+            if (curTime <= 0)
             {
                 isDisabled = true;
                 Instantiate(dropShip, transform.position + new Vector3(0, 15, 0), Quaternion.identity);

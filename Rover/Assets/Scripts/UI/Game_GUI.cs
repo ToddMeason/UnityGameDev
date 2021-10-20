@@ -15,6 +15,7 @@ public class Game_GUI : MonoBehaviour
     public Image fadePlane;
     public TextMeshProUGUI ammo;
     public TextMeshProUGUI currency;
+    public TextMeshProUGUI objectiveTimer;
     public GameObject gameOverUI;
     public Player player;
     #endregion
@@ -28,6 +29,7 @@ public class Game_GUI : MonoBehaviour
     void Start()
     {
         player.OnDeath += OnGameOver;
+        objectiveTimer.enabled = false;
     }
 
     void Update()
@@ -78,6 +80,12 @@ public class Game_GUI : MonoBehaviour
         }
     }
 
+    public void ShowObjectiveTimer(float time)
+    {
+        objectiveTimer.enabled = true;
+        objectiveTimer.text = "Objective Charging: " + time.ToString("F2");
+    }
+
     #endregion
 
     #region Input
@@ -96,6 +104,7 @@ public class Game_GUI : MonoBehaviour
         Player.OnExpChanged += SetPlayerExp;
         Player.OnCurrencyChanged += ShowCurrency;
         Rover.Basic.Rover_Controller.OnBoostUsed += ShowBoost;
+        MainObjective.OnTimerChange += ShowObjectiveTimer;
     }
 
     public void OnDisable()
@@ -105,6 +114,7 @@ public class Game_GUI : MonoBehaviour
         Player.OnExpChanged -= SetPlayerExp;
         Player.OnCurrencyChanged -= ShowCurrency;
         Rover.Basic.Rover_Controller.OnBoostUsed -= ShowBoost;
+        MainObjective.OnTimerChange -= ShowObjectiveTimer;
     }
 
     #endregion
