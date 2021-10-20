@@ -10,6 +10,7 @@ public class Game_GUI : MonoBehaviour
     #region Variables
     public Image expBar;
     public Image healthBar;
+    public Image boostBar;
     public Text levelText;
     public Image fadePlane;
     public TextMeshProUGUI ammo;
@@ -65,9 +66,16 @@ public class Game_GUI : MonoBehaviour
         expBar.rectTransform.localScale = new Vector3(percentToLevel, 1, 1);
     }
 
-    private void UpdateExpBar()
+    public void ShowBoost(bool boostAvailable)
     {
-
+        if (boostAvailable)
+        {
+            boostBar.enabled = true;
+        }
+        else
+        {
+            boostBar.enabled = false;
+        }
     }
 
     #endregion
@@ -87,6 +95,7 @@ public class Game_GUI : MonoBehaviour
         Gun.OnAmmoChanged += ShowAmmo;
         Player.OnExpChanged += SetPlayerExp;
         Player.OnCurrencyChanged += ShowCurrency;
+        Rover.Basic.Rover_Controller.OnBoostUsed += ShowBoost;
     }
 
     public void OnDisable()
@@ -95,6 +104,7 @@ public class Game_GUI : MonoBehaviour
         Gun.OnAmmoChanged -= ShowAmmo;
         Player.OnExpChanged -= SetPlayerExp;
         Player.OnCurrencyChanged -= ShowCurrency;
+        Rover.Basic.Rover_Controller.OnBoostUsed -= ShowBoost;
     }
 
     #endregion

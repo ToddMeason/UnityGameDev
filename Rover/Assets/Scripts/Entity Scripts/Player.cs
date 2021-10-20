@@ -39,7 +39,6 @@ public class Player : Entity
 
     int maxVelocityBonusTotal = 0;
     int accelerationBonusTotal = 0;
-    int turnStrengthBonusTotal = 0;
 
     #endregion
 
@@ -136,13 +135,6 @@ public class Player : Entity
                     roverController.reverseAccelerationBonus = stats[i].bonusValue;
                     break;
 
-                case Stats.turnStrengthBonus:
-                    stats[i].baseValue = roverController.turnStrength;
-                    stats[i].bonusValue = turnStrengthBonusTotal;
-                    stats[i].totalValue = stats[i].bonusValue + stats[i].baseValue;
-                    roverController.turnStrengthBonus = stats[i].bonusValue;
-                    break;
-
                 default:
                     break;
             }           
@@ -161,7 +153,6 @@ public class Player : Entity
 
         maxVelocityBonusTotal = 0;
         accelerationBonusTotal = 0;
-        turnStrengthBonusTotal = 0;
 
 
         for (int i = 0; i < inventory.Container.Slots.Count; i++)
@@ -199,9 +190,6 @@ public class Player : Entity
                         break;
                     case Stats.accelerationBonus:
                         accelerationBonusTotal += value * amount;
-                        break;
-                    case Stats.turnStrengthBonus:
-                        turnStrengthBonusTotal += value * amount;
                         break;
                     default:
                         break;

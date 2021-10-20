@@ -10,6 +10,9 @@ namespace Rover.Basic
     public class Rover_Controller : MonoBehaviour
     {
         #region Variables
+        public delegate void OnBoost(bool boostAvailable);
+        public static event OnBoost OnBoostUsed;
+
         [Header("Movement Properties")]
         private Rigidbody body;
         private float deadZone = 0.2f;
@@ -20,12 +23,14 @@ namespace Rover.Basic
         public float reverseAcceleration = 2000;      public float reverseAccelerationBonus = 0;     public float reverseAccelerationTotal;
         [SerializeField] private float thrust = 0f;
 
-        public float turnStrength = 250;              public float turnStrengthBonus = 0;            public float turnStrengthTotal;
+        public float turnStrengthTotal = 250;
         float turnValue = 0f;
 
         public float boostSpeed;
         public float boostTime = 3;
         public bool boosting;
+        public bool boostAvailable;
+        public float boostCooldown = 15;
 
         [SerializeField] private float playerLagSpeed;
 
@@ -58,6 +63,9 @@ namespace Rover.Basic
             body.centerOfMass = Vector3.down;
             boostSpeed = forwardAccelerationTotal * 4;
             boosting = false;
+            boostAvailable = true;
+            OnBoostUsed?.Invoke(boostAvailable);
+
             if (useController)
             {
                 reticleTransform.gameObject.SetActive(false);
@@ -77,7 +85,7 @@ namespace Rover.Basic
             if (Input.GetButtonDown("Interact"))
                 player.TryInteract();
 
-            if(Input.GetButtonDown("Sprint") && !boosting)
+            if(Input.GetButtonDown("Sprint") && !boosting && boostAvailable)
                 StartCoroutine(Boost());
 
             if (useController)
@@ -266,7 +274,6 @@ namespace Rover.Basic
             maxVelocityTotal = maxVelocity + maxVelocityBonus;
             forwardAccelerationTotal = forwardAcceleration + forwardAccelerationBonus;
             reverseAccelerationTotal = reverseAcceleration + reverseAccelerationBonus;
-            turnStrengthTotal = turnStrength + turnStrengthBonus;
             boostSpeed = forwardAccelerationTotal * 4;
         }
 
@@ -278,6 +285,8 @@ namespace Rover.Basic
             //Setup a boost system that moves the player forward faster based on movespeed and make the player invincible and able to damage enemies 
             boosting = true;
             player.invulnerable = true;
+            boostAvailable = false;
+            OnBoostUsed?.Invoke(boostAvailable);
 
             float originalAcc = forwardAccelerationTotal;
             forwardAccelerationTotal = boostSpeed;
@@ -285,9 +294,12 @@ namespace Rover.Basic
             yield return new WaitForSeconds(boostTime);
 
             forwardAccelerationTotal = originalAcc;
-
             boosting = false;
             player.invulnerable = false;
+
+            yield return new WaitForSeconds(boostCooldown);
+            boostAvailable = true;
+            OnBoostUsed?.Invoke(boostAvailable);
         }
 
         #endregion
