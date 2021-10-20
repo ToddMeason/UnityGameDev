@@ -29,15 +29,15 @@ public class MainObjective : Interactable //Make spawning its own class later
 
     private void Update()
     {
-        
+
     }
 
     public override void Interact()
     {
         if (!activated)
         {
-            StartCoroutine(Timer());          
-
+            StartCoroutine(Timer());
+            GetComponentInChildren<ParticleSystem>().Play();
             activated = true;
         }
 

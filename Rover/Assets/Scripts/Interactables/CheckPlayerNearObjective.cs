@@ -9,13 +9,14 @@ public class CheckPlayerNearObjective : MonoBehaviour
     private void Start()
     {
         mainObjective = GetComponentInParent<MainObjective>();
+        GetComponent<ParticleSystem>().Stop();
     }
 
     private void OnTriggerStay(Collider collider)
     {
         if (collider.GetComponent<Player>())//Checks if player is within range
         {
-            mainObjective.playerInRange = true;           
+            mainObjective.playerInRange = true;
         }
     }
 
