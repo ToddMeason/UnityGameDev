@@ -25,7 +25,10 @@ public class CheckPlayerNearObjective : MonoBehaviour
         if (collider.GetComponent<Player>())//Checks if player re-enters range and starts the timer again
         {
             mainObjective.playerInRange = true;
-            mainObjective.StartCoroutine(mainObjective.Timer());
+            if (mainObjective.activated)
+            {
+                mainObjective.StartCoroutine(mainObjective.Timer());
+            }         
         }
     }
 
