@@ -33,14 +33,14 @@ public class MapGenerator : MonoBehaviour
     void Start()
     {
         FindObjectOfType<Spawner>().OnNewWave += OnNewWave;//Changes the map with each new wave
-        //GenerateMap(); //Will stay on the same map if only you only run generateMap and no OnNewWave method
+        GenerateMap(); //Will stay on the same map if only you only run generateMap and no OnNewWave method
 
 
         //Random map settings
-        //maps[mapIndex].mapSize.x = Random.Range(20, 40);
-        //maps[mapIndex].mapSize.y = Random.Range(20, 40);
-        //maps[mapIndex].obstaclePercent = Random.Range(0.2f, 0.4f);
-        //maps[mapIndex].seed = Random.Range(0, 1000);
+        maps[mapIndex].mapSize.x = Random.Range(20, 40);
+        maps[mapIndex].mapSize.y = Random.Range(20, 40);
+        maps[mapIndex].obstaclePercent = Random.Range(0.2f, 0.4f);
+        maps[mapIndex].seed = Random.Range(0, 1000);
     }   
 
     void Update()

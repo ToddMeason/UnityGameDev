@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+
 
 public class RadarObject 
 {
@@ -30,7 +32,10 @@ public class Radar : MonoBehaviour
         sweepTransform = transform.Find("Sweep");
         rotationSpeed = 180f;
         playerPos = FindObjectOfType<Player>().transform;
-        target = FindObjectOfType<MainObjective>().transform;
+        if (SceneManager.GetActiveScene().name == "RoverGame")
+        {
+             target = FindObjectOfType<MainObjective>().transform;
+        }
     }
 
     // Update is called once per frame
@@ -38,7 +43,8 @@ public class Radar : MonoBehaviour
     {
         sweepTransform.eulerAngles -= new Vector3(0, 0, rotationSpeed * Time.deltaTime);
         DrawRadarDots();
-        LookAtObj();
+        if (SceneManager.GetActiveScene().name == "RoverGame")
+            LookAtObj();
     }
 
     #endregion
