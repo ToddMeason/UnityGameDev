@@ -23,8 +23,8 @@ namespace Rover.Basic
         public float reverseAcceleration = 2000;      public float reverseAccelerationBonus = 0;     public float reverseAccelerationTotal;
         [SerializeField] private float thrust = 0f;
 
-        public float turnStrengthTotal = 250;
-        float turnValue = 0f;
+        private float turnStrengthTotal = 250;
+        private float turnValue = 0f;
 
         public float boostSpeed;
         public float boostTime = 3;
@@ -137,7 +137,7 @@ namespace Rover.Basic
             if (Mathf.Abs(turnAxis) > deadZone)
                 turnValue = turnAxis;
 
-            //Debug.Log(turnAxis);
+            Debug.Log(turnValue);
             //Debug.Log(acceleration);
         }
 

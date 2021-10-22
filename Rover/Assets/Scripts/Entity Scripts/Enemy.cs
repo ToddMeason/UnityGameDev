@@ -21,12 +21,11 @@ public class Enemy : Entity
     private Material skinMaterial;
     private Color originalColor;
 
-    public float currencyOnDeath;//change to private later
-    public float expOnDeath;//change to private later
-    public float attackDistanceThreshold = 3f;//change to private later
-    public float timeBetweenAttacks = 2f;//change to private later
-    public float damage = 10;//change to private later
-
+    [SerializeField] private float currencyOnDeath;
+    [SerializeField] private float expOnDeath;
+    [SerializeField] private float attackDistanceThreshold = 3f;
+    [SerializeField] private float timeBetweenAttacks = 2f;
+    [SerializeField] private float damage = 10;
     private float nextAttackTime;
     private float myCollisionRadius;
     private float targetCollisionRadius;
