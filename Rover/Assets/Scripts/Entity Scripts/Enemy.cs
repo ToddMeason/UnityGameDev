@@ -15,11 +15,8 @@ public class Enemy : Entity
 
     private NavMeshAgent pathfinder;
     private Player player;
-    private Transform target;
+    [SerializeField] private Transform target;
     private Entity targetEntity;
-
-    private Material skinMaterial;
-    private Color originalColor;
 
     [SerializeField] private float currencyOnDeath;
     [SerializeField] private float expOnDeath;
@@ -40,8 +37,6 @@ public class Enemy : Entity
         base.Start();
 
         pathfinder = GetComponent<NavMeshAgent>();
-        skinMaterial = GetComponent<Renderer>().material;
-        originalColor = skinMaterial.color;
 
         if (GameObject.FindGameObjectWithTag("Player") != null)//Check if there is actually a player
         {
@@ -56,39 +51,48 @@ public class Enemy : Entity
             myCollisionRadius = GetComponent<CapsuleCollider>().radius;
             targetCollisionRadius = target.GetComponent<CapsuleCollider>().radius;//Need to figure out a way to get box collider edge or just add a capsule collider for a radius float
 
-            StartCoroutine("UpdatePath");
+            StartCoroutine(UpdatePath());
         }
     }
 
     private void Update()
     {
-        if (hit)//Dont know if this works properly
+        if (!target)
         {
-            if (health <= 0) {
-                currentState = State.Die;
+            currentState = State.Idle;
+        }
+        if (!dead)
+        {
+            switch (currentState)
+            {
+                case State.Idle:
+                    animator.Play("Idle_1");
+                    StopCoroutine(UpdatePath());
+                    pathfinder.enabled = false;
+                    break;
+
+                case State.Chasing:
+                    animator.Play("Walk_1");
+                    StartCoroutine(UpdatePath());
+                    break;
+
+                case State.Attacking:
+                    animator.Play("Attack_1");
+                    break;
+
+                case State.TakeDamage:
+                    StartCoroutine(TakeDamageAnimation());
+                    break;
             }
-            else 
-            {
-                currentState = State.TakeDamage;
-            }          
-        }
-        else 
-        {
-            currentState = State.Chasing;
-        }
 
-        StartCoroutine(PlayAnimationState());
-
-        if (hasTarget)
-        {
-            if (Time.time > nextAttackTime)
+            if (hit)//Dont know if this works properly
             {
-                float sqrDisToTarget = (target.position - transform.position).sqrMagnitude;
-                if (sqrDisToTarget < Mathf.Pow(attackDistanceThreshold + myCollisionRadius + targetCollisionRadius, 2))
-                {
-                    nextAttackTime = Time.time + timeBetweenAttacks;
-                    StartCoroutine("Attack");
-                }
+                if (health > 0)
+                    currentState = State.TakeDamage;
+            }
+            else
+            {
+                currentState = State.Chasing;
             }
         }
     }
@@ -98,7 +102,6 @@ public class Enemy : Entity
     #region Custom Methods
     protected override void Die()
     {
-        currentState = State.Die;
         dead = true;
         player.AddExp(expOnDeath);
         player.AddCurrency(currencyOnDeath);
@@ -114,36 +117,9 @@ public class Enemy : Entity
     #endregion
 
     #region Coroutines
-    IEnumerator PlayAnimationState()
-    {
-        switch (currentState)
-        {
-            case State.Idle:
-                animator.Play("Idle_1");
-                break;
-
-            case State.Chasing:
-                animator.Play("Walk_1");
-                break;
-
-            case State.Attacking:
-                animator.Play("Attack_1");
-                break;
-
-            case State.TakeDamage:
-                StartCoroutine(TakeDamageAnimation());
-                break;
-            
-            case State.Die:
-                animator.Play("Die");
-                break;
-        }
-        yield return null;
-    }
 
     IEnumerator UpdatePath()
     {
-
         float refreshRate = 0.25f;//Runs the pathfinder based on the refreshrate variable instead of each frame (for performance)
 
         while (hasTarget)
@@ -156,6 +132,17 @@ public class Enemy : Entity
                 {
                     pathfinder.SetDestination(targetPosition);
                 }
+
+                if (Time.time > nextAttackTime)
+                {
+                    float sqrDisToTarget = (target.position - transform.position).sqrMagnitude;
+                    if (sqrDisToTarget < Mathf.Pow(attackDistanceThreshold + myCollisionRadius + targetCollisionRadius, 2))
+                    {
+                        currentState = State.Attacking;
+                        nextAttackTime = Time.time + timeBetweenAttacks;
+                        StartCoroutine(Attack());
+                    }
+                }
             }
             yield return new WaitForSeconds(refreshRate);
         }
@@ -164,6 +151,7 @@ public class Enemy : Entity
     IEnumerator DieAnimation() {
         pathfinder.enabled = false;
         hasTarget = false;
+        animator.Play("Die");
         yield return new WaitForSeconds(2f);
         base.Die();
     }
@@ -188,7 +176,6 @@ public class Enemy : Entity
         float percent = 0;
         float attackSpeed = 3;
 
-        skinMaterial.color = Color.red;
         bool hasAppliedDamage = false;
 
         while (percent <= 1)
@@ -206,7 +193,6 @@ public class Enemy : Entity
             yield return null;
         }
 
-        skinMaterial.color = originalColor;
         currentState = State.Chasing;
         pathfinder.enabled = true;
     }
