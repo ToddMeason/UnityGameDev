@@ -67,17 +67,17 @@ public class Enemy : Entity
             switch (currentState)
             {
                 case State.Idle:
-                    animator.Play("Idle_1");
+                    animator.Play("Idle_1");//change to generic variable
                     StopCoroutine(UpdatePath());
                     pathfinder.enabled = false;
                     break;
 
                 case State.Chasing:
-                    animator.Play("Walk_1");
+                    animator.Play("Walk_1");//change to generic variable
                     break;
 
                 case State.Attacking://make part of the chasing state. Where the ai stops and plays attack animation and attack method then continues chasing
-                    animator.Play("Attack_1");
+                    animator.Play("Attack_1");//change to generic variable
                     break;
 
                 case State.TakeDamage:
@@ -151,14 +151,14 @@ public class Enemy : Entity
     IEnumerator DieAnimation() {
         pathfinder.enabled = false;
         hasTarget = false;
-        animator.Play("Die");
+        animator.Play("Die");//change to generic variable
         yield return new WaitForSeconds(2f);
         base.Die();
     }
 
     IEnumerator TakeDamageAnimation() {
         pathfinder.enabled = false;
-        animator.Play("Take_Damage_1");
+        animator.Play("Take_Damage_1");//change to generic variable
         yield return new WaitForSeconds(0.5f);
         hit = false;
         pathfinder.enabled = true;
