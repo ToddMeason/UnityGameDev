@@ -61,6 +61,7 @@ public class Enemy : Entity
         {
             currentState = State.Idle;
         }
+
         if (!dead)
         {
             switch (currentState)
@@ -73,10 +74,9 @@ public class Enemy : Entity
 
                 case State.Chasing:
                     animator.Play("Walk_1");
-                    StartCoroutine(UpdatePath());
                     break;
 
-                case State.Attacking:
+                case State.Attacking://make part of the chasing state. Where the ai stops and plays attack animation and attack method then continues chasing
                     animator.Play("Attack_1");
                     break;
 
