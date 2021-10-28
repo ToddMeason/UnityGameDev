@@ -35,7 +35,6 @@ public class MapGenerator : MonoBehaviour
         FindObjectOfType<Spawner>().OnNewWave += OnNewWave;//Changes the map with each new wave
         GenerateMap(); //Will stay on the same map if only you only run generateMap and no OnNewWave method
 
-
         //Random map settings
         maps[mapIndex].mapSize.x = Random.Range(20, 40);
         maps[mapIndex].mapSize.y = Random.Range(20, 40);

@@ -5,30 +5,37 @@ using UnityEngine;
 using UnityEngine.AI;
 
 [RequireComponent(typeof(NavMeshAgent))]
-public class Enemy : Entity
+public abstract class Enemy : Entity
 {
     #region Variables
     public enum State {Idle, Chasing, Attacking, TakeDamage, Die}
-    [SerializeField] State currentState;
+    public State currentState;
 
     public Animator animator;
 
-    private NavMeshAgent pathfinder;
+    public NavMeshAgent pathfinder;
     private Player player;
-    [SerializeField] private Transform target;
-    private Entity targetEntity;
+    public Transform target;
+    public Entity targetEntity;
 
-    [SerializeField] private float currencyOnDeath;
-    [SerializeField] private float expOnDeath;
-    [SerializeField] private float attackDistanceThreshold = 3f;
-    [SerializeField] private float timeBetweenAttacks = 2f;
-    [SerializeField] private float damage = 10;
-    private float nextAttackTime;
-    private float myCollisionRadius;
-    private float targetCollisionRadius;
+    public float currencyOnDeath;
+    public float expOnDeath;
+    public float attackDistanceThreshold = 3f;
+    public float timeBetweenAttacks = 2f;
+    public float damage = 10;
+    public float nextAttackTime;
+    public float myCollisionRadius;
+    public float targetCollisionRadius;
 
     private bool hasTarget;
-    
+
+    [Header("Animations")]
+    public string idleAnimation; //make sure all of these are the exact name of the animation
+    public string walkAnimation;
+    public string attackAnimation;
+    public string takeDamageAnimation;
+    public string dieAnimation;
+
     #endregion
 
     #region Builtin Methods
@@ -67,17 +74,17 @@ public class Enemy : Entity
             switch (currentState)
             {
                 case State.Idle:
-                    animator.Play("Idle_1");//change to generic variable
+                    animator.Play(idleAnimation);//change to generic variable
                     StopCoroutine(UpdatePath());
                     pathfinder.enabled = false;
                     break;
 
                 case State.Chasing:
-                    animator.Play("Walk_1");//change to generic variable
+                    animator.Play(walkAnimation);//change to generic variable
                     break;
 
                 case State.Attacking://make part of the chasing state. Where the ai stops and plays attack animation and attack method then continues chasing
-                    animator.Play("Attack_1");//change to generic variable
+                    animator.Play(attackAnimation);//change to generic variable
                     break;
 
                 case State.TakeDamage:
@@ -114,6 +121,8 @@ public class Enemy : Entity
         currentState = State.Idle;
     }
 
+    public abstract void CheckAttack();
+
     #endregion
 
     #region Coroutines
@@ -133,16 +142,8 @@ public class Enemy : Entity
                     pathfinder.SetDestination(targetPosition);
                 }
 
-                if (Time.time > nextAttackTime)
-                {
-                    float sqrDisToTarget = (target.position - transform.position).sqrMagnitude;
-                    if (sqrDisToTarget < Mathf.Pow(attackDistanceThreshold + myCollisionRadius + targetCollisionRadius, 2))
-                    {
-                        currentState = State.Attacking;
-                        nextAttackTime = Time.time + timeBetweenAttacks;
-                        StartCoroutine(Attack());
-                    }
-                }
+                CheckAttack();
+
             }
             yield return new WaitForSeconds(refreshRate);
         }
@@ -151,51 +152,20 @@ public class Enemy : Entity
     IEnumerator DieAnimation() {
         pathfinder.enabled = false;
         hasTarget = false;
-        animator.Play("Die");//change to generic variable
+        animator.Play(dieAnimation);//change to generic variable
         yield return new WaitForSeconds(2f);
         base.Die();
     }
 
     IEnumerator TakeDamageAnimation() {
         pathfinder.enabled = false;
-        animator.Play("Take_Damage_1");//change to generic variable
+        animator.Play(takeDamageAnimation);//change to generic variable
         yield return new WaitForSeconds(0.5f);
         hit = false;
         pathfinder.enabled = true;
     }
 
-    IEnumerator Attack()
-    {
-        currentState = State.Attacking;
-        pathfinder.enabled = false;
-
-        Vector3 originalPosition = transform.position;
-        Vector3 dirToTarget = (target.position - transform.position).normalized;
-        Vector3 attackPosition = target.position - dirToTarget * (myCollisionRadius + (targetCollisionRadius / 2));//Makes it so the attack only goes just into the target capsule collider instead of directly to the middle of their position
-
-        float percent = 0;
-        float attackSpeed = 3;
-
-        bool hasAppliedDamage = false;
-
-        while (percent <= 1)
-        {
-            if(percent >= 0.5f && !hasAppliedDamage)
-            {
-                hasAppliedDamage = true;
-                targetEntity.TakeDamage(damage);
-            }
-
-            percent += Time.deltaTime * attackSpeed;
-            float interpolation = (-Mathf.Pow(percent, 2) + percent) * 4;//Parabola for 0 to 1 then back to 0 ie move enemy from current position to the player position then back
-            transform.position = Vector3.Lerp(originalPosition, attackPosition, interpolation);//Move the enemy from current position to the player position then back
-
-            yield return null;
-        }
-
-        currentState = State.Chasing;
-        pathfinder.enabled = true;
-    }
+    public abstract IEnumerator Attack();
 
     #endregion
 }
