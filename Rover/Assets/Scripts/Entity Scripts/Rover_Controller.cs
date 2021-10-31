@@ -137,7 +137,7 @@ namespace Rover.Basic
             if (Mathf.Abs(turnAxis) > deadZone)
                 turnValue = turnAxis;
 
-            Debug.Log(turnValue);
+            //Debug.Log(turnValue);
             //Debug.Log(acceleration);
         }
 
