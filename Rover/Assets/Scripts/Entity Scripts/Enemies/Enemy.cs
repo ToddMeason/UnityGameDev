@@ -27,7 +27,7 @@ public abstract class Enemy : Entity
     public float myCollisionRadius;
     public float targetCollisionRadius;
 
-    private bool hasTarget;
+    public bool hasTarget;
 
     [Header("Animations")]
     public string idleAnimation; //make sure all of these are the exact name of the animation
@@ -121,33 +121,12 @@ public abstract class Enemy : Entity
         currentState = State.Idle;
     }
 
-    public abstract void CheckAttack();
-
     #endregion
 
     #region Coroutines
 
-    IEnumerator UpdatePath()
-    {
-        float refreshRate = 0.25f;//Runs the pathfinder based on the refreshrate variable instead of each frame (for performance)
-
-        while (hasTarget)
-        {
-            if (currentState == State.Chasing)
-            {
-                Vector3 dirToTarget = (target.position - transform.position).normalized;
-                Vector3 targetPosition = target.position - dirToTarget * (myCollisionRadius + targetCollisionRadius + attackDistanceThreshold/2);//Makes it so the movement only goes just into the target capsule collider instead of directly to the middle of their position
-                if (!dead)
-                {
-                    pathfinder.SetDestination(targetPosition);
-                }
-
-                CheckAttack();
-
-            }
-            yield return new WaitForSeconds(refreshRate);
-        }
-    }
+    public abstract IEnumerator UpdatePath();
+ 
 
     IEnumerator DieAnimation() {
         pathfinder.enabled = false;

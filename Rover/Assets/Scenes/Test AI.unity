@@ -172,9 +172,10 @@ GameObject:
   - component: {fileID: 354096596}
   - component: {fileID: 354096595}
   - component: {fileID: 354096594}
+  - component: {fileID: 354096598}
+  - component: {fileID: 354096599}
   - component: {fileID: 354096593}
   - component: {fileID: 354096592}
-  - component: {fileID: 354096598}
   m_Layer: 0
   m_Name: Charger
   m_TagString: Untagged
@@ -210,6 +211,7 @@ MonoBehaviour:
   nextAttackTime: 0
   myCollisionRadius: 0
   targetCollisionRadius: 0
+  hasTarget: 0
   idleAnimation: 
   walkAnimation: 
   attackAnimation: 
@@ -218,7 +220,7 @@ MonoBehaviour:
   windUpTime: 2
   chargeTime: 2
   selfStunTime: 5
-  chargeSpeed: 5
+  chargeSpeed: 20
 --- !u!195 &354096593
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -312,8 +314,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 354096591}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.984, z: -2.84}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 3.07, z: -2.84}
+  m_LocalScale: {x: 3, y: 3, z: 3}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 5
@@ -333,7 +335,20 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 116
-  m_CollisionDetection: 1
+  m_CollisionDetection: 3
+--- !u!65 &354096599
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 354096591}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 2, z: 1}
+  m_Center: {x: 0, y: 0, z: 1}
 --- !u!1 &449720422
 GameObject:
   m_ObjectHideFlags: 0

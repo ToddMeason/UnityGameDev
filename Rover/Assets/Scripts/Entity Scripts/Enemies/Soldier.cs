@@ -3,18 +3,35 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Soldier : Enemy
-{ 
-    public override void CheckAttack()
+{
+    public override IEnumerator UpdatePath()
     {
-        if (Time.time > nextAttackTime)
+        float refreshRate = 0.25f;//Runs the pathfinder based on the refreshrate variable instead of each frame (for performance)
+
+        while (hasTarget)
         {
-            float sqrDisToTarget = (target.position - transform.position).sqrMagnitude;
-            if (sqrDisToTarget < Mathf.Pow(attackDistanceThreshold + myCollisionRadius + targetCollisionRadius, 2))
+            if (currentState == State.Chasing)
             {
-                currentState = State.Attacking;
-                nextAttackTime = Time.time + timeBetweenAttacks;
-                StartCoroutine(Attack());
+                Vector3 dirToTarget = (target.position - transform.position).normalized;
+                Vector3 targetPosition = target.position - dirToTarget * (myCollisionRadius + targetCollisionRadius + attackDistanceThreshold / 2);//Makes it so the movement only goes just into the target capsule collider instead of directly to the middle of their position
+                if (!dead)
+                {
+                    pathfinder.SetDestination(targetPosition);
+                }
+
+                if (Time.time > nextAttackTime)
+                {
+                    float sqrDisToTarget = (target.position - transform.position).sqrMagnitude;
+                    if (sqrDisToTarget < Mathf.Pow(attackDistanceThreshold + myCollisionRadius + targetCollisionRadius, 2))
+                    {
+                        currentState = State.Attacking;
+                        nextAttackTime = Time.time + timeBetweenAttacks;
+                        StartCoroutine(Attack());
+                    }
+                }
+
             }
+            yield return new WaitForSeconds(refreshRate);
         }
     }
 
