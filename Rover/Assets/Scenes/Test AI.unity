@@ -207,7 +207,7 @@ MonoBehaviour:
   expOnDeath: 5
   attackDistanceThreshold: 3
   timeBetweenAttacks: 2
-  damage: 10
+  damage: 25
   nextAttackTime: 0
   myCollisionRadius: 0
   targetCollisionRadius: 0
@@ -314,7 +314,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 354096591}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 3.07, z: -2.84}
+  m_LocalPosition: {x: 0, y: 3.07, z: -10.43}
   m_LocalScale: {x: 3, y: 3, z: 3}
   m_Children: []
   m_Father: {fileID: 0}
@@ -660,6 +660,10 @@ PrefabInstance:
     - target: {fileID: 5299476855291187253, guid: b39355888b5dd7a4eb25e030bdf16808, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5620843501176780754, guid: b39355888b5dd7a4eb25e030bdf16808, type: 3}
+      propertyPath: m_CollisionDetection
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5620843501176780755, guid: b39355888b5dd7a4eb25e030bdf16808, type: 3}
       propertyPath: camera

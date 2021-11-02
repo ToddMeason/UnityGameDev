@@ -12,6 +12,7 @@ public class Charger : Enemy
     private RaycastHit chargerHit;
     private Rigidbody rb;
     private bool attacking = false;
+    private bool hitPlayer = false;
 
     protected override void Start()
     {
@@ -32,15 +33,21 @@ public class Charger : Enemy
         //Needs to constantly face player except when charging
         //spherecast forward and see if it can hit the player in a straight line
 
-        Vector3 centre = transform.position;//change to a set height 
+        Vector3 centre = new Vector3(transform.position.x, transform.position.y - 2, transform.position.z);
+        Vector3 left = new Vector3(transform.position.x - 2, transform.position.y - 2, transform.position.z);
+        Vector3 right = new Vector3(transform.position.x + 2, transform.position.y - 2, transform.position.z);
 
         Debug.DrawRay(centre, transform.TransformDirection(Vector3.forward) * 20, Color.red, 1);
+        Debug.DrawRay(left, transform.TransformDirection(Vector3.forward) * 20, Color.red, 1);
+        Debug.DrawRay(right, transform.TransformDirection(Vector3.forward) * 20, Color.red, 1);
 
-        if (Physics.SphereCast(centre, 3, transform.forward, out chargerHit, 20))
+        if (Physics.SphereCast(centre, 2, transform.forward, out chargerHit, 20) 
+            && Physics.SphereCast(left, 2, transform.forward, out chargerHit, 20) 
+            && Physics.SphereCast(right, 2, transform.forward, out chargerHit, 20))
         {
             if (chargerHit.collider.GetComponent<Player>())
             {
-                Debug.Log("Detect Player");
+                //Debug.Log("Detect Player");
                 if (!attacking)
                 {
                     StartCoroutine(Attack());
@@ -48,46 +55,34 @@ public class Charger : Enemy
             }
             else
             {
-                Debug.Log("Detect Object Not player");
+                //Debug.Log("Detect Object Not player");
             }
         }
     }
 
-    //public void Charge()
-    //{
-    //    charging = true;
-
-
-    //    Vector3 startingPos = transform.position;
-    //    Vector3 finalPos = transform.position + (transform.forward * chargeSpeed);
-    //    float elapsedTime = 0;
-
-    //    while (elapsedTime < chargeTime)
-    //    {
-    //        if (charging)
-    //        {
-
-    //            transform.position = Vector3.Lerp(startingPos, finalPos, (elapsedTime / chargeTime));
-    //            elapsedTime += Time.deltaTime;
-    //        }
-    //        else
-    //        {
-    //            break;
-    //        }
-    //    }
-    //    charging = false;
-    //}
-
     private void OnCollisionEnter(Collision collision)
     {
-        charging = false;
-        Debug.Log(collision);
+        if (!collision.collider.GetComponent<Player>())
+        {
+            charging = false;
+            Debug.Log(collision); 
+        }      
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        charging = false;
-        Debug.Log(other);
+        var player = other.GetComponent<Player>();
+        if (player && !hitPlayer && attacking)
+        {
+            player.TakeDamage(damage);
+            other.GetComponent<Rover.Basic.Rover_Controller>().TakeCharge(transform.forward * 250000);
+            hitPlayer = true;
+        }
+        else
+        {
+            charging = false;
+            Debug.Log(other);
+        }
     }
 
     public override IEnumerator UpdatePath()
@@ -128,6 +123,6 @@ public class Charger : Enemy
         rb.isKinematic = false;
         pathfinder.enabled = true;
         attacking = false;
+        hitPlayer = false;
     }
-
 }
