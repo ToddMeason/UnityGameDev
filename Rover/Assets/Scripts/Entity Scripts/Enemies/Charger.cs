@@ -62,7 +62,7 @@ public class Charger : Enemy
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (!collision.collider.GetComponent<Player>())
+        if (!collision.collider.GetComponent<Entity>())
         {
             charging = false;
             Debug.Log(collision); 
@@ -71,12 +71,15 @@ public class Charger : Enemy
 
     private void OnTriggerEnter(Collider other)
     {
-        var player = other.GetComponent<Player>();
-        if (player && !hitPlayer && attacking)
+        if (other.GetComponent<Entity>())
         {
-            player.TakeDamage(damage);
-            other.GetComponent<Rover.Basic.Rover_Controller>().TakeCharge(transform.forward * 250000);
-            hitPlayer = true;
+            var player = other.GetComponent<Player>();
+            if (player && !hitPlayer && attacking)
+            {
+                player.TakeDamage(damage);
+                other.GetComponent<Rover.Basic.Rover_Controller>().TakeCharge(transform.forward * 250000);
+                hitPlayer = true;
+            }
         }
         else
         {
