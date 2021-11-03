@@ -8,9 +8,14 @@ public class Charger : Enemy
     [SerializeField] private float chargeTime;
     [SerializeField] private float selfStunTime;
     [SerializeField] private float chargeSpeed;
-    private bool charging = false;
+
+    [SerializeField] private LayerMask enemy;
+
     private RaycastHit chargerHit;
     private Rigidbody rb;
+
+
+    private bool charging = false;
     private bool attacking = false;
     private bool hitPlayer = false;
 
@@ -41,9 +46,9 @@ public class Charger : Enemy
         Debug.DrawRay(left, transform.TransformDirection(Vector3.forward) * 20, Color.red, 1);
         Debug.DrawRay(right, transform.TransformDirection(Vector3.forward) * 20, Color.red, 1);
 
-        if (Physics.SphereCast(centre, 2, transform.forward, out chargerHit, 20) 
-            && Physics.SphereCast(left, 2, transform.forward, out chargerHit, 20) 
-            && Physics.SphereCast(right, 2, transform.forward, out chargerHit, 20))
+        if (Physics.SphereCast(centre, 2, transform.forward, out chargerHit, 20, ~enemy) 
+            && Physics.SphereCast(left, 2, transform.forward, out chargerHit, 20, ~enemy) 
+            && Physics.SphereCast(right, 2, transform.forward, out chargerHit, 20, ~enemy))
         {
             if (chargerHit.collider.GetComponent<Player>())
             {

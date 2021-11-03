@@ -6,13 +6,22 @@ public class Spitter : Enemy
 {
     [SerializeField] private float attackCoolDown;
     [SerializeField] private float attackDelay;
+    [SerializeField] private float attackRange;
     [SerializeField] private float projectileSpeed;
+
+    [SerializeField] private LayerMask enemy;
 
     private bool attacking = false;
     private RaycastHit rayHit;
 
     [SerializeField] private Transform projectileSpawn;
-    [SerializeField] private Projectile projectile;
+    [SerializeField] private SpitterProjectile projectile;
+
+
+    private void Update()
+    {
+        projectileSpawn.LookAt(target);
+    }
 
     public void CheckAttack()
     {
@@ -23,13 +32,13 @@ public class Spitter : Enemy
         Vector3 left = new Vector3(transform.position.x - 2, transform.position.y - 1.5f, transform.position.z);
         Vector3 right = new Vector3(transform.position.x + 2, transform.position.y - 1.5f, transform.position.z);
 
-        Debug.DrawRay(centre, transform.TransformDirection(Vector3.forward) * 20, Color.red, 1);
-        Debug.DrawRay(left, transform.TransformDirection(Vector3.forward) * 20, Color.red, 1);//change to display forward properly
-        Debug.DrawRay(right, transform.TransformDirection(Vector3.forward) * 20, Color.red, 1);//change to display forward properly
+        Debug.DrawRay(centre, transform.TransformDirection(Vector3.forward) * attackRange, Color.red, 1);
+        Debug.DrawRay(left, transform.TransformDirection(Vector3.forward) * attackRange, Color.red, 1);//change to display forward properly
+        Debug.DrawRay(right, transform.TransformDirection(Vector3.forward) * attackRange, Color.red, 1);//change to display forward properly
 
-        if (Physics.SphereCast(centre, 2, transform.forward, out rayHit, 20)
-            && Physics.SphereCast(left, 2, transform.forward, out rayHit, 20)
-            && Physics.SphereCast(right, 2, transform.forward, out rayHit, 20))
+        if (Physics.SphereCast(centre, 2, transform.forward, out rayHit, attackRange, ~enemy)
+            && Physics.SphereCast(left, 2, transform.forward, out rayHit, attackRange, ~enemy)
+            && Physics.SphereCast(right, 2, transform.forward, out rayHit, attackRange, ~enemy))
         {
             if (rayHit.collider.GetComponent<Player>())
             {
@@ -59,7 +68,7 @@ public class Spitter : Enemy
         Quaternion newRotation = projectileSpawn.rotation;
 
         newRotation = Quaternion.Euler(projectileSpawn.eulerAngles.x, projectileSpawn.eulerAngles.y, projectileSpawn.eulerAngles.z);
-        Projectile newProjectile = Instantiate(projectile, projectileSpawn.position, newRotation) as Projectile;
+        SpitterProjectile newProjectile = Instantiate(projectile, projectileSpawn.position, newRotation);
         newProjectile.SetSpeed(projectileSpeed);
         newProjectile.SetDamage(damage);
 
