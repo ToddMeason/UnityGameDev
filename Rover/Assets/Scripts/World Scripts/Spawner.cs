@@ -178,7 +178,7 @@ public class Spawner : MonoBehaviour //rework to not spawn when objective is spa
         {
             Transform SpawnTile = map.GetRandomOpenTile();
 
-            var chest = Instantiate(chests[i], SpawnTile.position + Vector3.up, Quaternion.identity);
+            var chest = Instantiate(chests[i], SpawnTile.position + Vector3.up - new Vector3(0,0.5f,0), Quaternion.identity);
             chest.transform.parent = this.transform;
         }
         yield return null;

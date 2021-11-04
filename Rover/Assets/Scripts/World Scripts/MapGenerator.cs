@@ -9,7 +9,7 @@ public class MapGenerator : MonoBehaviour
     public int mapIndex;
 
     public Transform tilePrefab;
-    public Transform obstaclePrefab;
+    public Transform[] obstaclePrefab;
     public Transform navmeshFloor;
     public Transform navmeshMaskPrefab;
 
@@ -109,7 +109,7 @@ public class MapGenerator : MonoBehaviour
                 float obstacleHeight = Mathf.Lerp(currentMap.minObstacleHeight, currentMap.maxObstacleHeight, (float)prng.NextDouble());
                 float obstacleWidth = Mathf.Lerp(currentMap.minObstacleWidth, currentMap.maxObstacleWidth, (float)prng.NextDouble());
                 Vector3 obstaclePosition = CoordToPosition(randomCoord.x, randomCoord.y);
-                Transform newObstacle = Instantiate(obstaclePrefab, obstaclePosition + Vector3.up * obstacleHeight/2 , Quaternion.identity) as Transform;
+                Transform newObstacle = Instantiate(obstaclePrefab[Random.Range(0, obstaclePrefab.Length)], obstaclePosition + Vector3.up * obstacleHeight/2 , Quaternion.identity) as Transform;
                 newObstacle.parent = mapHolder;
                 newObstacle.localScale = new Vector3((1 - outlinePercent) * obstacleWidth, obstacleHeight, (1 - outlinePercent) * obstacleWidth);
                 newObstacle.rotation = Random.rotation; //randomizes rotation everytime would have to save rotation if seed is to be consistent
