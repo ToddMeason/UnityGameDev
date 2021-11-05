@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2384022}
   - component: {fileID: -1583174482163756276}
   - component: {fileID: 1572777910586180290}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Rock3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -92,8 +92,8 @@ NavMeshObstacle:
   m_GameObject: {fileID: 149536}
   m_Enabled: 1
   serializedVersion: 3
-  m_Shape: 1
-  m_Extents: {x: 1.8730001, y: 3.5360003, z: 1.7670001}
+  m_Shape: 0
+  m_Extents: {x: 1.8730001, y: 3.5360003, z: 1.8730001}
   m_MoveThreshold: 0.1
   m_Carve: 0
   m_CarveOnlyStationary: 1

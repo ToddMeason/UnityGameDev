@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2306174}
   - component: {fileID: -1239645293823750617}
   - component: {fileID: 2831144271857252620}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Rock4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -92,8 +92,8 @@ NavMeshObstacle:
   m_GameObject: {fileID: 189914}
   m_Enabled: 1
   serializedVersion: 3
-  m_Shape: 1
-  m_Extents: {x: 4.5360003, y: 2.158, z: 1.557}
+  m_Shape: 0
+  m_Extents: {x: 4.5360003, y: 2.158, z: 4.5360003}
   m_MoveThreshold: 0.1
   m_Carve: 0
   m_CarveOnlyStationary: 1
