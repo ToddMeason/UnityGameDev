@@ -29,8 +29,7 @@ public abstract class Enemy : Entity
 
     public bool hasTarget;
 
-    [Header("Animations")]
-    public string idleAnimation; //make sure all of these are the exact name of the animation
+    [Header("Animations")]//make sure all of these are the exact name of the animation
     public string walkAnimation;
     public string attackAnimation;
     public string takeDamageAnimation;
@@ -74,7 +73,6 @@ public abstract class Enemy : Entity
             switch (currentState)
             {
                 case State.Idle:
-                    animator.Play(idleAnimation);//change to generic variable
                     StopCoroutine(UpdatePath());
                     pathfinder.enabled = false;
                     break;
