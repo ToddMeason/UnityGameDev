@@ -11,13 +11,18 @@ public class InventoryObject : ScriptableObject
     public static event PickedUpItem pickedUpItem;
 
     public string savePath;
-    public ItemDatabaseObject database;//May need to be private and reworked so it doesnt get overwritten and could be problems when buidling
+    private ItemDatabaseObject database {get { return database;} set { database = value; } }//May need to be private and reworked so it doesnt get overwritten and could be problems when buidling
     public Inventory Container;
     public List<InventorySlot> GetSlots { get { return Container.Slots; } }
 
+    private void OnEnable()
+    {
+        database = Resources.Load("Database") as ItemDatabaseObject;
+        Debug.Log(database);
+    }
+
     public void AddItem(Item _item, int _amount)
     {
-
         for (int i = 0; i < Container.Slots.Count; i++)//Check if item is in inventory
         {
             if (Container.Slots[i].item.Id == _item.Id)
@@ -36,6 +41,8 @@ public class InventoryObject : ScriptableObject
     [ContextMenu("Save")]
     public void Save()//save path is C:/Users/'username'/AppData/LocalLow/DefaultCompany/Rover
     {
+        Debug.Log("Saving");
+
         //Could use IFormatter to make file uneditable
         string saveData = JsonUtility.ToJson(this, true);
         BinaryFormatter bf = new BinaryFormatter();
@@ -47,8 +54,7 @@ public class InventoryObject : ScriptableObject
 
     [ContextMenu("Load")]
     public void Load()
-    {
-        Debug.Log("not Load Inv");
+    {       
         if (File.Exists(Application.persistentDataPath + savePath))
         {
             Debug.Log("Load Inv");
@@ -56,6 +62,10 @@ public class InventoryObject : ScriptableObject
             FileStream file = File.Open(Application.persistentDataPath + savePath, FileMode.Open);
             JsonUtility.FromJsonOverwrite(bf.Deserialize(file).ToString(), this);
             file.Close();
+        }
+        else
+        {
+            Debug.Log("not Load Inv");
         }
         pickedUpItem?.Invoke();//just to call update inventoryDisplay
     }

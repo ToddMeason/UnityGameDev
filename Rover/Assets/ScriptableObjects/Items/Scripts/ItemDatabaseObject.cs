@@ -6,7 +6,7 @@ using UnityEngine;
 public class ItemDatabaseObject : ScriptableObject, ISerializationCallbackReceiver
 {
     //Used to give IDs to the scriptable objects within the scriptable object(inventory) so you can save them in a json file with the correct reference IDs instead of reference names
-    [SerializeField] private int databaseId;
+    public int databaseId;
     public ItemObject[] Items;
     public Dictionary<int, ItemObject> GetItem = new Dictionary<int, ItemObject>();
 
