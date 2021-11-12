@@ -11,7 +11,7 @@ public class InventoryObject : ScriptableObject
     public static event PickedUpItem pickedUpItem;
 
     public string savePath;
-    private ItemDatabaseObject database {get { return database;} set { database = value; } }//May need to be private and reworked so it doesnt get overwritten and could be problems when buidling
+    public ItemDatabaseObject database; //May need to be private and reworked so it doesnt get overwritten and could be problems when buidling
     public Inventory Container;
     public List<InventorySlot> GetSlots { get { return Container.Slots; } }
 
@@ -44,7 +44,7 @@ public class InventoryObject : ScriptableObject
         Debug.Log("Saving");
 
         //Could use IFormatter to make file uneditable
-        string saveData = JsonUtility.ToJson(this, true);
+        string saveData = JsonUtility.ToJson(savePath + Container, true);
         BinaryFormatter bf = new BinaryFormatter();
         FileStream file = File.Create(Application.persistentDataPath + savePath);
         bf.Serialize(file, saveData);
