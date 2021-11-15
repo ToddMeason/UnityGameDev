@@ -70,7 +70,7 @@ public class Charger : Enemy
         if (!collision.collider.GetComponent<Entity>())
         {
             charging = false;
-            Debug.Log(collision); 
+            //Debug.Log(collision); 
         }      
     }
 
@@ -89,7 +89,7 @@ public class Charger : Enemy
         else
         {
             charging = false;
-            Debug.Log(other);
+            //Debug.Log(other);
         }
     }
 
