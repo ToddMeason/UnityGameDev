@@ -82,9 +82,7 @@ public abstract class Enemy : Entity
                     break;
 
                 case State.Attacking://make part of the chasing state. Where the ai stops and plays attack animation and attack method then continues chasing
-                    active = true;
                     animator.Play(attackAnimation);//change to generic variable
-                    StartCoroutine(Wait(1));
                     break;
 
                 case State.TakeDamage:
@@ -150,7 +148,6 @@ public abstract class Enemy : Entity
     IEnumerator Wait(float time)
     {
         yield return new WaitForSeconds(time);
-        active = false;
     }
 
     public abstract IEnumerator Attack();
