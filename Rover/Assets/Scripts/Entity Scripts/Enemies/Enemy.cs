@@ -28,6 +28,7 @@ public abstract class Enemy : Entity
     public float targetCollisionRadius;
 
     public bool hasTarget;
+    public bool active = false;
 
     [Header("Animations")]//make sure all of these are the exact name of the animation
     public string walkAnimation;
@@ -73,7 +74,6 @@ public abstract class Enemy : Entity
             switch (currentState)
             {
                 case State.Idle:
-                    StopCoroutine(UpdatePath());
                     pathfinder.enabled = false;
                     break;
 
@@ -82,7 +82,9 @@ public abstract class Enemy : Entity
                     break;
 
                 case State.Attacking://make part of the chasing state. Where the ai stops and plays attack animation and attack method then continues chasing
+                    active = true;
                     animator.Play(attackAnimation);//change to generic variable
+                    StartCoroutine(Wait(1));
                     break;
 
                 case State.TakeDamage:
@@ -97,7 +99,10 @@ public abstract class Enemy : Entity
             }
             else
             {
-                currentState = State.Chasing;
+                if (!active)
+                {
+                    currentState = State.Chasing;
+                }               
             }
         }
     }
@@ -140,6 +145,12 @@ public abstract class Enemy : Entity
         yield return new WaitForSeconds(0.5f);
         hit = false;
         pathfinder.enabled = true;
+    }
+
+    IEnumerator Wait(float time)
+    {
+        yield return new WaitForSeconds(time);
+        active = false;
     }
 
     public abstract IEnumerator Attack();

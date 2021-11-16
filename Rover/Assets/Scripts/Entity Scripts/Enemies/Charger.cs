@@ -38,9 +38,9 @@ public class Charger : Enemy
         //Needs to constantly face player except when charging
         //spherecast forward and see if it can hit the player in a straight line
 
-        Vector3 centre = new Vector3(transform.position.x, transform.position.y - 2, transform.position.z);
-        Vector3 left = new Vector3(transform.position.x - 2, transform.position.y - 2, transform.position.z);
-        Vector3 right = new Vector3(transform.position.x + 2, transform.position.y - 2, transform.position.z);
+        Vector3 centre = new Vector3(transform.position.x, transform.position.y, transform.position.z);
+        Vector3 left = new Vector3(transform.position.x - 0.5f, transform.position.y, transform.position.z);
+        Vector3 right = new Vector3(transform.position.x + 0.5f, transform.position.y, transform.position.z);
 
         Debug.DrawRay(centre, transform.TransformDirection(Vector3.forward) * 20, Color.red, 1);
         Debug.DrawRay(left, transform.TransformDirection(Vector3.forward) * 20, Color.red, 1);
@@ -52,15 +52,17 @@ public class Charger : Enemy
         {
             if (chargerHit.collider.GetComponent<Player>())
             {
-                //Debug.Log("Detect Player");
+                Debug.Log("Detect Player");
                 if (!attacking)
                 {
+                    active = true;
+                    currentState = State.Idle;
                     StartCoroutine(Attack());
                 }              
             }
             else
             {
-                //Debug.Log("Detect Object Not player");
+                Debug.Log("Detect Object Not player");
             }
         }
     }
@@ -119,18 +121,25 @@ public class Charger : Enemy
         attacking = true;//ok not amazing
         pathfinder.enabled = false;
         //play roar/starting charge animation
+        animator.Play("Roar");
         yield return new WaitForSeconds(windUpTime);
 
+        currentState = State.Attacking;
         charging = true;
         //play charge animation
+        animator.Play(attackAnimation);
         yield return new WaitForSeconds(chargeTime);
         charging = false;
         rb.isKinematic = true;
-         
+
+        currentState = State.Idle;
+        animator.Play("Stun");
         yield return new WaitForSeconds(selfStunTime);
         rb.isKinematic = false;
         pathfinder.enabled = true;
         attacking = false;
         hitPlayer = false;
+        active = false;
+        currentState = State.Chasing;
     }
 }
