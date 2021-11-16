@@ -138548,7 +138548,7 @@ PrefabInstance:
       objectReference: {fileID: 963194227}
     - target: {fileID: 5620843501176780764, guid: b39355888b5dd7a4eb25e030bdf16808, type: 3}
       propertyPath: useController
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5620843501176780764, guid: b39355888b5dd7a4eb25e030bdf16808, type: 3}
       propertyPath: reticleTransform

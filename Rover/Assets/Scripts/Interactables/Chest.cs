@@ -40,7 +40,8 @@ public class Chest : Interactable
             GameObject newItem = Instantiate(items[Random.Range(0, items.Length)], new Vector3(transform.position.x, transform.position.y + 1, transform.position.z), Quaternion.identity);//Pops item out above chest a little and throws it forward
             newItem.GetComponent<Rigidbody>().AddForce(transform.forward * 200 + transform.up *200);
 
-            activated = true;                       
+            activated = true;
+            Destroy(gameObject, 5);
         }
 
         base.Interact();

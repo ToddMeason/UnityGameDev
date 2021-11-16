@@ -1308,6 +1308,22 @@ PrefabInstance:
       propertyPath: m_Avatar
       value: 
       objectReference: {fileID: 9000000, guid: 603f381a18a86f24696495e5b7de5603, type: 3}
+    - target: {fileID: 4228204132586193824, guid: 36037ffcb57a15348898327f57892a8a, type: 3}
+      propertyPath: m_Size.x
+      value: 6.441011
+      objectReference: {fileID: 0}
+    - target: {fileID: 4228204132586193824, guid: 36037ffcb57a15348898327f57892a8a, type: 3}
+      propertyPath: m_Size.y
+      value: 8.30012
+      objectReference: {fileID: 0}
+    - target: {fileID: 4228204132586193824, guid: 36037ffcb57a15348898327f57892a8a, type: 3}
+      propertyPath: m_Center.x
+      value: 0.011445761
+      objectReference: {fileID: 0}
+    - target: {fileID: 4228204132586193824, guid: 36037ffcb57a15348898327f57892a8a, type: 3}
+      propertyPath: m_Center.y
+      value: 3.3499398
+      objectReference: {fileID: 0}
     - target: {fileID: 4228204132586193826, guid: 36037ffcb57a15348898327f57892a8a, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -1351,6 +1367,10 @@ PrefabInstance:
     - target: {fileID: 4228204132586193826, guid: 36037ffcb57a15348898327f57892a8a, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4228204132586193831, guid: 36037ffcb57a15348898327f57892a8a, type: 3}
+      propertyPath: selfStunTime
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4228204132586193848, guid: 36037ffcb57a15348898327f57892a8a, type: 3}
       propertyPath: m_Name

@@ -86,7 +86,10 @@ public abstract class Enemy : Entity
                     break;
 
                 case State.TakeDamage:
-                    StartCoroutine(TakeDamageAnimation());
+                    if (!active)
+                    {
+                        StartCoroutine(TakeDamageAnimation());
+                    }
                     break;
             }
 
