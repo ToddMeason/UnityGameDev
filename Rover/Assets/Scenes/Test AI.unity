@@ -1024,6 +1024,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4228204132586193831, guid: 36037ffcb57a15348898327f57892a8a, type: 3}
+      propertyPath: maxHealth
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 4228204132586193848, guid: 36037ffcb57a15348898327f57892a8a, type: 3}
       propertyPath: m_Name
       value: Charger

@@ -31,6 +31,12 @@ public class Charger : Enemy
         {
             transform.position += transform.forward * Time.deltaTime * chargeSpeed;//not too bad, still goes through wall if close          
         }
+
+        if (dead)
+        {
+            StopCoroutine(Attack());
+            StopCoroutine(UpdatePath());
+        }
     }
 
     public void CheckAttack()

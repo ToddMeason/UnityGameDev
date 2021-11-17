@@ -4947,7 +4947,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 512
   maxSpawnPos: 20
-  time: 10
+  time: 90
   curTime: 0
   spawnDelay: 2
   playerInRange: 0

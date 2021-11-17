@@ -136,7 +136,7 @@ public abstract class Enemy : Entity
         pathfinder.enabled = false;
         hasTarget = false;
         animator.Play(dieAnimation);//change to generic variable
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(3f);
         base.Die();
     }
 
