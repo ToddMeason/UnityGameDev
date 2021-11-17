@@ -180,8 +180,8 @@ namespace Rover.Basic
                     acceleration = 0;
                 }
 
-                Debug.Log(Input.GetAxisRaw("Horizontal"));
-                Debug.Log(Input.GetAxisRaw("Vertical"));
+                //Debug.Log(Input.GetAxisRaw("Horizontal"));
+                //Debug.Log(Input.GetAxisRaw("Vertical"));
 
 
                 thrust = acceleration * forwardAccelerationTotal;

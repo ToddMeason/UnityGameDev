@@ -43403,7 +43403,9 @@ MonoBehaviour:
   - enemyCount: 100
     chestCount: 0
     timeBetweenSpawns: 0.5
-  enemy: {fileID: 8098694925220183217, guid: 2aa3884c09e49084aab2c15b0262b342, type: 3}
+  enemy:
+  - {fileID: 8098694925220183217, guid: 2aa3884c09e49084aab2c15b0262b342, type: 3}
+  - {fileID: 4228204132586193831, guid: 36037ffcb57a15348898327f57892a8a, type: 3}
   chests:
   - {fileID: 7524535409318879800, guid: 682121d2eafc19244993bbd5da5f3464, type: 3}
   - {fileID: 7524535409318879800, guid: 682121d2eafc19244993bbd5da5f3464, type: 3}
