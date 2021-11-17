@@ -16,15 +16,9 @@ public class MainMenu : MonoBehaviour
         OpenMainMenu();
     }
 
-   
-    void Update()
-    {
-        
-    }
-
     public void PlayGame()
     {
-
+        SceneManager.LoadScene("RoverGame");
     }
 
     public void OpenMainMenu()
