@@ -23,14 +23,15 @@ namespace Rover.Basic
         public float reverseAcceleration = 2000;      public float reverseAccelerationBonus = 0;     public float reverseAccelerationTotal;
         [SerializeField] private float thrust = 0f;
 
-        public float turnStrengthTotal = 250;
-        float turnValue = 0f;
+        private float turnStrengthTotal = 250;
+        private float turnValue = 0f;
 
         public float boostSpeed;
         public float boostTime = 3;
         public bool boosting;
         public bool boostAvailable;
         public float boostCooldown = 15;
+        public bool stunned = false;
 
         [SerializeField] private float playerLagSpeed;
 
@@ -50,6 +51,7 @@ namespace Rover.Basic
         [SerializeField] private float cameraOffset = 45;
         public ParticleSystem[] dustTrails = new ParticleSystem[2];
         public bool useController;
+      
         #endregion
 
 
@@ -76,45 +78,51 @@ namespace Rover.Basic
 
         private void Update()
         {
-            if(Input.GetButton("Shoot") || Input.GetAxis("Shoot") > 0.2f)
-                gunController.Shoot();
-
-            if(Input.GetButton("Reload"))
-                gunController.Reload();
-
-            if (Input.GetButtonDown("Interact"))
-                player.TryInteract();
-
-            if(Input.GetButtonDown("Sprint") && !boosting && boostAvailable)
-                StartCoroutine(Boost());
-
-            if (useController)
+            if (!stunned)
             {
-                ControllerMovementInput();
+                if(Input.GetButton("Shoot") || Input.GetAxis("Shoot") > 0.2f)
+                    gunController.Shoot();
+
+                if(Input.GetButton("Reload"))
+                    gunController.Reload();
+
+                if (Input.GetButtonDown("Interact"))
+                    player.TryInteract();
+
+                if (Input.GetButtonDown("Sprint") && !boosting && boostAvailable)
+                    StartCoroutine(Boost());
+
+                if (useController)
+                {
+                    ControllerMovementInput();
+                }
+                else
+                {
+                    KeyBoardMovementInput();
+                }
             }
-            else
-            {
-                 KeyBoardMovementInput();
-            }          
         }
 
 
         void FixedUpdate()
         {
-            if(body && input && !useController)//Keyboard Inputs
+            if (!stunned)
             {
-                HandleMovementKeyboard();
-                HandleTurretKeyboard();
-                HandleReticle();
-            }
-            else if (body && input && useController)
-            {
-                HandleMovementController();
-                HandleTurretController();
-            }
-            else
-            {
-                Debug.Log("No control inputs detected. Check useContoller bool");
+                if (body && input && !useController)//Keyboard Inputs
+                {
+                    HandleMovementKeyboard();
+                    HandleTurretKeyboard();
+                    HandleReticle();
+                }
+                else if (body && input && useController)
+                {
+                    HandleMovementController();
+                    HandleTurretController();
+                }
+                else
+                {
+                    Debug.Log("No control inputs detected. Check useContoller bool");
+                }
             }
         }
         #endregion
@@ -137,7 +145,7 @@ namespace Rover.Basic
             if (Mathf.Abs(turnAxis) > deadZone)
                 turnValue = turnAxis;
 
-            //Debug.Log(turnAxis);
+            //Debug.Log(turnValue);
             //Debug.Log(acceleration);
         }
 
@@ -172,8 +180,8 @@ namespace Rover.Basic
                     acceleration = 0;
                 }
 
-                Debug.Log(Input.GetAxisRaw("Horizontal"));
-                Debug.Log(Input.GetAxisRaw("Vertical"));
+                //Debug.Log(Input.GetAxisRaw("Horizontal"));
+                //Debug.Log(Input.GetAxisRaw("Vertical"));
 
 
                 thrust = acceleration * forwardAccelerationTotal;
@@ -277,6 +285,11 @@ namespace Rover.Basic
             boostSpeed = forwardAccelerationTotal * 4;
         }
 
+        public void TakeCharge(Vector3 force)//very scuffed but works
+        {
+            StartCoroutine(TakeChargerHit(force));
+        }
+
         #endregion
 
         #region Coroutines
@@ -300,6 +313,14 @@ namespace Rover.Basic
             yield return new WaitForSeconds(boostCooldown);
             boostAvailable = true;
             OnBoostUsed?.Invoke(boostAvailable);
+        }
+
+        public IEnumerator TakeChargerHit(Vector3 force)
+        {
+            stunned = true;
+            body.AddForce(force);
+            yield return new WaitForSeconds(2);
+            stunned = false;
         }
 
         #endregion

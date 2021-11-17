@@ -16,7 +16,7 @@ public class ShopSlot : Interactable
         GenerateItem();
         DisplayItem();
         textPopup.autoSizeTextContainer = true;
-        textPopup.text = "E\n" + cost;
+        textPopup.text = "A\n" + cost;
     }
 
     public void GenerateItem()

@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using TMPro;
+using UnityEngine.EventSystems;
 
 public class Game_GUI : MonoBehaviour
 {
@@ -18,6 +19,8 @@ public class Game_GUI : MonoBehaviour
     public TextMeshProUGUI objectiveTimer;
     public GameObject gameOverUI;
     public Player player;
+
+    public GameObject gameOverFirstButton;
     #endregion
 
     #region Builtin Methods
@@ -60,6 +63,8 @@ public class Game_GUI : MonoBehaviour
     {
         StartCoroutine(Fade(Color.clear, Color.black, 1));
         gameOverUI.SetActive(true);
+        EventSystem.current.SetSelectedGameObject(null);
+        EventSystem.current.SetSelectedGameObject(gameOverFirstButton);
     }
 
     public void SetPlayerExp(float percentToLevel, int playerLevel)
@@ -91,7 +96,7 @@ public class Game_GUI : MonoBehaviour
     #region Input
     public void StartNewGame()//Added to the button ui object
     {
-        SceneManager.LoadScene("RoverGame");
+        SceneManager.LoadScene("MainMenu");
     }
 
     #endregion

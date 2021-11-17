@@ -29,15 +29,15 @@ public class MainObjective : Interactable //Make spawning its own class later
 
     private void Update()
     {
-        
+
     }
 
     public override void Interact()
     {
         if (!activated)
         {
-            StartCoroutine(Timer());          
-
+            StartCoroutine(Timer());
+            GetComponentInChildren<ParticleSystem>().Play();
             activated = true;
         }
 
@@ -65,8 +65,17 @@ public class MainObjective : Interactable //Make spawning its own class later
     {
         if (!isDisabled)
         {
-            Enemy spawnedEnemy = Instantiate(enemies[Random.Range(0, enemies.Length)] , spawnPos + Vector3.up, Quaternion.identity) as Enemy;
-            spawnedEnemy.transform.parent = this.transform;
+            int x;
+            if (Random.Range(0, 100) > 90)
+            {
+                x = 1;
+            }
+            else
+            {
+                x = 0;
+            }
+            Enemy spawnedEnemy = Instantiate(enemies[x] , spawnPos + Vector3.up, Quaternion.identity) as Enemy;
+            //spawnedEnemy.transform.parent = this.transform;
         }
     }
 
@@ -108,6 +117,7 @@ public class MainObjective : Interactable //Make spawning its own class later
                 isDisabled = true;
                 Instantiate(dropShip, transform.position + new Vector3(0, 15, 0), Quaternion.identity);
                 OnObjectiveComplete();
+                Destroy(gameObject, 3);
                 yield return null;
             }
             yield return null;

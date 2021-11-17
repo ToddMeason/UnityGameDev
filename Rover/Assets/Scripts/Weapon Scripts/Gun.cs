@@ -11,7 +11,7 @@ public class Gun : MonoBehaviour
     public delegate void OnAmmoChange(float ammo);
     public static event OnAmmoChange OnAmmoChanged;
 
-    public enum WeaponType {MachineGun, ShotGun};//not used currently will be needed for rocket launcher later maybe
+    public enum WeaponType {MachineGun, ShotGun, Minigun};//not used currently will be needed for rocket launcher later maybe
     public WeaponType weaponType;
 
     public Transform projectileSpawn;//Where bullet comes out ie barrel
@@ -86,7 +86,11 @@ public class Gun : MonoBehaviour
             ////Above for lineRenderer
 
             //Play Audio
-            GetComponent<AudioSource>().Play();
+            if (weaponType != WeaponType.Minigun)
+            {
+                GetComponent<AudioSource>().Play();
+            }
+            
             OnAmmoChanged?.Invoke(currentMagSize);
 
             //Spawning a shell casing after a shot 

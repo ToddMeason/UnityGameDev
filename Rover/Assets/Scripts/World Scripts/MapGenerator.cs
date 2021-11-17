@@ -9,7 +9,7 @@ public class MapGenerator : MonoBehaviour
     public int mapIndex;
 
     public Transform tilePrefab;
-    public Transform obstaclePrefab;
+    public Transform[] obstaclePrefab;
     public Transform navmeshFloor;
     public Transform navmeshMaskPrefab;
 
@@ -33,14 +33,13 @@ public class MapGenerator : MonoBehaviour
     void Start()
     {
         FindObjectOfType<Spawner>().OnNewWave += OnNewWave;//Changes the map with each new wave
-        //GenerateMap(); //Will stay on the same map if only you only run generateMap and no OnNewWave method
-
+        GenerateMap(); //Will stay on the same map if only you only run generateMap and no OnNewWave method
 
         //Random map settings
-        //maps[mapIndex].mapSize.x = Random.Range(20, 40);
-        //maps[mapIndex].mapSize.y = Random.Range(20, 40);
-        //maps[mapIndex].obstaclePercent = Random.Range(0.2f, 0.4f);
-        //maps[mapIndex].seed = Random.Range(0, 1000);
+        maps[mapIndex].mapSize.x = Random.Range(20, 40);
+        maps[mapIndex].mapSize.y = Random.Range(20, 40);
+        maps[mapIndex].obstaclePercent = Random.Range(0.2f, 0.4f);
+        maps[mapIndex].seed = Random.Range(0, 1000);
     }   
 
     void Update()
@@ -110,7 +109,7 @@ public class MapGenerator : MonoBehaviour
                 float obstacleHeight = Mathf.Lerp(currentMap.minObstacleHeight, currentMap.maxObstacleHeight, (float)prng.NextDouble());
                 float obstacleWidth = Mathf.Lerp(currentMap.minObstacleWidth, currentMap.maxObstacleWidth, (float)prng.NextDouble());
                 Vector3 obstaclePosition = CoordToPosition(randomCoord.x, randomCoord.y);
-                Transform newObstacle = Instantiate(obstaclePrefab, obstaclePosition + Vector3.up * obstacleHeight/2 , Quaternion.identity) as Transform;
+                Transform newObstacle = Instantiate(obstaclePrefab[Random.Range(0, obstaclePrefab.Length)], obstaclePosition + Vector3.up * obstacleHeight/2 , Quaternion.identity) as Transform;
                 newObstacle.parent = mapHolder;
                 newObstacle.localScale = new Vector3((1 - outlinePercent) * obstacleWidth, obstacleHeight, (1 - outlinePercent) * obstacleWidth);
                 newObstacle.rotation = Random.rotation; //randomizes rotation everytime would have to save rotation if seed is to be consistent

@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 7553865590466224865}
   - component: {fileID: 7553865590466224864}
   - component: {fileID: 180805901294915297}
-  - component: {fileID: 1360574630269136150}
   - component: {fileID: 7155503397567041630}
   m_Layer: 7
   m_Name: Enemy
@@ -98,23 +97,6 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &1360574630269136150
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7553865590466224861}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 67aec1b4d84ff5a45aadc809e9935326, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  startingHealth: 50
-  expOnDeath: 25
-  attackDistanceThreshold: 3
-  timeBetweenAttacks: 2
-  damage: 10
 --- !u!195 &7155503397567041630
 NavMeshAgent:
   m_ObjectHideFlags: 0

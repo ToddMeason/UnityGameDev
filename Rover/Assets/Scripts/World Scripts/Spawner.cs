@@ -6,7 +6,7 @@ public class Spawner : MonoBehaviour //rework to not spawn when objective is spa
 {
     #region Variables
     public Wave[] waves;
-    public Enemy enemy;
+    public Enemy[] enemy;
     public List<GameObject> chests = new List<GameObject>();
     public MainObjective mainObjective;
 
@@ -167,7 +167,17 @@ public class Spawner : MonoBehaviour //rework to not spawn when objective is spa
             yield return null;
         }
 
-        Enemy spawnedEnemy = Instantiate(enemy, SpawnTile.position + Vector3.up, Quaternion.identity) as Enemy;
+        int x;
+        if (Random.Range(0, 100) > 90)
+        {
+            x = 1;
+        }
+        else
+        {
+            x = 0;
+        }
+
+        Enemy spawnedEnemy = Instantiate(enemy[x], SpawnTile.position + Vector3.up, Quaternion.identity) as Enemy;
         spawnedEnemy.transform.parent = this.transform;
         //spawnedEnemy.OnDeath += OnEnemyDeath;//Gets the event call from the enemy/entity script that died
     }
@@ -178,7 +188,7 @@ public class Spawner : MonoBehaviour //rework to not spawn when objective is spa
         {
             Transform SpawnTile = map.GetRandomOpenTile();
 
-            var chest = Instantiate(chests[i], SpawnTile.position + Vector3.up, Quaternion.identity);
+            var chest = Instantiate(chests[i], SpawnTile.position + Vector3.up - new Vector3(0,0.5f,0), Quaternion.identity);
             chest.transform.parent = this.transform;
         }
         yield return null;
