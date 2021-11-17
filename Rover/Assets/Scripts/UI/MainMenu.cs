@@ -6,19 +6,48 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
-    public GameObject mainMenu, controlsMenu, objectiveMenu;
+    public GameObject mainMenu, controlsMenu, objectiveMenu, pauseMenu;
+    public GameObject mainFirstButton, controlsFirstButton, objectiveFirstbutton, pauseFirstbutton;
 
-    public GameObject mainFirstButton, controlsFirstButton, objectiveFirstbutton;
+    [SerializeField] private Player player;
 
 
     void Start()
     {
         OpenMainMenu();
+        player = FindObjectOfType<Player>().GetComponent<Player>();
+    }
+
+    private void Update()
+    {
+        if (Input.GetButtonDown("Cancel"))
+        {
+            PauseUnpause();
+        }
     }
 
     public void PlayGame()
     {
         SceneManager.LoadScene("RoverGame");
+    }
+
+    public void PauseUnpause()
+    {
+        if (!pauseMenu.activeInHierarchy)
+        {
+            player.roverController.stunned = true;
+            pauseMenu.SetActive(true);
+            Time.timeScale = 0;
+            EventSystem.current.SetSelectedGameObject(null);
+            EventSystem.current.SetSelectedGameObject(pauseFirstbutton);
+        }
+        else
+        {
+            player.roverController.stunned = false;
+            pauseMenu.SetActive(false);
+            Time.timeScale = 1;
+            controlsMenu.SetActive(false);
+        }
     }
 
     public void OpenMainMenu()
@@ -37,6 +66,12 @@ public class MainMenu : MonoBehaviour
     {
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(objectiveFirstbutton);
+    }
+
+    public void OpenPause()
+    {
+        EventSystem.current.SetSelectedGameObject(null);
+        EventSystem.current.SetSelectedGameObject(pauseFirstbutton);
     }
 
     public void QuitGame()
