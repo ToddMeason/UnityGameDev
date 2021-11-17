@@ -10,12 +10,14 @@ public class MainMenu : MonoBehaviour
     public GameObject mainFirstButton, controlsFirstButton, objectiveFirstbutton, pauseFirstbutton;
 
     [SerializeField] private Player player;
+    [SerializeField] private SaveAndLoad saveAndLoad;
 
 
     void Start()
     {
         OpenMainMenu();
         player = FindObjectOfType<Player>().GetComponent<Player>();
+        saveAndLoad = FindObjectOfType<SaveAndLoad>().GetComponent<SaveAndLoad>();
     }
 
     private void Update()
@@ -77,6 +79,7 @@ public class MainMenu : MonoBehaviour
     public void QuitGame()
     {
         Debug.Log("Quit");
+        saveAndLoad.Clear();
         Application.Quit();
     }
 }

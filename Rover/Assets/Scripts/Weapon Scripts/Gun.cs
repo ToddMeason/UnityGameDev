@@ -51,11 +51,6 @@ public class Gun : MonoBehaviour
     #region Custom Methods
     public void Shoot()
     {
-        if (weaponType == WeaponType.Minigun)
-        {
-            GetComponent<AudioSource>().Play();
-        }
-
         if (Time.time > nextShotTime && currentMagSize > 0 && !reloading)
         {
             //For normal bullet projectile

@@ -54,7 +54,7 @@ public class SaveAndLoad : MonoBehaviour
     }
 
     [ContextMenu("Clear")]
-    private void Clear()
+    public void Clear()
     {
         PlayerPrefs.SetInt("level", 0);
         PlayerPrefs.SetFloat("currentExp", 0);
